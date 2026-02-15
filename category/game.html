@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ゲームおすすめランキング - 人気ゲームレビュー | CinemaFind</title>
+  <meta name="description" content="話題の人気ゲームランキング。最新ゲームのレビュー・評価をチェック。PCゲーム、ブラウザゲームなど幅広く紹介。">
+  <meta name="keywords" content="ゲーム, おすすめ, ランキング, PCゲーム, レビュー, 新作ゲーム">
+  <meta property="og:title" content="ゲームおすすめランキング | CinemaFind">
+  <meta property="og:description" content="話題の人気ゲームランキング。最新ゲームのレビュー・評価をチェック。">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://example.com/category/game.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a href="../index.html" class="logo">
+        <span class="logo-icon">&#9654;</span>
+        <span class="logo-text">CinemaFind</span>
+      </a>
+      <nav class="nav">
+        <ul class="nav-list">
+          <li><a href="../index.html" class="nav-link">ホーム</a></li>
+          <li><a href="movie.html" class="nav-link">映画</a></li>
+          <li><a href="anime.html" class="nav-link">アニメ</a></li>
+          <li><a href="drama.html" class="nav-link">ドラマ</a></li>
+          <li><a href="game.html" class="nav-link active">ゲーム</a></li>
+        </ul>
+      </nav>
+      <button class="menu-toggle" aria-label="メニュー">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <section class="page-header">
+    <div class="container">
+      <h1>&#127918; ゲーム</h1>
+      <p>話題の新作ゲームをチェック</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="filter-bar">
+        <button class="tab-btn active" onclick="filterCategory('all', this)">すべて</button>
+        <button class="tab-btn" onclick="filterCategory('rpg', this)">RPG</button>
+        <button class="tab-btn" onclick="filterCategory('action', this)">アクション</button>
+        <button class="tab-btn" onclick="filterCategory('simulation', this)">シミュレーション</button>
+      </div>
+      <div class="content-grid" id="categoryGrid">
+        <!-- Game cards -->
+        <a href="#" class="featured-card animate-in" target="_blank" rel="noopener noreferrer">
+          <div class="featured-thumb">
+            <div class="featured-thumb-inner">&#127918;</div>
+            <span class="badge new">NEW</span>
+            <span class="rating">★ 4.7</span>
+          </div>
+          <div class="featured-info">
+            <h3>人気オンラインゲーム特集</h3>
+            <div class="featured-meta">
+              <span class="featured-genre">RPG</span>
+            </div>
+          </div>
+        </a>
+        <a href="#" class="featured-card animate-in" target="_blank" rel="noopener noreferrer">
+          <div class="featured-thumb">
+            <div class="featured-thumb-inner">&#127918;</div>
+            <span class="badge">人気</span>
+            <span class="rating">★ 4.5</span>
+          </div>
+          <div class="featured-info">
+            <h3>ブラウザゲーム特集</h3>
+            <div class="featured-meta">
+              <span class="featured-genre">ブラウザ</span>
+            </div>
+          </div>
+        </a>
+        <a href="#" class="featured-card animate-in" target="_blank" rel="noopener noreferrer">
+          <div class="featured-thumb">
+            <div class="featured-thumb-inner">&#127918;</div>
+            <span class="badge">話題</span>
+            <span class="rating">★ 4.6</span>
+          </div>
+          <div class="featured-info">
+            <h3>PCゲーム おすすめタイトル</h3>
+            <div class="featured-meta">
+              <span class="featured-genre">PCゲーム</span>
+            </div>
+          </div>
+        </a>
+        <a href="#" class="featured-card animate-in" target="_blank" rel="noopener noreferrer">
+          <div class="featured-thumb">
+            <div class="featured-thumb-inner">&#127918;</div>
+            <span class="badge new">NEW</span>
+            <span class="rating">★ 4.8</span>
+          </div>
+          <div class="featured-info">
+            <h3>美少女ゲーム 新作まとめ</h3>
+            <div class="featured-meta">
+              <span class="featured-genre">ADV</span>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="cta-wrapper" style="padding-top: 40px;">
+        <a href="#" class="cta-button" id="mainCta">DMMでゲームを探す</a>
+        <p class="cta-note">※豊富なラインナップからお気に入りを見つけよう</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background: var(--bg-light);">
+    <div class="container" style="max-width: 800px;">
+      <h2 class="section-title">DMMのゲームが選ばれる理由</h2>
+      <div style="color: var(--text-muted); line-height: 2;">
+        <p>DMMゲームでは、PCゲームからブラウザゲームまで幅広いジャンルのゲームを提供しています。基本プレイ無料のタイトルも多数あり、気軽に始められます。</p>
+        <br>
+        <h3 style="color: var(--text-heading); font-size: 1.2rem; margin-bottom: 12px;">おすすめポイント</h3>
+        <ul style="padding-left: 20px; list-style: disc;">
+          <li>基本プレイ無料のゲームが豊富</li>
+          <li>ブラウザですぐ遊べるタイトルあり</li>
+          <li>定期的なイベント・キャンペーン開催</li>
+          <li>DMMポイントが使えてお得</li>
+          <li>新作ゲームが続々追加</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <a href="../index.html" class="footer-logo">
+            <span class="logo-icon">&#9654;</span>
+            <span class="logo-text">CinemaFind</span>
+          </a>
+          <p class="footer-desc">映画・アニメ・ドラマの最新情報をお届けするエンタメ総合ガイド。</p>
+        </div>
+        <div class="footer-col">
+          <h4>カテゴリ</h4>
+          <ul>
+            <li><a href="movie.html">映画</a></li>
+            <li><a href="anime.html">アニメ</a></li>
+            <li><a href="drama.html">ドラマ</a></li>
+            <li><a href="game.html">ゲーム</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>サイトについて</h4>
+          <ul>
+            <li><a href="#">運営者情報</a></li>
+            <li><a href="#">プライバシーポリシー</a></li>
+            <li><a href="#">お問い合わせ</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CinemaFind. ※当サイトはアフィリエイトプログラムに参加しています。</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    window.SITE_CONFIG = {
+      affiliateId: 'YOUR_AFFILIATE_ID',
+      siteUrl: 'https://example.com'
+    };
+  </script>
+  <script src="../js/main.js"></script>
+  <script>
+    function filterCategory(cat, btn) {
+      document.querySelectorAll('.filter-bar .tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+    }
+  </script>
+</body>
+</html>
