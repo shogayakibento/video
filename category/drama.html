@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ドラマおすすめランキング - 人気ドラマレビュー | CinemaFind</title>
+  <meta name="description" content="国内外の人気ドラマランキング。話題の新作ドラマや名作ドラマのレビュー・評価をチェック。見逃し配信も対応。">
+  <meta name="keywords" content="ドラマ, おすすめ, ランキング, 国内ドラマ, 海外ドラマ, 見逃し配信">
+  <meta property="og:title" content="ドラマおすすめランキング | CinemaFind">
+  <meta property="og:description" content="国内外の人気ドラマランキング。話題のドラマシリーズをチェック。">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://owstrategy.com/category/drama.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a href="../index.html" class="logo">
+        <span class="logo-icon">&#9654;</span>
+        <span class="logo-text">CinemaFind</span>
+      </a>
+      <nav class="nav">
+        <ul class="nav-list">
+          <li><a href="../index.html" class="nav-link">ホーム</a></li>
+          <li><a href="movie.html" class="nav-link">映画</a></li>
+          <li><a href="anime.html" class="nav-link">アニメ</a></li>
+          <li><a href="drama.html" class="nav-link active">ドラマ</a></li>
+          <li><a href="game.html" class="nav-link">ゲーム</a></li>
+        </ul>
+      </nav>
+      <button class="menu-toggle" aria-label="メニュー">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <section class="page-header">
+    <div class="container">
+      <h1>&#127917; ドラマ</h1>
+      <p>国内外の人気ドラマシリーズをご紹介</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="filter-bar">
+        <button class="tab-btn active" onclick="filterCategory('all', this)">すべて</button>
+        <button class="tab-btn" onclick="filterCategory('japanese', this)">国内ドラマ</button>
+        <button class="tab-btn" onclick="filterCategory('korean', this)">韓国ドラマ</button>
+        <button class="tab-btn" onclick="filterCategory('western', this)">海外ドラマ</button>
+      </div>
+      <div class="content-grid" id="categoryGrid"></div>
+      <div class="cta-wrapper" style="padding-top: 40px;">
+        <a href="#" class="cta-button" id="mainCta">DMMプレミアムでドラマを見る</a>
+        <p class="cta-note">※30日間の無料トライアル付き</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background: var(--bg-light);">
+    <div class="container" style="max-width: 800px;">
+      <h2 class="section-title">ドラマを楽しむならDMMプレミアム</h2>
+      <div style="color: var(--text-muted); line-height: 2;">
+        <p>DMMプレミアムでは、国内ドラマの見逃し配信から韓国ドラマ、海外ドラマまで幅広いラインナップを配信中。人気シリーズの一気見にも対応しています。</p>
+        <br>
+        <h3 style="color: var(--text-heading); font-size: 1.2rem; margin-bottom: 12px;">ドラマ好きにおすすめの理由</h3>
+        <ul style="padding-left: 20px; list-style: disc;">
+          <li>放送中ドラマの見逃し配信対応</li>
+          <li>韓国ドラマの独占配信多数</li>
+          <li>完結済みシリーズの一気見に最適</li>
+          <li>オリジナルドラマも配信中</li>
+          <li>字幕・吹替を選べる海外作品</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <a href="../index.html" class="footer-logo">
+            <span class="logo-icon">&#9654;</span>
+            <span class="logo-text">CinemaFind</span>
+          </a>
+          <p class="footer-desc">映画・アニメ・ドラマの最新情報をお届けするエンタメ総合ガイド。</p>
+        </div>
+        <div class="footer-col">
+          <h4>カテゴリ</h4>
+          <ul>
+            <li><a href="movie.html">映画</a></li>
+            <li><a href="anime.html">アニメ</a></li>
+            <li><a href="drama.html">ドラマ</a></li>
+            <li><a href="game.html">ゲーム</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>サイトについて</h4>
+          <ul>
+            <li><a href="#">運営者情報</a></li>
+            <li><a href="#">プライバシーポリシー</a></li>
+            <li><a href="#">お問い合わせ</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CinemaFind. ※当サイトはアフィリエイトプログラムに参加しています。</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    window.SITE_CONFIG = {
+      affiliateId: 'xlikeranking-001',
+      siteUrl: 'https://owstrategy.com'
+    };
+  </script>
+  <script src="../js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof renderCategoryContent === 'function') {
+        renderCategoryContent('drama');
+      }
+    });
+    function filterCategory(cat, btn) {
+      document.querySelectorAll('.filter-bar .tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      if (typeof renderCategoryContent === 'function') {
+        renderCategoryContent(cat === 'all' ? 'drama' : cat);
+      }
+    }
+  </script>
+</body>
+</html>
