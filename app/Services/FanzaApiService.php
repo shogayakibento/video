@@ -122,7 +122,7 @@ class FanzaApiService
 
     public function getItemUrl(array $item): string
     {
-        // APIのaffiliateURLはal.fanza.co.jp経由で無効なことがあるため
+        // APIのaffiliateURLはal.fanza.co.jp/al.dmm.com経由で無効なため
         // 商品の直接URL(item['URL'])からal.dmm.co.jp経由で自前で組み立てる
         $productUrl = $item['URL'] ?? '';
 
