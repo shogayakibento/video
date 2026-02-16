@@ -58,7 +58,7 @@
                         @endif
                     </div>
                     <div class="ranking-item-action">
-                        <a href="{{ $item['affiliateURL'] ?? $item['URL'] ?? '#' }}" target="_blank" rel="noopener noreferrer" class="detail-btn">
+                        <a href="{{ app(\App\Services\FanzaApiService::class)->getItemUrl($item) }}" target="_blank" rel="noopener noreferrer" class="detail-btn">
                             詳細を見る
                         </a>
                         @if(!empty($item['prices']['price']))
