@@ -109,12 +109,28 @@ class FanzaApiService
         });
     }
 
-    public function buildAffiliateUrl(string $path): string
+    public function buildAffiliateUrl(string $url): string
     {
-        $targetUrl = 'https://www.dmm.co.jp' . $path;
-        return 'https://al.dmm.co.jp/?lurl=' . urlencode($targetUrl)
+        if (!str_starts_with($url, 'http')) {
+            $url = 'https://www.dmm.co.jp' . $url;
+        }
+
+        return 'https://al.dmm.co.jp/?lurl=' . urlencode($url)
             . '&af_id=' . urlencode($this->affiliateId)
             . '&ch=link_tool&ch_id=link';
+    }
+
+    public function getItemUrl(array $item): string
+    {
+        // APIのaffiliateURLはal.fanza.co.jp経由で無効なことがあるため
+        // 商品の直接URL(item['URL'])からal.dmm.co.jp経由で自前で組み立てる
+        $productUrl = $item['URL'] ?? '';
+
+        if (empty($productUrl) || $productUrl === '#') {
+            return '#';
+        }
+
+        return $this->buildAffiliateUrl($productUrl);
     }
 
     private function request(string $endpoint, array $params): array
