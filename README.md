@@ -1,75 +1,99 @@
-# CinemaFind - DMMアフィリエイトサイト
+# FanzaGate - FANZAアフィリエイトサイト (Laravel)
 
-映画・アニメ・ドラマ・ゲームの総合エンタメガイドサイトです。DMMアフィリエイトプログラムと連携しています。
+FANZAの人気作品ランキング、新着情報、レビューをお届けするアフィリエイトガイドサイトです。
+
+## 技術スタック
+
+- **Laravel** - PHPフレームワーク
+- **FANZA (DMM) Web API v3** - 商品データ取得
+- **SQLite** - データベース（キャッシュ・セッション）
+- **Blade** - テンプレートエンジン
 
 ## セットアップ
 
-### 1. アフィリエイトIDの設定
+### 1. 依存関係のインストール
 
-各HTMLファイルの `SITE_CONFIG` にDMMアフィリエイトIDを設定してください：
-
-```javascript
-window.SITE_CONFIG = {
-  affiliateId: 'YOUR_AFFILIATE_ID',  // ここにあなたのIDを設定
-  siteUrl: 'https://your-domain.com'
-};
+```bash
+composer install
 ```
 
-対象ファイル:
-- `index.html`
-- `category/movie.html`
-- `category/anime.html`
-- `category/drama.html`
-- `category/game.html`
+### 2. 環境設定
 
-### 2. ドメインの設定
+`.env` ファイルをコピーして編集：
 
-`sitemap.xml` と各HTMLファイルの `canonical` URLを実際のドメインに変更してください。
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-### 3. デプロイ
+### 3. FANZA API設定
 
-静的サイトなので、以下のサービスにそのままデプロイできます：
+`.env` に以下を設定してください：
 
-- **GitHub Pages** - リポジトリ設定から有効化
-- **Netlify** - リポジトリを接続するだけ
-- **Vercel** - リポジトリを接続するだけ
-- **Cloudflare Pages** - リポジトリを接続するだけ
+```
+FANZA_API_ID=your_api_id_here
+FANZA_AFFILIATE_ID=your_affiliate_id_here
+```
+
+> API IDとアフィリエイトIDは [DMMアフィリエイト](https://affiliate.dmm.com/) で取得できます。
+
+### 4. データベース準備
+
+```bash
+touch database/database.sqlite
+php artisan migrate
+```
+
+### 5. 起動
+
+```bash
+php artisan serve
+```
+
+`http://localhost:8000` でサイトにアクセスできます。
 
 ## サイト構成
 
 ```
-/
-├── index.html           # トップページ
-├── css/
-│   └── style.css        # スタイルシート
-├── js/
-│   └── main.js          # JavaScript
-├── category/
-│   ├── movie.html       # 映画カテゴリ
-│   ├── anime.html       # アニメカテゴリ
-│   ├── drama.html       # ドラマカテゴリ
-│   └── game.html        # ゲームカテゴリ
-├── sitemap.xml          # サイトマップ
-├── robots.txt           # クローラー設定
-└── README.md
+/                   - トップページ（ランキング・新着・VRピックアップ）
+/category/douga     - 動画カテゴリ
+/category/vr        - VR動画カテゴリ
+/category/dvd       - DVDカテゴリ
+/category/rental    - レンタルカテゴリ
+/category/comic     - コミックカテゴリ
+/ranking            - ランキングページ
+/search?q=keyword   - 検索ページ
+/sitemap.xml        - サイトマップ
 ```
 
 ## 機能
 
-- レスポンシブデザイン（モバイル対応）
-- SEO最適化（メタタグ、サイトマップ、構造化データ）
-- カテゴリ別ページ（映画・アニメ・ドラマ・ゲーム）
-- おすすめ作品のタブ切り替え
+- FANZA (DMM) Web API v3連携
+- カテゴリ別作品一覧（動画・VR・DVD・レンタル・コミック）
 - 人気ランキング表示
-- 検索機能（DMMの検索へ連携）
-- FAQ（アコーディオン）
-- スクロールアニメーション
-- モバイルメニュー
+- キーワード検索
+- ソート機能（人気順・新着順・レビュー順）
+- ページネーション
+- レスポンシブデザイン（モバイル対応）
+- ダークテーマUI
+- SEO最適化（メタタグ・サイトマップ）
+- APIレスポンスキャッシュ
+- API未設定時のサンプルデータ表示
 
-## DMMアフィリエイトの始め方
+## デプロイ
 
-1. [DMMアフィリエイト](https://affiliate.dmm.com/)にアクセス
-2. 無料会員登録を行う
-3. アフィリエイトIDを取得
-4. 本サイトの `SITE_CONFIG` にIDを設定
-5. サイトをデプロイして運用開始
+### 本番環境の設定
+
+```env
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://your-domain.com
+```
+
+### キャッシュの最適化
+
+```bash
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
