@@ -111,14 +111,23 @@ class FanzaApiService
 
     public function getItemUrl(array $item): string
     {
-        // APIが返すaffiliateURLを使用し、無効なal.fanza.co.jpをal.dmm.co.jpに置換
-        $url = $item['affiliateURL'] ?? '';
+        $affiliateUrl = $item['affiliateURL'] ?? '';
+        $productUrl = $item['URL'] ?? '';
 
-        if (empty($url) || $url === '#') {
-            return '#';
+        if (empty($affiliateUrl) || $affiliateUrl === '#') {
+            return $productUrl ?: '#';
         }
 
-        return str_replace('al.fanza.co.jp', 'al.dmm.co.jp', $url);
+        // al.fanza.co.jp は無効なのでal.dmm.co.jpに置換
+        $url = str_replace('al.fanza.co.jp', 'al.dmm.co.jp', $affiliateUrl);
+
+        // APIのaffiliateURLに含まれるlurl(video.dmm.co.jpなど)が無効なため
+        // 実際の商品ページURL(item['URL'])で差し替える
+        if (!empty($productUrl)) {
+            $url = preg_replace('/lurl=[^&]+/', 'lurl=' . urlencode($productUrl), $url);
+        }
+
+        return $url;
     }
 
     private function request(string $endpoint, array $params): array
