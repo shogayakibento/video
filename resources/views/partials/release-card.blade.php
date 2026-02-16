@@ -1,6 +1,6 @@
 @php
     $title = $item['title'] ?? 'タイトル未設定';
-    $url = app(\App\Services\FanzaApiService::class)->getItemUrl($item);
+    $url = $item['URL'] ?? '#';
     $imageUrl = $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? $item['imageURL']['list'] ?? '';
     $actress = $item['iteminfo']['actress'][0]['name'] ?? null;
     $date = isset($item['date']) ? \Carbon\Carbon::parse($item['date'])->format('m/d') : null;

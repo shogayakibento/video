@@ -21,17 +21,13 @@ class CategoryController extends Controller
         $hits = 20;
         $offset = (($page - 1) * $hits) + 1;
 
-        if ($api->isConfigured()) {
-            $result = $api->getItems([
-                'service' => $category['service'],
-                'floor' => $category['floor'],
-                'hits' => $hits,
-                'offset' => $offset,
-                'sort' => $sort,
-            ]);
-        } else {
-            $result = $api->getSampleItems($slug, $hits);
-        }
+        $result = $api->getItems([
+            'service' => $category['service'],
+            'floor' => $category['floor'],
+            'hits' => $hits,
+            'offset' => $offset,
+            'sort' => $sort,
+        ]);
 
         $items = $result['result']['items'] ?? [];
         $totalCount = $result['result']['total_count'] ?? 0;
@@ -46,7 +42,6 @@ class CategoryController extends Controller
             'totalPages' => min($totalPages, 50),
             'totalCount' => $totalCount,
             'sort' => $sort,
-            'isConfigured' => $api->isConfigured(),
         ]);
     }
 }
