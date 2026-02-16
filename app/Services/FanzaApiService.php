@@ -111,14 +111,14 @@ class FanzaApiService
 
     public function getItemUrl(array $item): string
     {
-        // APIが返すaffiliateURLをそのまま使用する
+        // APIが返すaffiliateURLを使用し、無効なal.fanza.co.jpをal.dmm.co.jpに置換
         $url = $item['affiliateURL'] ?? '';
 
         if (empty($url) || $url === '#') {
             return '#';
         }
 
-        return $url;
+        return str_replace('al.fanza.co.jp', 'al.dmm.co.jp', $url);
     }
 
     private function request(string $endpoint, array $params): array
