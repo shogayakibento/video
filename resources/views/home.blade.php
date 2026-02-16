@@ -160,11 +160,4 @@
         </div>
     </section>
 
-    @if(!$isConfigured)
-        <div class="setup-notice">
-            <div class="container">
-                <p><strong>セットアップ:</strong> .envファイルに <code>FANZA_API_ID</code> と <code>FANZA_AFFILIATE_ID</code> を設定してください。現在はサンプルデータを表示しています。</p>
-            </div>
-        </div>
-    @endif
 @endsection

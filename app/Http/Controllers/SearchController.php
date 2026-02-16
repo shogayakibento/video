@@ -20,12 +20,7 @@ class SearchController extends Controller
         $totalCount = 0;
 
         if ($keyword) {
-            if ($api->isConfigured()) {
-                $result = $api->search($keyword, $service, $floor, $hits, $offset);
-            } else {
-                $result = $api->getSampleItems('douga', $hits);
-            }
-
+            $result = $api->search($keyword, $service, $floor, $hits, $offset);
             $items = $result['result']['items'] ?? [];
             $totalCount = $result['result']['total_count'] ?? 0;
         }
@@ -41,7 +36,6 @@ class SearchController extends Controller
             'service' => $service,
             'floor' => $floor,
             'categories' => config('fanza.categories'),
-            'isConfigured' => $api->isConfigured(),
         ]);
     }
 }

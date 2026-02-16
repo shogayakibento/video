@@ -18,19 +18,13 @@ class RankingController extends Controller
 
         $category = $categories[$activeCategory];
 
-        if ($api->isConfigured()) {
-            $result = $api->getRanking($category['service'], $category['floor'], 30);
-        } else {
-            $result = $api->getSampleItems($activeCategory, 30);
-        }
-
+        $result = $api->getRanking($category['service'], $category['floor'], 30);
         $items = $result['result']['items'] ?? [];
 
         return view('ranking.index', [
             'items' => $items,
             'categories' => $categories,
             'activeCategory' => $activeCategory,
-            'isConfigured' => $api->isConfigured(),
         ]);
     }
 }
