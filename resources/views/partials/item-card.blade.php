@@ -1,6 +1,6 @@
 @php
     $title = $item['title'] ?? 'タイトル未設定';
-    $url = $item['affiliateURL'] ?? '#';
+    $url = $item['URL'] ?? '#';
     $imageUrl = $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? $item['imageURL']['list'] ?? '';
     $review = $item['review']['average'] ?? null;
     $actress = $item['iteminfo']['actress'][0]['name'] ?? null;

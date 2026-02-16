@@ -58,7 +58,7 @@
                         @endif
                     </div>
                     <div class="ranking-item-action">
-                        <a href="{{ $item['affiliateURL'] ?? '#' }}" target="_blank" rel="noopener noreferrer" class="detail-btn">
+                        <a href="{{ $item['URL'] ?? '#' }}" target="_blank" rel="noopener noreferrer" class="detail-btn">
                             詳細を見る
                         </a>
                         @if(!empty($item['prices']['price']))
