@@ -109,11 +109,6 @@ class FanzaApiService
         });
     }
 
-    public function getItemUrl(array $item): string
-    {
-        return $item['affiliateURL'] ?? '#';
-    }
-
     private function request(string $endpoint, array $params): array
     {
         try {
