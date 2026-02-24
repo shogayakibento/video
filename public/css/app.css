@@ -391,22 +391,20 @@ img {
 .item-thumb {
     position: relative;
     width: 100%;
-    padding-top: 140%;
+    aspect-ratio: 2 / 3;
     background: var(--bg-light);
     overflow: hidden;
 }
 
 .item-thumb img {
-    position: absolute;
-    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
 .thumb-placeholder-card {
-    position: absolute;
-    inset: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -549,7 +547,7 @@ img {
 
 .release-thumb {
     width: 100%;
-    height: 270px;
+    aspect-ratio: 2 / 3;
     position: relative;
     overflow: hidden;
     background: linear-gradient(135deg, var(--bg-light), var(--bg-card));
@@ -562,8 +560,8 @@ img {
 }
 
 .release-thumb .thumb-placeholder-card {
-    position: absolute;
-    inset: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
