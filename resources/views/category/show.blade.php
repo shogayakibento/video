@@ -23,7 +23,7 @@
         </div>
 
         {{-- Items Grid --}}
-        <div class="items-grid content-grid">
+        <div class="items-grid content-grid {{ $slug === 'vr' ? 'category-vr' : '' }}">
             @forelse($items as $index => $item)
                 @include('partials.item-card', ['item' => $item, 'rank' => $sort === 'rank' ? (($currentPage - 1) * 20) + $index + 1 : null])
             @empty

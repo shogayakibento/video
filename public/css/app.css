@@ -391,14 +391,15 @@ img {
 .item-thumb {
     position: relative;
     width: 100%;
+    aspect-ratio: 3 / 2;
     background: var(--bg-light);
     overflow: hidden;
 }
 
 .item-thumb img {
     width: 100%;
-    height: auto;
-    display: block;
+    height: 100%;
+    object-fit: cover;
 }
 
 .thumb-placeholder-card {
@@ -546,6 +547,7 @@ img {
 
 .release-thumb {
     width: 100%;
+    aspect-ratio: 3 / 2;
     position: relative;
     overflow: hidden;
     background: linear-gradient(135deg, var(--bg-light), var(--bg-card));
@@ -553,8 +555,8 @@ img {
 
 .release-thumb img {
     width: 100%;
-    height: auto;
-    display: block;
+    height: 100%;
+    object-fit: cover;
 }
 
 .release-thumb .thumb-placeholder-card {
@@ -1141,6 +1143,11 @@ img {
 /* ===== VR Section ===== */
 .vr-section {
     background: var(--bg-light);
+}
+
+.vr-section .item-thumb,
+.category-vr .item-thumb {
+    aspect-ratio: 1 / 1;
 }
 
 
