@@ -1154,8 +1154,8 @@ img {
     aspect-ratio: 2 / 3;
 }
 
-.category-dvd .item-thumb img {
-    object-position: left;
+.category-dvd .item-thumb {
+    aspect-ratio: 2 / 3;
 }
 
 /* ===== Animations ===== */
