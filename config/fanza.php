@@ -22,13 +22,7 @@ return [
                 'blu_ray' => 'ブルーレイ',
             ],
         ],
-        'rental' => [
-            'name' => 'DVDレンタル',
-            'floors' => [
-                'rental_dvd' => 'レンタルDVD',
-            ],
-        ],
-        'digital_book' => [
+        'ebook' => [
             'name' => '電子書籍',
             'floors' => [
                 'comic' => 'コミック',
@@ -59,16 +53,9 @@ return [
             'icon' => 'disc',
             'description' => 'DVD・ブルーレイの通販',
         ],
-        'rental' => [
-            'label' => 'レンタル',
-            'service' => 'rental',
-            'floor' => 'rental_dvd',
-            'icon' => 'box-arrow-up-right',
-            'description' => 'DVDレンタルサービス',
-        ],
         'comic' => [
             'label' => 'コミック',
-            'service' => 'digital_book',
+            'service' => 'ebook',
             'floor' => 'comic',
             'icon' => 'book',
             'description' => '人気コミックを電子書籍で',
