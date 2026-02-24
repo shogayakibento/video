@@ -64,7 +64,7 @@
                 <a href="{{ route('category.show', 'douga') }}?sort=date" class="section-link">すべて見る →</a>
             </div>
             <div class="releases-slider">
-                @foreach(array_slice($newReleaseItems, 0, 12) as $item)
+                @foreach(array_slice($newReleaseItems, 0, 8) as $item)
                     @include('partials.release-card', ['item' => $item])
                 @endforeach
             </div>
