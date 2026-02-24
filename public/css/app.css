@@ -1145,6 +1145,10 @@ img {
     background: var(--bg-light);
 }
 
+.vr-section .item-thumb {
+    aspect-ratio: 1 / 1;
+}
+
 /* ===== Animations ===== */
 @keyframes fadeInUp {
     from {
