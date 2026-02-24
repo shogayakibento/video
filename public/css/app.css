@@ -1150,6 +1150,9 @@ img {
     aspect-ratio: 1 / 1;
 }
 
+.category-portrait .item-thumb {
+    aspect-ratio: 2 / 3;
+}
 
 /* ===== Animations ===== */
 @keyframes fadeInUp {
