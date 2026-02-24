@@ -50,6 +50,30 @@
         <a href="{{ route('ranking') }}">ランキング</a>
     </div>
 
+    {{-- Side Ads --}}
+    <div class="side-ad side-ad-left" id="sideAdLeft">
+        <div class="side-ad-inner">
+            <div class="side-ad-label">AD</div>
+            {{-- 160x600 バナー広告をここに挿入 --}}
+            <a href="https://al.dmm.co.jp/?lurl=https%3A%2F%2Fwww.dmm.co.jp%2F&af_id={{ config('fanza.affiliate_id') }}" target="_blank" rel="noopener noreferrer" class="side-ad-placeholder">
+                <span>FANZA</span>
+                <span>広告枠</span>
+                <span>160×600</span>
+            </a>
+        </div>
+    </div>
+    <div class="side-ad side-ad-right" id="sideAdRight">
+        <div class="side-ad-inner">
+            <div class="side-ad-label">AD</div>
+            {{-- 160x600 バナー広告をここに挿入 --}}
+            <a href="https://al.dmm.co.jp/?lurl=https%3A%2F%2Fwww.dmm.co.jp%2F&af_id={{ config('fanza.affiliate_id') }}" target="_blank" rel="noopener noreferrer" class="side-ad-placeholder">
+                <span>FANZA</span>
+                <span>広告枠</span>
+                <span>160×600</span>
+            </a>
+        </div>
+    </div>
+
     {{-- Main Content --}}
     <main>
         @yield('content')

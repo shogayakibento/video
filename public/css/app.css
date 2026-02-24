@@ -1147,6 +1147,62 @@ img {
     aspect-ratio: 2 / 3;
 }
 
+/* ===== Side Ads ===== */
+.side-ad {
+    display: none;
+}
+
+@media (min-width: 1400px) {
+    .side-ad {
+        display: block;
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 50;
+    }
+
+    .side-ad-left {
+        left: calc((100vw - 1200px) / 2 - 180px);
+    }
+
+    .side-ad-right {
+        right: calc((100vw - 1200px) / 2 - 180px);
+    }
+
+    .side-ad-inner {
+        width: 160px;
+    }
+
+    .side-ad-label {
+        font-size: 0.65rem;
+        color: var(--text-muted);
+        text-align: center;
+        margin-bottom: 4px;
+        letter-spacing: 0.1em;
+    }
+
+    .side-ad-placeholder {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 160px;
+        height: 600px;
+        background: linear-gradient(135deg, var(--bg-light), var(--bg-card));
+        border: 1px dashed var(--border);
+        border-radius: var(--radius);
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        gap: 4px;
+        transition: var(--transition);
+    }
+
+    .side-ad-placeholder:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+    }
+}
+
 /* ===== Animations ===== */
 @keyframes fadeInUp {
     from {
