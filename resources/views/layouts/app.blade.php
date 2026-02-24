@@ -50,27 +50,22 @@
         <a href="{{ route('ranking') }}">ランキング</a>
     </div>
 
-    {{-- Side Ads --}}
+    {{-- Side Ads (300x250 FANZA Widget Banners) --}}
     <div class="side-ad side-ad-left" id="sideAdLeft">
         <div class="side-ad-inner">
             <div class="side-ad-label">AD</div>
-            {{-- 160x600 バナー広告をここに挿入 --}}
-            <a href="https://al.dmm.co.jp/?lurl=https%3A%2F%2Fwww.dmm.co.jp%2F&af_id={{ config('fanza.affiliate_id') }}" target="_blank" rel="noopener noreferrer" class="side-ad-placeholder">
-                <span>FANZA</span>
-                <span>広告枠</span>
-                <span>160×600</span>
-            </a>
+            <ins class="widget-banner"></ins>
+            <script class="widget-banner-script" src="https://widget-view.dmm.co.jp/js/banner_placement.js?affiliate_id=xlikeranking-001&banner_id=1701_300_250"></script>
+            <div class="side-ad-spacer"></div>
+            <ins class="widget-banner"></ins>
+            <script class="widget-banner-script" src="https://widget-view.dmm.co.jp/js/banner_placement.js?affiliate_id=xlikeranking-001&banner_id=1523_300_250"></script>
         </div>
     </div>
     <div class="side-ad side-ad-right" id="sideAdRight">
         <div class="side-ad-inner">
             <div class="side-ad-label">AD</div>
-            {{-- 160x600 バナー広告をここに挿入 --}}
-            <a href="https://al.dmm.co.jp/?lurl=https%3A%2F%2Fwww.dmm.co.jp%2F&af_id={{ config('fanza.affiliate_id') }}" target="_blank" rel="noopener noreferrer" class="side-ad-placeholder">
-                <span>FANZA</span>
-                <span>広告枠</span>
-                <span>160×600</span>
-            </a>
+            <ins class="widget-banner"></ins>
+            <script class="widget-banner-script" src="https://widget-view.dmm.co.jp/js/banner_placement.js?affiliate_id=xlikeranking-001&banner_id=1829_300_250"></script>
         </div>
     </div>
 
