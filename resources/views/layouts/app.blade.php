@@ -74,6 +74,9 @@
         @yield('content')
     </main>
 
+    {{-- Pre-Footer Ad --}}
+    @include('partials.ad-inline', ['bannerId' => '1523_300_250'])
+
     {{-- Footer --}}
     <footer class="footer">
         <div class="container">

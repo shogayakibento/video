@@ -33,6 +33,8 @@
             @endforelse
         </div>
 
+        @include('partials.ad-inline', ['bannerId' => '1829_300_250'])
+
         {{-- Pagination --}}
         @if($totalPages > 1)
             <div class="pagination">
