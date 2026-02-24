@@ -1154,12 +1154,8 @@ img {
     aspect-ratio: 2 / 3;
 }
 
-.category-natural .item-thumb {
-    aspect-ratio: unset;
-}
-
-.category-natural .item-thumb img {
-    height: auto;
+.category-dvd .item-thumb img {
+    object-position: left;
 }
 
 /* ===== Animations ===== */
