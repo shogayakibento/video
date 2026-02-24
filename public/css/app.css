@@ -391,14 +391,15 @@ img {
 .item-thumb {
     position: relative;
     width: 100%;
+    aspect-ratio: 16 / 9;
     background: var(--bg-light);
     overflow: hidden;
 }
 
 .item-thumb img {
     width: 100%;
-    height: auto;
-    display: block;
+    height: 100%;
+    object-fit: contain;
 }
 
 .thumb-placeholder-card {
@@ -546,6 +547,7 @@ img {
 
 .release-thumb {
     width: 100%;
+    aspect-ratio: 16 / 9;
     position: relative;
     overflow: hidden;
     background: linear-gradient(135deg, var(--bg-light), var(--bg-card));
@@ -553,8 +555,8 @@ img {
 
 .release-thumb img {
     width: 100%;
-    height: auto;
-    display: block;
+    height: 100%;
+    object-fit: contain;
 }
 
 .release-thumb .thumb-placeholder-card {
