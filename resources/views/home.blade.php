@@ -56,6 +56,8 @@
         </div>
     </section>
 
+    @include('partials.ad-inline', ['bannerId' => '1701_300_250'])
+
     {{-- New Releases Section --}}
     <section class="section new-releases-section">
         <div class="container">
@@ -64,7 +66,7 @@
                 <a href="{{ route('category.show', 'douga') }}?sort=date" class="section-link">すべて見る →</a>
             </div>
             <div class="releases-slider">
-                @foreach(array_slice($newReleaseItems, 0, 12) as $item)
+                @foreach(array_slice($newReleaseItems, 0, 8) as $item)
                     @include('partials.release-card', ['item' => $item])
                 @endforeach
             </div>
@@ -85,6 +87,8 @@
             </div>
         </div>
     </section>
+
+    @include('partials.ad-inline', ['bannerId' => '1523_300_250'])
 
     {{-- Benefits Section --}}
     <section class="section benefits-section">

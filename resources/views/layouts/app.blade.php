@@ -14,7 +14,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
     @stack('styles')
 </head>
 <body>
@@ -32,6 +32,8 @@
                         <li><a href="{{ route('category.show', $slug) }}" class="nav-link {{ request()->is('category/'.$slug) ? 'active' : '' }}">{{ $cat['label'] }}</a></li>
                     @endforeach
                     <li><a href="{{ route('ranking') }}" class="nav-link {{ request()->routeIs('ranking') ? 'active' : '' }}">ランキング</a></li>
+                    <li><a href="{{ route('genre.index') }}" class="nav-link {{ request()->routeIs('genre.*') ? 'active' : '' }}">ジャンル</a></li>
+                    <li><a href="{{ route('actress.index') }}" class="nav-link {{ request()->routeIs('actress.*') ? 'active' : '' }}">女優</a></li>
                 </ul>
             </nav>
             <button class="menu-toggle" aria-label="メニュー" id="menuToggle">
@@ -48,12 +50,36 @@
             <a href="{{ route('category.show', $slug) }}">{{ $cat['label'] }}</a>
         @endforeach
         <a href="{{ route('ranking') }}">ランキング</a>
+        <a href="{{ route('genre.index') }}">ジャンル</a>
+        <a href="{{ route('actress.index') }}">女優</a>
+    </div>
+
+    {{-- Side Ads (300x250 FANZA Widget Banners) --}}
+    <div class="side-ad side-ad-left" id="sideAdLeft">
+        <div class="side-ad-inner">
+            <div class="side-ad-label">AD</div>
+            <ins class="widget-banner"></ins>
+            <script class="widget-banner-script" src="https://widget-view.dmm.co.jp/js/banner_placement.js?affiliate_id=xlikeranking-001&banner_id=1701_300_250"></script>
+            <div class="side-ad-spacer"></div>
+            <ins class="widget-banner"></ins>
+            <script class="widget-banner-script" src="https://widget-view.dmm.co.jp/js/banner_placement.js?affiliate_id=xlikeranking-001&banner_id=1523_300_250"></script>
+        </div>
+    </div>
+    <div class="side-ad side-ad-right" id="sideAdRight">
+        <div class="side-ad-inner">
+            <div class="side-ad-label">AD</div>
+            <ins class="widget-banner"></ins>
+            <script class="widget-banner-script" src="https://widget-view.dmm.co.jp/js/banner_placement.js?affiliate_id=xlikeranking-001&banner_id=1829_300_250"></script>
+        </div>
     </div>
 
     {{-- Main Content --}}
     <main>
         @yield('content')
     </main>
+
+    {{-- Pre-Footer Ad --}}
+    @include('partials.ad-inline', ['bannerId' => '1523_300_250'])
 
     {{-- Footer --}}
     <footer class="footer">
@@ -78,6 +104,8 @@
                     <h4>メニュー</h4>
                     <ul>
                         <li><a href="{{ route('ranking') }}">ランキング</a></li>
+                        <li><a href="{{ route('genre.index') }}">ジャンル</a></li>
+                        <li><a href="{{ route('actress.index') }}">女優</a></li>
                         <li><a href="{{ route('search') }}">検索</a></li>
                     </ul>
                 </div>

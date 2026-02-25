@@ -72,5 +72,7 @@
                 </div>
             @endforelse
         </div>
+
+        @include('partials.ad-inline', ['bannerId' => '1701_300_250'])
     </div>
 @endsection
