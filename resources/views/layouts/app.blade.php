@@ -33,6 +33,7 @@
                     @endforeach
                     <li><a href="{{ route('ranking') }}" class="nav-link {{ request()->routeIs('ranking') ? 'active' : '' }}">ランキング</a></li>
                     <li><a href="{{ route('genre.index') }}" class="nav-link {{ request()->routeIs('genre.*') ? 'active' : '' }}">ジャンル</a></li>
+                    <li><a href="{{ route('actress.index') }}" class="nav-link {{ request()->routeIs('actress.*') ? 'active' : '' }}">女優</a></li>
                 </ul>
             </nav>
             <button class="menu-toggle" aria-label="メニュー" id="menuToggle">
@@ -50,6 +51,7 @@
         @endforeach
         <a href="{{ route('ranking') }}">ランキング</a>
         <a href="{{ route('genre.index') }}">ジャンル</a>
+        <a href="{{ route('actress.index') }}">女優</a>
     </div>
 
     {{-- Side Ads (300x250 FANZA Widget Banners) --}}
@@ -103,6 +105,7 @@
                     <ul>
                         <li><a href="{{ route('ranking') }}">ランキング</a></li>
                         <li><a href="{{ route('genre.index') }}">ジャンル</a></li>
+                        <li><a href="{{ route('actress.index') }}">女優</a></li>
                         <li><a href="{{ route('search') }}">検索</a></li>
                     </ul>
                 </div>

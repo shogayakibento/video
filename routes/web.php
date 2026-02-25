@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActressController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\HomeController;
@@ -12,6 +13,8 @@ Route::get('/', HomeController::class)->name('home');
 Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 Route::get('/genre', [GenreController::class, 'index'])->name('genre.index');
 Route::get('/genre/{slug}', [GenreController::class, 'show'])->name('genre.show');
+Route::get('/actress', [ActressController::class, 'index'])->name('actress.index');
+Route::get('/actress/{id}', [ActressController::class, 'show'])->name('actress.show');
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/ranking', [RankingController::class, 'index'])->name('ranking');
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');

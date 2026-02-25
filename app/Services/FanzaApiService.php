@@ -89,19 +89,17 @@ class FanzaApiService
         });
     }
 
-    public function getActresses(string $keyword = '', int $hits = 20): array
+    public function getActresses(array $overrides = []): array
     {
-        $params = [
+        $defaults = [
             'api_id' => $this->apiId,
             'affiliate_id' => $this->affiliateId,
-            'hits' => $hits,
+            'hits' => 30,
+            'offset' => 1,
             'output' => 'json',
         ];
 
-        if ($keyword) {
-            $params['keyword'] = $keyword;
-        }
-
+        $params = array_merge($defaults, $overrides);
         $cacheKey = 'fanza_actresses_' . md5(json_encode($params));
 
         return Cache::remember($cacheKey, $this->cacheTtl, function () use ($params) {
