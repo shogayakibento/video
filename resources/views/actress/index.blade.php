@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', '女優から探す - FanzaGate')
-@section('description', 'FANZA女優一覧。名前検索や五十音順でお気に入りの女優を見つけて、出演作品をチェックしよう。')
+@section('description', 'FANZA女優ランキング・検索。人気女優ランキング、カップ・身長・年齢での絞り込み、名前検索でお気に入りの女優を見つけよう。')
 
 @section('content')
     <div class="page-header">
@@ -12,37 +12,101 @@
     </div>
 
     <div class="container">
-        {{-- Search --}}
-        <form action="{{ route('actress.index') }}" method="GET" class="actress-search-form">
-            <div class="search-box">
-                <input type="text" name="keyword" value="{{ $keyword }}" placeholder="女優名で検索..." class="search-input">
-                <button type="submit" class="search-submit-btn">検索</button>
-            </div>
-        </form>
-
-        {{-- Initial Filter --}}
-        <div class="filter-bar filter-bar-center filter-bar-wrap">
-            <a href="{{ route('actress.index') }}" class="tab-btn {{ !$initial && !$keyword ? 'active' : '' }}">すべて</a>
-            @foreach($initials as $kana => $label)
-                <a href="{{ route('actress.index', ['initial' => $kana]) }}" class="tab-btn {{ $initial === $kana ? 'active' : '' }}">{{ $label }}</a>
-            @endforeach
+        {{-- Main Tabs --}}
+        <div class="filter-bar filter-bar-center">
+            <a href="{{ route('actress.index', ['tab' => 'ranking']) }}" class="tab-btn {{ $tab === 'ranking' ? 'active' : '' }}">人気ランキング</a>
+            <a href="{{ route('actress.index', ['tab' => 'filter']) }}" class="tab-btn {{ $tab === 'filter' ? 'active' : '' }}">絞り込み</a>
+            <a href="{{ route('actress.index', ['tab' => 'search']) }}" class="tab-btn {{ $tab === 'search' ? 'active' : '' }}">名前検索</a>
         </div>
 
-        @if($keyword)
-            <p class="search-result-info">「{{ $keyword }}」の検索結果: {{ number_format($totalCount) }}件</p>
+        {{-- Search Tab --}}
+        @if($tab === 'search')
+            <form action="{{ route('actress.index') }}" method="GET" class="actress-search-form">
+                <input type="hidden" name="tab" value="search">
+                <div class="search-box">
+                    <input type="text" name="keyword" value="{{ $keyword }}" placeholder="女優名で検索..." class="search-input">
+                    <button type="submit" class="search-submit-btn">検索</button>
+                </div>
+            </form>
+
+            <div class="filter-bar filter-bar-center filter-bar-wrap">
+                <a href="{{ route('actress.index', ['tab' => 'search']) }}" class="tab-btn {{ !$initial && !$keyword ? 'active' : '' }}">すべて</a>
+                @foreach($initials as $kana => $label)
+                    <a href="{{ route('actress.index', ['tab' => 'search', 'initial' => $kana]) }}" class="tab-btn {{ $initial === $kana ? 'active' : '' }}">{{ $label }}</a>
+                @endforeach
+            </div>
+
+            @if($keyword)
+                <p class="search-result-info">「{{ $keyword }}」の検索結果: {{ number_format($totalCount) }}件</p>
+            @endif
+        @endif
+
+        {{-- Filter Tab --}}
+        @if($tab === 'filter')
+            <form action="{{ route('actress.index') }}" method="GET" class="filter-form">
+                <input type="hidden" name="tab" value="filter">
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label class="filter-label">カップ</label>
+                        <select name="cup" class="filter-select">
+                            <option value="">指定なし</option>
+                            @foreach(['A','B','C','D','E','F','G','H','I'] as $c)
+                                <option value="{{ $c }}" {{ ($filters['cup'] ?? '') === $c ? 'selected' : '' }}>{{ $c }}カップ</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">身長</label>
+                        <div class="filter-range">
+                            <input type="number" name="height_min" value="{{ $filters['heightMin'] ?? '' }}" placeholder="140" class="filter-input-sm" min="140" max="190">
+                            <span>〜</span>
+                            <input type="number" name="height_max" value="{{ $filters['heightMax'] ?? '' }}" placeholder="190" class="filter-input-sm" min="140" max="190">
+                            <span>cm</span>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">年齢</label>
+                        <div class="filter-range">
+                            <input type="number" name="age_min" value="{{ $filters['ageMin'] ?? '' }}" placeholder="18" class="filter-input-sm" min="18" max="80">
+                            <span>〜</span>
+                            <input type="number" name="age_max" value="{{ $filters['ageMax'] ?? '' }}" placeholder="60" class="filter-input-sm" min="18" max="80">
+                            <span>歳</span>
+                        </div>
+                    </div>
+                    <div class="filter-group filter-group-btn">
+                        <button type="submit" class="filter-submit-btn">検索する</button>
+                    </div>
+                </div>
+            </form>
+
+            @if(!empty(array_filter($filters)))
+                <p class="search-result-info">絞り込み結果: {{ number_format($totalCount) }}件</p>
+            @endif
+        @endif
+
+        {{-- Ranking Tab Header --}}
+        @if($tab === 'ranking')
+            <p class="search-result-info">いま人気作品に出演している注目の女優たち</p>
         @endif
 
         {{-- Actress Grid --}}
-        <div class="actress-grid">
-            @forelse($actresses as $actress)
+        <div class="actress-grid {{ $tab === 'ranking' ? 'actress-grid-ranking' : '' }}">
+            @forelse($actresses as $index => $actress)
                 @php
-                    $imageUrl = $actress['imageURL']['large'] ?? $actress['imageURL']['small'] ?? '';
                     $actressId = $actress['id'] ?? '';
                     $name = $actress['name'] ?? '不明';
                     $ruby = $actress['ruby'] ?? '';
+                    if ($tab === 'ranking') {
+                        $imageUrl = $actress['top_item_image'] ?? '';
+                    } else {
+                        $imageUrl = $actress['imageURL']['large'] ?? $actress['imageURL']['small'] ?? '';
+                    }
                 @endphp
-                <a href="{{ route('actress.show', $actressId) }}" class="actress-card animate-on-scroll">
-                    <div class="actress-thumb">
+                <a href="{{ route('actress.show', $actressId) }}" class="actress-card animate-on-scroll {{ $tab === 'ranking' ? 'actress-card-ranking' : '' }}">
+                    @if($tab === 'ranking')
+                        <span class="actress-rank-badge">{{ ($currentPage - 1) * 100 + $index + 1 }}</span>
+                    @endif
+                    <div class="actress-thumb {{ $tab === 'ranking' ? 'actress-thumb-square' : '' }}">
                         @if($imageUrl)
                             <img src="{{ $imageUrl }}" alt="{{ $name }}" loading="lazy">
                         @else
@@ -59,6 +123,12 @@
                         @if($ruby)
                             <span class="actress-ruby">{{ $ruby }}</span>
                         @endif
+                        @if($tab === 'filter' && isset($actress['bust']))
+                            <span class="actress-spec-badge">
+                                {{ $actress['cup'] ?? '' }}{{ $actress['cup'] ? 'カップ' : '' }}
+                                {{ $actress['height'] ? ' / ' . $actress['height'] . 'cm' : '' }}
+                            </span>
+                        @endif
                     </div>
                 </a>
             @empty
@@ -73,9 +143,24 @@
         {{-- Pagination --}}
         @if($totalPages > 1)
             @php
-                $paginationParams = [];
-                if($keyword) $paginationParams['keyword'] = $keyword;
-                if($initial) $paginationParams['initial'] = $initial;
+                $paginationParams = ['tab' => $tab];
+                if ($tab === 'search') {
+                    if ($keyword) $paginationParams['keyword'] = $keyword;
+                    if ($initial) $paginationParams['initial'] = $initial;
+                } elseif ($tab === 'filter') {
+                    foreach ($filters as $k => $v) {
+                        if ($v !== '') {
+                            $paramKey = match($k) {
+                                'heightMin' => 'height_min',
+                                'heightMax' => 'height_max',
+                                'ageMin' => 'age_min',
+                                'ageMax' => 'age_max',
+                                default => $k,
+                            };
+                            $paginationParams[$paramKey] = $v;
+                        }
+                    }
+                }
             @endphp
             <div class="pagination">
                 @if($currentPage > 1)
