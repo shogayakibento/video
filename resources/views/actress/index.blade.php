@@ -66,11 +66,29 @@
                     </div>
                     <div class="filter-group">
                         <label class="filter-label">年齢</label>
-                        <div class="filter-range">
-                            <input type="number" name="age_min" value="{{ $filters['ageMin'] ?? '' }}" placeholder="18" class="filter-input-sm" min="18" max="80">
-                            <span>〜</span>
-                            <input type="number" name="age_max" value="{{ $filters['ageMax'] ?? '' }}" placeholder="60" class="filter-input-sm" min="18" max="80">
-                            <span>歳</span>
+                        <div class="filter-age-presets">
+                            @php
+                                $agePresets = [
+                                    ['label' => '18~20', 'min' => '18', 'max' => '20'],
+                                    ['label' => '20~25', 'min' => '20', 'max' => '25'],
+                                    ['label' => '25~30', 'min' => '25', 'max' => '30'],
+                                    ['label' => '30~35', 'min' => '30', 'max' => '35'],
+                                    ['label' => '35~40', 'min' => '35', 'max' => '40'],
+                                    ['label' => '40~50', 'min' => '40', 'max' => '50'],
+                                    ['label' => '50~',   'min' => '50', 'max' => ''],
+                                ];
+                                $currentAgeMin = $filters['ageMin'] ?? '';
+                                $currentAgeMax = $filters['ageMax'] ?? '';
+                            @endphp
+                            @foreach($agePresets as $preset)
+                                <label class="filter-age-chip {{ $currentAgeMin === $preset['min'] && $currentAgeMax === $preset['max'] ? 'active' : '' }}">
+                                    <input type="radio" name="age_preset" value="{{ $preset['min'] }}-{{ $preset['max'] }}"
+                                        {{ $currentAgeMin === $preset['min'] && $currentAgeMax === $preset['max'] ? 'checked' : '' }}>
+                                    {{ $preset['label'] }}歳
+                                </label>
+                            @endforeach
+                            <input type="hidden" name="age_min" id="age_min" value="{{ $currentAgeMin }}">
+                            <input type="hidden" name="age_max" id="age_max" value="{{ $currentAgeMax }}">
                         </div>
                     </div>
                     <div class="filter-group filter-group-btn">
@@ -123,10 +141,9 @@
                         @if($ruby)
                             <span class="actress-ruby">{{ $ruby }}</span>
                         @endif
-                        @if($tab === 'filter' && isset($actress['bust']))
+                        @if($tab === 'filter' && (($actress['cup'] ?? null) || ($actress['height'] ?? null)))
                             <span class="actress-spec-badge">
-                                {{ $actress['cup'] ?? '' }}{{ $actress['cup'] ? 'カップ' : '' }}
-                                {{ $actress['height'] ? ' / ' . $actress['height'] . 'cm' : '' }}
+                                {{ ($actress['cup'] ?? null) ? $actress['cup'] . 'カップ' : '' }}{{ ($actress['cup'] ?? null) && ($actress['height'] ?? null) ? ' / ' : '' }}{{ ($actress['height'] ?? null) ? $actress['height'] . 'cm' : '' }}
                             </span>
                         @endif
                     </div>
@@ -178,4 +195,16 @@
             </div>
         @endif
     </div>
+
+    @if($tab === 'filter')
+    <script>
+        document.querySelectorAll('input[name="age_preset"]').forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                var parts = this.value.split('-');
+                document.getElementById('age_min').value = parts[0];
+                document.getElementById('age_max').value = parts[1] || '';
+            });
+        });
+    </script>
+    @endif
 @endsection

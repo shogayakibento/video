@@ -1464,6 +1464,40 @@ img {
     border-color: var(--primary);
 }
 
+.filter-age-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.filter-age-chip {
+    display: inline-block;
+    padding: 7px 14px;
+    font-size: 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--bg-light);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.filter-age-chip:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.filter-age-chip.active,
+.filter-age-chip:has(input:checked) {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+}
+
+.filter-age-chip input[type="radio"] {
+    display: none;
+}
+
 .filter-range span {
     color: var(--text-muted);
     font-size: 0.85rem;
