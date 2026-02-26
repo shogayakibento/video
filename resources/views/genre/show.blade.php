@@ -12,6 +12,12 @@
     </div>
 
     <div class="container">
+        @include('partials.breadcrumb', ['items' => [
+            ['label' => 'ホーム', 'url' => route('home')],
+            ['label' => 'ジャンル', 'url' => route('genre.index')],
+            ['label' => $genre['label']],
+        ]])
+
         {{-- Sort --}}
         <div class="filter-bar">
             <a href="{{ route('genre.show', $slug) }}?sort=rank" class="tab-btn {{ $sort === 'rank' ? 'active' : '' }}">人気順</a>

@@ -12,6 +12,14 @@
         </div>
     </div>
 
+    {{-- Breadcrumb --}}
+    <div class="container">
+        @include('partials.breadcrumb', ['items' => [
+            ['label' => 'ホーム', 'url' => route('home')],
+            ['label' => $category['label']],
+        ]])
+    </div>
+
     {{-- Sort & Filter --}}
     <div class="container">
         <div class="filter-bar">
