@@ -48,20 +48,39 @@
                 <div class="filter-grid">
                     <div class="filter-group">
                         <label class="filter-label">カップ</label>
-                        <select name="cup" class="filter-select">
-                            <option value="">指定なし</option>
+                        <div class="filter-age-presets">
                             @foreach(['A','B','C','D','E','F','G','H','I'] as $c)
-                                <option value="{{ $c }}" {{ ($filters['cup'] ?? '') === $c ? 'selected' : '' }}>{{ $c }}カップ</option>
+                                <label class="filter-age-chip {{ ($filters['cup'] ?? '') === $c ? 'active' : '' }}">
+                                    <input type="radio" name="cup" value="{{ $c }}"
+                                        {{ ($filters['cup'] ?? '') === $c ? 'checked' : '' }}>
+                                    {{ $c }}
+                                </label>
                             @endforeach
-                        </select>
+                        </div>
                     </div>
                     <div class="filter-group">
                         <label class="filter-label">身長</label>
-                        <div class="filter-range">
-                            <input type="number" name="height_min" value="{{ $filters['heightMin'] ?? '' }}" placeholder="140" class="filter-input-sm" min="140" max="190">
-                            <span>〜</span>
-                            <input type="number" name="height_max" value="{{ $filters['heightMax'] ?? '' }}" placeholder="190" class="filter-input-sm" min="140" max="190">
-                            <span>cm</span>
+                        <div class="filter-age-presets">
+                            @php
+                                $heightPresets = [
+                                    ['label' => '〜150cm', 'min' => '',    'max' => '150'],
+                                    ['label' => '150〜155', 'min' => '150', 'max' => '155'],
+                                    ['label' => '155〜160', 'min' => '155', 'max' => '160'],
+                                    ['label' => '160〜165', 'min' => '160', 'max' => '165'],
+                                    ['label' => '165cm〜',  'min' => '165', 'max' => ''],
+                                ];
+                                $currentHeightMin = $filters['heightMin'] ?? '';
+                                $currentHeightMax = $filters['heightMax'] ?? '';
+                            @endphp
+                            @foreach($heightPresets as $preset)
+                                <label class="filter-age-chip {{ $currentHeightMin === $preset['min'] && $currentHeightMax === $preset['max'] ? 'active' : '' }}">
+                                    <input type="radio" name="height_preset" value="{{ $preset['min'] }}-{{ $preset['max'] }}"
+                                        {{ $currentHeightMin === $preset['min'] && $currentHeightMax === $preset['max'] ? 'checked' : '' }}>
+                                    {{ $preset['label'] }}
+                                </label>
+                            @endforeach
+                            <input type="hidden" name="height_min" id="height_min" value="{{ $currentHeightMin }}">
+                            <input type="hidden" name="height_max" id="height_max" value="{{ $currentHeightMax }}">
                         </div>
                     </div>
                     <div class="filter-group">
@@ -200,6 +219,13 @@
                 var parts = this.value.split('-');
                 document.getElementById('age_min').value = parts[0];
                 document.getElementById('age_max').value = parts[1] || '';
+            });
+        });
+        document.querySelectorAll('input[name="height_preset"]').forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                var parts = this.value.split('-');
+                document.getElementById('height_min').value = parts[0];
+                document.getElementById('height_max').value = parts[1] || '';
             });
         });
     </script>

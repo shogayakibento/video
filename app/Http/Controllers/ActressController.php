@@ -137,6 +137,34 @@ class ActressController extends Controller
         $totalCount = $result['result']['total_count'] ?? 0;
         $totalPages = (int) ceil($totalCount / $hits);
 
+        // Sort by popularity: cross-reference with popular ranking items
+        if (!empty($actresses)) {
+            $popularResult = $api->getItems([
+                'service' => 'digital',
+                'floor' => 'videoa',
+                'hits' => 50,
+                'offset' => 1,
+                'sort' => 'rank',
+            ]);
+            $popularRank = [];
+            $rank = 0;
+            foreach ($popularResult['result']['items'] ?? [] as $item) {
+                foreach ($item['iteminfo']['actress'] ?? [] as $a) {
+                    $aid = $a['id'] ?? null;
+                    if ($aid && !isset($popularRank[$aid])) {
+                        $popularRank[$aid] = $rank++;
+                    }
+                }
+            }
+            if (!empty($popularRank)) {
+                usort($actresses, function ($a, $b) use ($popularRank) {
+                    $aRank = $popularRank[$a['id'] ?? ''] ?? PHP_INT_MAX;
+                    $bRank = $popularRank[$b['id'] ?? ''] ?? PHP_INT_MAX;
+                    return $aRank <=> $bRank;
+                });
+            }
+        }
+
         $filters = compact('cup', 'heightMin', 'heightMax', 'ageMin', 'ageMax');
 
         return view('actress.index', [
