@@ -98,11 +98,11 @@ class ActressController extends Controller
 
     private function filter(Request $request, int $page, FanzaApiService $api)
     {
-        $cup = $request->input('cup', '');
-        $heightMin = $request->input('height_min', '');
-        $heightMax = $request->input('height_max', '');
-        $ageMin = $request->input('age_min', '');
-        $ageMax = $request->input('age_max', '');
+        $cup = (string) ($request->input('cup') ?? '');
+        $heightMin = (string) ($request->input('height_min') ?? '');
+        $heightMax = (string) ($request->input('height_max') ?? '');
+        $ageMin = (string) ($request->input('age_min') ?? '');
+        $ageMax = (string) ($request->input('age_max') ?? '');
 
         // Fetch popular actress IDs from ranking (source of truth for popularity)
         $popularResult = $api->getItems([
