@@ -621,7 +621,7 @@ img {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
+    border-radius: var(--radius-sm);
     font-size: 0.95rem;
     font-weight: 700;
     color: var(--text-muted);
@@ -1580,7 +1580,7 @@ img {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
+    border-radius: var(--radius-sm);
     font-size: 0.75rem;
     font-weight: 700;
     color: var(--text-muted);
