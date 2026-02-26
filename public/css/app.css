@@ -621,27 +621,54 @@ img {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 10px;
-    font-size: 1.1rem;
-    font-weight: 900;
+    border-radius: 50%;
+    font-size: 0.95rem;
+    font-weight: 700;
     color: var(--text-muted);
     background: var(--bg-light);
+    border: 2px solid var(--border);
     flex-shrink: 0;
 }
 
 .rank-number.rank-1 {
-    background: linear-gradient(135deg, #fbbf24, #f59e0b);
-    color: #000;
+    min-width: 56px;
+    height: 56px;
+    font-size: 1.5rem;
+    font-weight: 900;
+    background: linear-gradient(145deg, #fde68a, #f59e0b, #d97706);
+    color: #7c2d00;
+    border: 3px solid #fbbf24;
+    box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.2), 0 4px 16px rgba(245, 158, 11, 0.5);
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
 }
 
 .rank-number.rank-2 {
-    background: linear-gradient(135deg, #cbd5e1, #94a3b8);
-    color: #000;
+    min-width: 50px;
+    height: 50px;
+    font-size: 1.25rem;
+    font-weight: 900;
+    background: linear-gradient(145deg, #f1f5f9, #e2e8f0, #94a3b8);
+    color: #1e293b;
+    border: 2px solid #cbd5e1;
+    box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.2), 0 3px 12px rgba(148, 163, 184, 0.4);
 }
 
 .rank-number.rank-3 {
-    background: linear-gradient(135deg, #d97706, #b45309);
+    min-width: 46px;
+    height: 46px;
+    font-size: 1.1rem;
+    font-weight: 900;
+    background: linear-gradient(145deg, #fed7aa, #d97706, #92400e);
     color: #fff;
+    border: 2px solid #d97706;
+    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.2), 0 3px 12px rgba(180, 83, 9, 0.4);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.rank-crown {
+    font-size: 1.6rem;
+    line-height: 1;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .ranking-item-thumb {
@@ -1546,19 +1573,60 @@ img {
 
 .actress-rank-badge {
     position: absolute;
-    top: 8px;
-    left: 8px;
-    width: 28px;
+    top: 6px;
+    left: 6px;
+    min-width: 28px;
     height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: #fff;
+    border-radius: 50%;
     font-size: 0.75rem;
     font-weight: 700;
-    border-radius: 50%;
+    color: var(--text-muted);
+    background: var(--bg-light);
+    border: 2px solid var(--border);
     z-index: 2;
+    flex-shrink: 0;
+}
+
+.actress-rank-badge.rank-1 {
+    min-width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+    font-weight: 900;
+    background: linear-gradient(145deg, #fde68a, #f59e0b, #d97706);
+    color: #7c2d00;
+    border: 3px solid #fbbf24;
+    box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2), 0 3px 12px rgba(245, 158, 11, 0.5);
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.actress-rank-badge.rank-1 .rank-crown {
+    font-size: 1.1rem;
+}
+
+.actress-rank-badge.rank-2 {
+    min-width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+    font-weight: 900;
+    background: linear-gradient(145deg, #f1f5f9, #e2e8f0, #94a3b8);
+    color: #1e293b;
+    border: 2px solid #cbd5e1;
+    box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.2), 0 2px 8px rgba(148, 163, 184, 0.4);
+}
+
+.actress-rank-badge.rank-3 {
+    min-width: 30px;
+    height: 30px;
+    font-size: 0.85rem;
+    font-weight: 900;
+    background: linear-gradient(145deg, #fed7aa, #d97706, #92400e);
+    color: #fff;
+    border: 2px solid #d97706;
+    box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.2), 0 2px 8px rgba(180, 83, 9, 0.4);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 .actress-thumb-square {
