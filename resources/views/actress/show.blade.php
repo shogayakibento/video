@@ -27,6 +27,12 @@
     </div>
 
     <div class="container">
+        @include('partials.breadcrumb', ['items' => [
+            ['label' => 'ホーム', 'url' => route('home')],
+            ['label' => '女優', 'url' => route('actress.index')],
+            ['label' => $name],
+        ]])
+
         {{-- Actress Profile --}}
         <div class="actress-profile">
             @if($imageUrl)

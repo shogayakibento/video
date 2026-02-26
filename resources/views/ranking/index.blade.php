@@ -12,6 +12,11 @@
     </div>
 
     <div class="container">
+        @include('partials.breadcrumb', ['items' => [
+            ['label' => 'ホーム', 'url' => route('home')],
+            ['label' => 'ランキング'],
+        ]])
+
         {{-- Category Tabs --}}
         <div class="filter-bar filter-bar-center">
             @foreach($categories as $slug => $cat)
