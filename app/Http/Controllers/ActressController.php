@@ -44,7 +44,7 @@ class ActressController extends Controller
 
     private function ranking(int $page, FanzaApiService $api)
     {
-        $hits = 100;
+        $hits = 30;
         $offset = (($page - 1) * $hits) + 1;
 
         $itemResult = $api->getItems([
@@ -57,7 +57,7 @@ class ActressController extends Controller
 
         $items = $itemResult['result']['items'] ?? [];
 
-        // Extract unique actresses from popular items
+        // Extract unique actresses and fetch their face photos
         $seen = [];
         $actresses = [];
         foreach ($items as $item) {
@@ -66,10 +66,16 @@ class ActressController extends Controller
                 $id = $a['id'] ?? null;
                 if ($id && !isset($seen[$id])) {
                     $seen[$id] = true;
+
+                    // Fetch actress face photo from ActressSearch API
+                    $actressResult = $api->getActresses(['actress_id' => $id, 'hits' => 1]);
+                    $actressData = $actressResult['result']['actress'][0] ?? null;
+
                     $actresses[] = [
                         'id' => $id,
                         'name' => $a['name'] ?? '',
-                        'imageURL' => [],
+                        'ruby' => $a['ruby'] ?? '',
+                        'imageURL' => $actressData['imageURL'] ?? [],
                         'top_item_image' => $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? '',
                         'top_item_title' => $item['title'] ?? '',
                     ];

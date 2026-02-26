@@ -114,11 +114,8 @@
                     $actressId = $actress['id'] ?? '';
                     $name = $actress['name'] ?? '不明';
                     $ruby = $actress['ruby'] ?? '';
-                    if ($tab === 'ranking') {
-                        $imageUrl = $actress['top_item_image'] ?? '';
-                    } else {
-                        $imageUrl = $actress['imageURL']['large'] ?? $actress['imageURL']['small'] ?? '';
-                    }
+                    // Prefer actress face photo (imageURL), fall back to product cover
+                    $imageUrl = $actress['imageURL']['large'] ?? $actress['imageURL']['small'] ?? $actress['top_item_image'] ?? '';
                 @endphp
                 <a href="{{ route('actress.show', $actressId) }}" class="actress-card animate-on-scroll {{ $tab === 'ranking' ? 'actress-card-ranking' : '' }}">
                     @if($tab === 'ranking')
