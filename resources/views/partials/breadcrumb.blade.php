@@ -16,12 +16,12 @@
 
 <script type="application/ld+json">
 {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
+    "@@context": "https://schema.org",
+    "@@type": "BreadcrumbList",
     "itemListElement": [
         @foreach($items as $item)
         {
-            "@type": "ListItem",
+            "@@type": "ListItem",
             "position": {{ $loop->index + 1 }},
             "name": "{{ $item['label'] }}"
             @if(isset($item['url']))
