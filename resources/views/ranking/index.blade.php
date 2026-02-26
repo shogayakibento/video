@@ -26,7 +26,9 @@
         <div class="ranking-list-full">
             @forelse($items as $index => $item)
                 <div class="ranking-item-full animate-on-scroll">
-                    <div class="rank-number rank-{{ $index + 1 }}">{{ $index + 1 }}</div>
+                    <div class="rank-number rank-{{ $index + 1 }}">
+                        @if($index === 0)<span class="rank-crown">👑</span>@else{{ $index + 1 }}@endif
+                    </div>
                     <div class="ranking-item-thumb">
                         @php
                             $firstActressId = $item['iteminfo']['actress'][0]['id'] ?? null;
