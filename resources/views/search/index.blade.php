@@ -6,6 +6,10 @@
 @section('content')
     <div class="page-header">
         <div class="container">
+            @include('partials.breadcrumb', ['items' => [
+                ['label' => 'ホーム', 'url' => route('home')],
+                ['label' => '検索'],
+            ]])
             <h1>作品検索</h1>
             <form action="{{ route('search') }}" method="GET" class="search-box search-box-page">
                 <input type="text" name="q" class="search-input" placeholder="作品名・キーワードで検索..." value="{{ $keyword }}">

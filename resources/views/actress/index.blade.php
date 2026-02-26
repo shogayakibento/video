@@ -6,6 +6,10 @@
 @section('content')
     <div class="page-header">
         <div class="container">
+            @include('partials.breadcrumb', ['items' => [
+                ['label' => 'ホーム', 'url' => route('home')],
+                ['label' => '女優'],
+            ]])
             <h1>女優から探す</h1>
             <p>お気に入りの女優を見つけよう</p>
         </div>

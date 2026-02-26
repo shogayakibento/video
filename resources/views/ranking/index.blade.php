@@ -6,6 +6,10 @@
 @section('content')
     <div class="page-header">
         <div class="container">
+            @include('partials.breadcrumb', ['items' => [
+                ['label' => 'ホーム', 'url' => route('home')],
+                ['label' => 'ランキング'],
+            ]])
             <h1>人気ランキング</h1>
             <p>FANZAの人気作品をランキング形式でお届け</p>
         </div>

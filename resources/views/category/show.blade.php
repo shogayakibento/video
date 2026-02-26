@@ -7,6 +7,10 @@
     {{-- Page Header --}}
     <div class="page-header">
         <div class="container">
+            @include('partials.breadcrumb', ['items' => [
+                ['label' => 'ホーム', 'url' => route('home')],
+                ['label' => $category['label']],
+            ]])
             <h1>{{ $category['label'] }}</h1>
             <p>{{ $category['description'] }}</p>
         </div>

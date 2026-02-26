@@ -6,6 +6,11 @@
 @section('content')
     <div class="page-header">
         <div class="container">
+            @include('partials.breadcrumb', ['items' => [
+                ['label' => 'ホーム', 'url' => route('home')],
+                ['label' => 'ジャンル', 'url' => route('genre.index')],
+                ['label' => $genre['label']],
+            ]])
             <h1>{{ $genre['label'] }}</h1>
             <p>{{ $genre['label'] }}の作品一覧</p>
         </div>
