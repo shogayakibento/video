@@ -164,4 +164,12 @@
         </div>
     </section>
 
+@push('scripts')
+<script>
+window.addEventListener('load', function () {
+    fetch('/actress?tab=ranking', { priority: 'low' }).catch(function(){});
+});
+</script>
+@endpush
+
 @endsection

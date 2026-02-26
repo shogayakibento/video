@@ -74,5 +74,7 @@
         </div>
 
         @include('partials.ad-inline', ['bannerId' => '1701_300_250'])
+        @include('partials.ad-inline', ['bannerId' => '1782_300_250', 'adDomain' => 'dmm.com'])
+        @include('partials.ad-inline', ['bannerId' => '1846_300_250'])
     </div>
 @endsection
