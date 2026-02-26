@@ -28,13 +28,7 @@
                 <div class="ranking-item-full animate-on-scroll">
                     <div class="rank-number rank-{{ $index + 1 }}">{{ $index + 1 }}</div>
                     <div class="ranking-item-thumb">
-                        @php
-                            $firstActressId = $item['iteminfo']['actress'][0]['id'] ?? null;
-                            $actressImgUrl = $firstActressId && !empty($actressImageMap[$firstActressId]) ? $actressImageMap[$firstActressId] : null;
-                        @endphp
-                        @if($actressImgUrl)
-                            <img src="{{ $actressImgUrl }}" alt="{{ $item['iteminfo']['actress'][0]['name'] ?? '' }}" loading="lazy" class="actress-face-img">
-                        @elseif(!empty($item['imageURL']['list']))
+                        @if(!empty($item['imageURL']['list']))
                             <img src="{{ $item['imageURL']['list'] }}" alt="{{ $item['title'] ?? '' }}" loading="lazy">
                         @else
                             <div class="thumb-placeholder">
