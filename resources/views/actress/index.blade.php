@@ -49,8 +49,13 @@
                     <div class="filter-group">
                         <label class="filter-label">カップ</label>
                         <div class="filter-age-presets">
+                            <label class="filter-age-chip">
+                                <input type="radio" name="cup" value=""
+                                    {{ ($filters['cup'] ?? '') === '' ? 'checked' : '' }}>
+                                指定なし
+                            </label>
                             @foreach(['A','B','C','D','E','F','G','H','I'] as $c)
-                                <label class="filter-age-chip {{ ($filters['cup'] ?? '') === $c ? 'active' : '' }}">
+                                <label class="filter-age-chip">
                                     <input type="radio" name="cup" value="{{ $c }}"
                                         {{ ($filters['cup'] ?? '') === $c ? 'checked' : '' }}>
                                     {{ $c }}
@@ -63,7 +68,8 @@
                         <div class="filter-age-presets">
                             @php
                                 $heightPresets = [
-                                    ['label' => '〜150cm', 'min' => '',    'max' => '150'],
+                                    ['label' => '指定なし',  'min' => '',    'max' => ''],
+                                    ['label' => '〜150cm',  'min' => '',    'max' => '150'],
                                     ['label' => '150〜155', 'min' => '150', 'max' => '155'],
                                     ['label' => '155〜160', 'min' => '155', 'max' => '160'],
                                     ['label' => '160〜165', 'min' => '160', 'max' => '165'],
@@ -73,7 +79,7 @@
                                 $currentHeightMax = $filters['heightMax'] ?? '';
                             @endphp
                             @foreach($heightPresets as $preset)
-                                <label class="filter-age-chip {{ $currentHeightMin === $preset['min'] && $currentHeightMax === $preset['max'] ? 'active' : '' }}">
+                                <label class="filter-age-chip">
                                     <input type="radio" name="height_preset" value="{{ $preset['min'] }}-{{ $preset['max'] }}"
                                         {{ $currentHeightMin === $preset['min'] && $currentHeightMax === $preset['max'] ? 'checked' : '' }}>
                                     {{ $preset['label'] }}
@@ -88,22 +94,23 @@
                         <div class="filter-age-presets">
                             @php
                                 $agePresets = [
-                                    ['label' => '18~20', 'min' => '18', 'max' => '20'],
-                                    ['label' => '20~25', 'min' => '20', 'max' => '25'],
-                                    ['label' => '25~30', 'min' => '25', 'max' => '30'],
-                                    ['label' => '30~35', 'min' => '30', 'max' => '35'],
-                                    ['label' => '35~40', 'min' => '35', 'max' => '40'],
-                                    ['label' => '40~50', 'min' => '40', 'max' => '50'],
-                                    ['label' => '50~',   'min' => '50', 'max' => ''],
+                                    ['label' => '指定なし', 'min' => '',   'max' => ''],
+                                    ['label' => '18~20',   'min' => '18', 'max' => '20'],
+                                    ['label' => '20~25',   'min' => '20', 'max' => '25'],
+                                    ['label' => '25~30',   'min' => '25', 'max' => '30'],
+                                    ['label' => '30~35',   'min' => '30', 'max' => '35'],
+                                    ['label' => '35~40',   'min' => '35', 'max' => '40'],
+                                    ['label' => '40~50',   'min' => '40', 'max' => '50'],
+                                    ['label' => '50~',     'min' => '50', 'max' => ''],
                                 ];
                                 $currentAgeMin = $filters['ageMin'] ?? '';
                                 $currentAgeMax = $filters['ageMax'] ?? '';
                             @endphp
                             @foreach($agePresets as $preset)
-                                <label class="filter-age-chip {{ $currentAgeMin === $preset['min'] && $currentAgeMax === $preset['max'] ? 'active' : '' }}">
+                                <label class="filter-age-chip">
                                     <input type="radio" name="age_preset" value="{{ $preset['min'] }}-{{ $preset['max'] }}"
                                         {{ $currentAgeMin === $preset['min'] && $currentAgeMax === $preset['max'] ? 'checked' : '' }}>
-                                    {{ $preset['label'] }}歳
+                                    {{ $preset['label'] }}{{ $preset['min'] !== '' || $preset['max'] !== '' ? '歳' : '' }}
                                 </label>
                             @endforeach
                             <input type="hidden" name="age_min" id="age_min" value="{{ $currentAgeMin }}">
