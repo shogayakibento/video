@@ -1297,7 +1297,7 @@ img {
 .actress-thumb {
     width: 100px;
     height: 100px;
-    border-radius: 50%;
+    border-radius: var(--radius-sm);
     overflow: hidden;
     margin-bottom: 0.75rem;
     background: var(--bg-light);
