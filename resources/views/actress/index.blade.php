@@ -147,7 +147,7 @@
                     @if($tab === 'ranking')
                         @php $rankNum = ($currentPage - 1) * 100 + $index + 1; @endphp
                         <span class="actress-rank-badge{{ $rankNum <= 3 ? ' rank-' . $rankNum : '' }}">
-                            @if($rankNum === 1)👑@else{{ $rankNum }}@endif
+                            @if($rankNum === 1)<span class="rank-crown">👑</span>@else{{ $rankNum }}@endif
                         </span>
                     @endif
                     <div class="actress-thumb">

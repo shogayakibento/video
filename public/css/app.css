@@ -1575,56 +1575,58 @@ img {
     position: absolute;
     top: 6px;
     left: 6px;
-    min-width: 26px;
-    height: 26px;
-    padding: 0 5px;
+    min-width: 28px;
+    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.62);
-    backdrop-filter: blur(4px);
-    color: #fff;
-    font-size: 0.72rem;
-    font-weight: 800;
-    border-radius: 6px;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    background: var(--bg-light);
+    border: 2px solid var(--border);
     z-index: 2;
-    letter-spacing: -0.02em;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+    flex-shrink: 0;
 }
 
 .actress-rank-badge.rank-1 {
-    min-width: 32px;
-    height: 32px;
+    min-width: 36px;
+    height: 36px;
     font-size: 1.1rem;
+    font-weight: 900;
     background: linear-gradient(145deg, #fde68a, #f59e0b, #d97706);
     color: #7c2d00;
-    border: 1.5px solid #fbbf24;
-    box-shadow: 0 2px 10px rgba(245, 158, 11, 0.55), 0 0 0 3px rgba(251, 191, 36, 0.2);
-    border-radius: 50%;
+    border: 3px solid #fbbf24;
+    box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2), 0 3px 12px rgba(245, 158, 11, 0.5);
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.actress-rank-badge.rank-1 .rank-crown {
+    font-size: 1.1rem;
 }
 
 .actress-rank-badge.rank-2 {
-    min-width: 28px;
-    height: 28px;
-    font-size: 0.85rem;
+    min-width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+    font-weight: 900;
     background: linear-gradient(145deg, #f1f5f9, #e2e8f0, #94a3b8);
     color: #1e293b;
-    border: 1px solid #cbd5e1;
-    box-shadow: 0 2px 8px rgba(148, 163, 184, 0.5);
-    border-radius: 50%;
+    border: 2px solid #cbd5e1;
+    box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.2), 0 2px 8px rgba(148, 163, 184, 0.4);
 }
 
 .actress-rank-badge.rank-3 {
-    min-width: 28px;
-    height: 28px;
+    min-width: 30px;
+    height: 30px;
     font-size: 0.85rem;
+    font-weight: 900;
     background: linear-gradient(145deg, #fed7aa, #d97706, #92400e);
     color: #fff;
-    border: 1px solid #d97706;
-    box-shadow: 0 2px 8px rgba(180, 83, 9, 0.45);
-    border-radius: 50%;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    border: 2px solid #d97706;
+    box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.2), 0 2px 8px rgba(180, 83, 9, 0.4);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 .actress-thumb-square {
