@@ -104,66 +104,42 @@ class ActressController extends Controller
         $ageMin = $request->input('age_min', '');
         $ageMax = $request->input('age_max', '');
 
-        $hits = 30;
-        $offset = (($page - 1) * $hits) + 1;
-
-        $params = [
-            'hits' => $hits,
-            'offset' => $offset,
-        ];
-
-        if ($cup && isset(self::CUP_BUST_MAP[$cup])) {
-            [$bustMin, $bustMax] = self::CUP_BUST_MAP[$cup];
-            $params['bust_gte'] = $bustMin;
-            $params['bust_lte'] = $bustMax;
-        }
-
-        if ($heightMin) {
-            $params['height_gte'] = (int) $heightMin;
-        }
-        if ($heightMax) {
-            $params['height_lte'] = (int) $heightMax;
-        }
-
-        if ($ageMax) {
-            $params['birthday_gte'] = date('Y-m-d', strtotime("-{$ageMax} years"));
-        }
-        if ($ageMin) {
-            $params['birthday_lte'] = date('Y-m-d', strtotime("-{$ageMin} years"));
-        }
-
-        $result = $api->getActresses($params);
-        $actresses = $result['result']['actress'] ?? [];
-        $totalCount = $result['result']['total_count'] ?? 0;
-        $totalPages = (int) ceil($totalCount / $hits);
-
-        // Sort by popularity: cross-reference with popular ranking items
-        if (!empty($actresses)) {
-            $popularResult = $api->getItems([
-                'service' => 'digital',
-                'floor' => 'videoa',
-                'hits' => 50,
-                'offset' => 1,
-                'sort' => 'rank',
-            ]);
-            $popularRank = [];
-            $rank = 0;
-            foreach ($popularResult['result']['items'] ?? [] as $item) {
-                foreach ($item['iteminfo']['actress'] ?? [] as $a) {
-                    $aid = $a['id'] ?? null;
-                    if ($aid && !isset($popularRank[$aid])) {
-                        $popularRank[$aid] = $rank++;
-                    }
+        // Fetch popular actress IDs from ranking (source of truth for popularity)
+        $popularResult = $api->getItems([
+            'service' => 'digital',
+            'floor' => 'videoa',
+            'hits' => 100,
+            'offset' => 1,
+            'sort' => 'rank',
+        ]);
+        $popularActressIds = [];
+        $seen = [];
+        foreach ($popularResult['result']['items'] ?? [] as $item) {
+            foreach ($item['iteminfo']['actress'] ?? [] as $a) {
+                $aid = $a['id'] ?? null;
+                if ($aid && !isset($seen[$aid])) {
+                    $seen[$aid] = true;
+                    $popularActressIds[] = $aid;
+                    if (count($popularActressIds) >= 60) break 2;
                 }
             }
-            if (!empty($popularRank)) {
-                usort($actresses, function ($a, $b) use ($popularRank) {
-                    $aRank = $popularRank[$a['id'] ?? ''] ?? PHP_INT_MAX;
-                    $bRank = $popularRank[$b['id'] ?? ''] ?? PHP_INT_MAX;
-                    return $aRank <=> $bRank;
-                });
+        }
+
+        // Fetch actress details and apply filters, preserving popularity order
+        $allMatching = [];
+        foreach ($popularActressIds as $id) {
+            $actressResult = $api->getActresses(['actress_id' => $id, 'hits' => 1]);
+            $actress = $actressResult['result']['actress'][0] ?? null;
+            if (!$actress) continue;
+            if ($this->matchesFilter($actress, $cup, $heightMin, $heightMax, $ageMin, $ageMax)) {
+                $allMatching[] = $actress;
             }
         }
+
+        $hits = 30;
+        $totalCount = count($allMatching);
+        $actresses = array_slice($allMatching, ($page - 1) * $hits, $hits);
+        $totalPages = (int) ceil($totalCount / $hits);
 
         $filters = compact('cup', 'heightMin', 'heightMax', 'ageMin', 'ageMax');
 
@@ -174,10 +150,40 @@ class ActressController extends Controller
             'initial' => '',
             'initials' => self::INITIALS,
             'currentPage' => $page,
-            'totalPages' => min($totalPages, 50),
+            'totalPages' => $totalPages,
             'totalCount' => $totalCount,
             'filters' => $filters,
         ]);
+    }
+
+    private function matchesFilter(array $actress, string $cup, string $heightMin, string $heightMax, string $ageMin, string $ageMax): bool
+    {
+        if ($cup && isset(self::CUP_BUST_MAP[$cup])) {
+            [$bustMin, $bustMax] = self::CUP_BUST_MAP[$cup];
+            $bust = (int) ($actress['bust'] ?? 0);
+            if (!$bust || $bust < $bustMin || $bust > $bustMax) return false;
+        }
+
+        if ($heightMin || $heightMax) {
+            $height = (int) ($actress['height'] ?? 0);
+            if (!$height) return false;
+            if ($heightMin && $height < (int) $heightMin) return false;
+            if ($heightMax && $height > (int) $heightMax) return false;
+        }
+
+        if ($ageMin || $ageMax) {
+            $birthday = $actress['birthday'] ?? '';
+            if (!$birthday) return false;
+            try {
+                $age = (new \DateTime())->diff(new \DateTime($birthday))->y;
+            } catch (\Exception $e) {
+                return false;
+            }
+            if ($ageMin && $age < (int) $ageMin) return false;
+            if ($ageMax && $age > (int) $ageMax) return false;
+        }
+
+        return true;
     }
 
     private function search(Request $request, int $page, FanzaApiService $api)
