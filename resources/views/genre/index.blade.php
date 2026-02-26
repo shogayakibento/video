@@ -6,10 +6,6 @@
 @section('content')
     <div class="page-header">
         <div class="container">
-            @include('partials.breadcrumb', ['items' => [
-                ['label' => 'ホーム', 'url' => route('home')],
-                ['label' => 'ジャンル'],
-            ]])
             <h1>ジャンルから探す</h1>
             <p>人気ジャンルから作品を探そう</p>
         </div>
@@ -24,6 +20,6 @@
             @endforeach
         </div>
 
-        @include('partials.ad-inline', ['bannerId' => '1701_300_250'])
+        @include('partials.ad-inline', ['bannerId' => '1844_728_90'])
     </div>
 @endsection

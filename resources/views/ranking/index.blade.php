@@ -6,10 +6,6 @@
 @section('content')
     <div class="page-header">
         <div class="container">
-            @include('partials.breadcrumb', ['items' => [
-                ['label' => 'ホーム', 'url' => route('home')],
-                ['label' => 'ランキング'],
-            ]])
             <h1>人気ランキング</h1>
             <p>FANZAの人気作品をランキング形式でお届け</p>
         </div>
@@ -77,8 +73,6 @@
             @endforelse
         </div>
 
-        @include('partials.ad-inline', ['bannerId' => '1701_300_250'])
         @include('partials.ad-inline', ['bannerId' => '1782_300_250', 'adDomain' => 'dmm.com'])
-        @include('partials.ad-inline', ['bannerId' => '1846_300_250'])
     </div>
 @endsection

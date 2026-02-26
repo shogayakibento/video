@@ -56,7 +56,7 @@
         </div>
     </section>
 
-    @include('partials.ad-inline', ['bannerId' => '1701_300_250'])
+    @include('partials.ad-inline', ['bannerId' => '1782_320_50'])
 
     {{-- New Releases Section --}}
     <section class="section new-releases-section">
@@ -88,7 +88,7 @@
         </div>
     </section>
 
-    @include('partials.ad-inline', ['bannerId' => '1523_300_250'])
+    @include('partials.ad-inline', ['bannerId' => '1844_728_90'])
 
     {{-- Benefits Section --}}
     <section class="section benefits-section">

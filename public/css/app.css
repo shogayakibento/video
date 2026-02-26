@@ -1001,46 +1001,6 @@ img {
     color: var(--text-muted);
 }
 
-/* ===== Breadcrumb ===== */
-.breadcrumb {
-    margin-bottom: 14px;
-}
-
-.breadcrumb-list {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    gap: 2px;
-}
-
-.breadcrumb-item {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.82rem;
-    color: var(--text-muted);
-}
-
-.breadcrumb-item a {
-    color: var(--primary);
-    text-decoration: none;
-    opacity: 0.85;
-}
-
-.breadcrumb-item a:hover {
-    opacity: 1;
-    text-decoration: underline;
-}
-
-.breadcrumb-sep {
-    color: var(--text-muted);
-    opacity: 0.6;
-}
-
 /* ===== Footer ===== */
 .footer {
     padding: 50px 0 24px;

@@ -6,10 +6,6 @@
 @section('content')
     <div class="page-header">
         <div class="container">
-            @include('partials.breadcrumb', ['items' => [
-                ['label' => 'ホーム', 'url' => route('home')],
-                ['label' => '女優'],
-            ]])
             <h1>女優から探す</h1>
             <p>お気に入りの女優を見つけよう</p>
         </div>
@@ -185,7 +181,7 @@
             @endforelse
         </div>
 
-        @include('partials.ad-inline', ['bannerId' => '1701_300_250'])
+        @include('partials.ad-inline', ['bannerId' => '1844_728_90'])
 
         {{-- Pagination --}}
         @if($totalPages > 1)

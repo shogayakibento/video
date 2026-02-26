@@ -19,11 +19,6 @@
 @section('content')
     <div class="page-header">
         <div class="container">
-            @include('partials.breadcrumb', ['items' => [
-                ['label' => 'ホーム', 'url' => route('home')],
-                ['label' => '女優', 'url' => route('actress.index')],
-                ['label' => $name],
-            ]])
             <h1>{{ $name }}</h1>
             @if($ruby)
                 <p>{{ $ruby }}</p>
