@@ -121,7 +121,7 @@
                     @if($tab === 'ranking')
                         <span class="actress-rank-badge">{{ ($currentPage - 1) * 100 + $index + 1 }}</span>
                     @endif
-                    <div class="actress-thumb {{ $tab === 'ranking' ? 'actress-thumb-square' : '' }}">
+                    <div class="actress-thumb">
                         @if($imageUrl)
                             <img src="{{ $imageUrl }}" alt="{{ $name }}" loading="lazy">
                         @else

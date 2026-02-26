@@ -1539,6 +1539,11 @@ img {
     position: relative;
 }
 
+.actress-card-ranking .actress-thumb {
+    width: 120px;
+    height: 120px;
+}
+
 .actress-rank-badge {
     position: absolute;
     top: 8px;
