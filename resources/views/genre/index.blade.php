@@ -12,6 +12,11 @@
     </div>
 
     <div class="container">
+        @include('partials.breadcrumb', ['items' => [
+            ['label' => 'ホーム', 'url' => route('home')],
+            ['label' => 'ジャンル'],
+        ]])
+
         <div class="genre-grid">
             @foreach($genres as $slug => $genre)
                 <a href="{{ route('genre.show', $slug) }}" class="genre-card animate-on-scroll">
@@ -20,6 +25,6 @@
             @endforeach
         </div>
 
-        @include('partials.ad-inline', ['bannerId' => '1701_300_250'])
+        @include('partials.ad-inline', ['bannerId' => '1844_728_90'])
     </div>
 @endsection

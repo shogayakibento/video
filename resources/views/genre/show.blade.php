@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', $genre['label'] . 'の動画一覧 - FanzaGate')
-@section('description', $genre['label'] . 'の人気動画作品一覧。FANZAの' . $genre['label'] . 'ジャンルをランキング・新着順でチェック。')
+@section('description', $genre['label'] . 'ジャンルの人気FANZA動画一覧。最新作・人気作品をランキング・新着順でチェック。')
 
 @section('content')
     <div class="page-header">
@@ -12,6 +12,12 @@
     </div>
 
     <div class="container">
+        @include('partials.breadcrumb', ['items' => [
+            ['label' => 'ホーム', 'url' => route('home')],
+            ['label' => 'ジャンル', 'url' => route('genre.index')],
+            ['label' => $genre['label']],
+        ]])
+
         {{-- Sort --}}
         <div class="filter-bar">
             <a href="{{ route('genre.show', $slug) }}?sort=rank" class="tab-btn {{ $sort === 'rank' ? 'active' : '' }}">人気順</a>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', ($keyword ? $keyword . 'の検索結果' : '検索') . ' - FanzaGate')
-@section('description', 'FANZAの作品を検索。動画、VR、DVD、コミックなど幅広いカテゴリから作品を探せます。')
+@section('description', $keyword ? '「' . $keyword . '」のFANZA作品検索結果。動画・VR・DVD・コミックから' . $keyword . '関連作品を一覧表示。' : 'FANZAの作品を検索。動画、VR、DVD、コミックなど幅広いカテゴリから作品を探せます。')
 
 @section('content')
     <div class="page-header">
@@ -15,6 +15,11 @@
     </div>
 
     <div class="container">
+        @include('partials.breadcrumb', ['items' => [
+            ['label' => 'ホーム', 'url' => route('home')],
+            ['label' => $keyword ? '「' . $keyword . '」の検索結果' : '検索'],
+        ]])
+
         @if($keyword)
             <div class="search-meta">
                 <p>「<strong>{{ $keyword }}</strong>」の検索結果: <span class="result-count">{{ number_format($totalCount) }}件</span></p>

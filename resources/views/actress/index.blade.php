@@ -12,6 +12,11 @@
     </div>
 
     <div class="container">
+        @include('partials.breadcrumb', ['items' => [
+            ['label' => 'ホーム', 'url' => route('home')],
+            ['label' => '女優'],
+        ]])
+
         {{-- Main Tabs --}}
         <div class="filter-bar filter-bar-center">
             <a href="{{ route('actress.index', ['tab' => 'ranking']) }}" class="tab-btn {{ $tab === 'ranking' ? 'active' : '' }}">人気ランキング</a>
@@ -181,7 +186,7 @@
             @endforelse
         </div>
 
-        @include('partials.ad-inline', ['bannerId' => '1701_300_250'])
+        @include('partials.ad-inline', ['bannerId' => '1844_728_90'])
 
         {{-- Pagination --}}
         @if($totalPages > 1)

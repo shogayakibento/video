@@ -12,6 +12,14 @@
         </div>
     </div>
 
+    {{-- Breadcrumb --}}
+    <div class="container">
+        @include('partials.breadcrumb', ['items' => [
+            ['label' => 'ホーム', 'url' => route('home')],
+            ['label' => $category['label']],
+        ]])
+    </div>
+
     {{-- Sort & Filter --}}
     <div class="container">
         <div class="filter-bar">
@@ -33,7 +41,7 @@
             @endforelse
         </div>
 
-        @include('partials.ad-inline', ['bannerId' => '1829_300_250'])
+        @include('partials.ad-inline', ['bannerId' => '1844_728_90'])
 
         {{-- Pagination --}}
         @if($totalPages > 1)
