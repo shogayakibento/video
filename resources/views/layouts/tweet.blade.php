@@ -217,7 +217,6 @@
                 </a>
                 <nav class="flex gap-6 text-sm font-medium">
                     <a href="{{ route('tweet.ranking.index') }}" class="nav-link {{ request()->routeIs('tweet.ranking.index') ? 'active' : '' }}">ランキング</a>
-                    <a href="{{ route('tweet.ranking.popular-tweets') }}" class="nav-link {{ request()->routeIs('tweet.ranking.popular-tweets') ? 'active' : '' }}">話題のツイート</a>
                     <a href="{{ route('tweet.ranking.latest') }}" class="nav-link {{ request()->routeIs('tweet.ranking.latest') ? 'active' : '' }}">新着</a>
                     <a href="{{ route('home') }}" class="nav-link text-xs border border-gray-700 px-2 py-0.5 rounded">FanzaGate</a>
                 </nav>

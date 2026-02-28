@@ -88,12 +88,4 @@ class RankingController extends Controller
         return view('tweet-ranking.latest', compact('videos'));
     }
 
-    public function tweetPopularTweets()
-    {
-        $tweets = Tweet::with('video')
-            ->orderByDesc('like_count')
-            ->paginate(20);
-
-        return view('tweet-ranking.popular-tweets', compact('tweets'));
-    }
 }
