@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'FanzaGate - 人気作品ランキング＆レビューガイド')</title>
-    <meta name="description" content="@yield('description', 'FANZAの人気作品ランキング、新着情報、レビューをお届け。動画・VR・DVD・コミックの最新おすすめ作品を毎日更新。')">
-    <meta name="keywords" content="@yield('keywords', 'FANZA, 動画, VR, DVD, コミック, ランキング, レビュー, おすすめ')">
-    <meta property="og:title" content="@yield('og_title', 'FanzaGate - 人気作品ランキング＆レビューガイド')">
-    <meta property="og:description" content="@yield('og_description', 'FANZAの人気作品ランキング、新着情報、レビューをお届け。')">
+    <title>@yield('title', 'FANZA人気作品ランキング・新着動画まとめ | FanzaGate')</title>
+    <meta name="description" content="@yield('description', 'FANZAの人気ランキング・新着動画・VR・DVDを毎日更新。X(Twitter)でバズった話題作もチェックできるFANZA専門ガイドサイト。')">
+    <meta name="keywords" content="@yield('keywords', 'FANZA, 動画, VR, DVD, コミック, ランキング, 新着, おすすめ, バズり')">
+    <meta property="og:title" content="@yield('og_title', 'FANZA人気作品ランキング・新着動画まとめ | FanzaGate')">
+    <meta property="og:description" content="@yield('og_description', 'FANZAの人気ランキング・新着動画・VR・DVDを毎日更新。X(Twitter)でバズった話題作もチェック！')">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
     <link rel="canonical" href="{{ url()->current() }}">
@@ -32,7 +32,7 @@
                         <li><a href="{{ route('category.show', $slug) }}" class="nav-link {{ request()->is('category/'.$slug) ? 'active' : '' }}">{{ $cat['label'] }}</a></li>
                     @endforeach
                     <li><a href="{{ route('ranking') }}" class="nav-link {{ request()->routeIs('ranking') ? 'active' : '' }}">ランキング</a></li>
-                    <li><a href="{{ route('tweet.ranking.index') }}" class="nav-link {{ request()->routeIs('tweet.ranking.*') || request()->routeIs('tweet.video.*') ? 'active' : '' }}">Xランキング</a></li>
+                    <li><a href="{{ route('tweet.ranking.index') }}" class="nav-link {{ request()->routeIs('tweet.ranking.*') || request()->routeIs('tweet.video.*') ? 'active' : '' }}">Xバズりランキング</a></li>
                     <li><a href="{{ route('genre.index') }}" class="nav-link {{ request()->routeIs('genre.*') ? 'active' : '' }}">ジャンル</a></li>
                     <li><a href="{{ route('actress.index') }}" class="nav-link {{ request()->routeIs('actress.*') ? 'active' : '' }}">女優</a></li>
                 </ul>
@@ -51,7 +51,7 @@
             <a href="{{ route('category.show', $slug) }}">{{ $cat['label'] }}</a>
         @endforeach
         <a href="{{ route('ranking') }}">ランキング</a>
-        <a href="{{ route('tweet.ranking.index') }}">Xランキング</a>
+        <a href="{{ route('tweet.ranking.index') }}">Xバズりランキング</a>
         <a href="{{ route('genre.index') }}">ジャンル</a>
         <a href="{{ route('actress.index') }}">女優</a>
     </div>
@@ -109,7 +109,7 @@
                     <h4>メニュー</h4>
                     <ul>
                         <li><a href="{{ route('ranking') }}">ランキング</a></li>
-                        <li><a href="{{ route('tweet.ranking.index') }}">Xランキング</a></li>
+                        <li><a href="{{ route('tweet.ranking.index') }}">Xバズりランキング</a></li>
                         <li><a href="{{ route('genre.index') }}">ジャンル</a></li>
                         <li><a href="{{ route('actress.index') }}">女優</a></li>
                         <li><a href="{{ route('search') }}">検索</a></li>
