@@ -32,6 +32,7 @@
                         <li><a href="{{ route('category.show', $slug) }}" class="nav-link {{ request()->is('category/'.$slug) ? 'active' : '' }}">{{ $cat['label'] }}</a></li>
                     @endforeach
                     <li><a href="{{ route('ranking') }}" class="nav-link {{ request()->routeIs('ranking') ? 'active' : '' }}">ランキング</a></li>
+                    <li><a href="{{ route('tweet.ranking.index') }}" class="nav-link {{ request()->routeIs('tweet.ranking.*') || request()->routeIs('tweet.video.*') ? 'active' : '' }}">Xランキング</a></li>
                     <li><a href="{{ route('genre.index') }}" class="nav-link {{ request()->routeIs('genre.*') ? 'active' : '' }}">ジャンル</a></li>
                     <li><a href="{{ route('actress.index') }}" class="nav-link {{ request()->routeIs('actress.*') ? 'active' : '' }}">女優</a></li>
                 </ul>
@@ -50,6 +51,7 @@
             <a href="{{ route('category.show', $slug) }}">{{ $cat['label'] }}</a>
         @endforeach
         <a href="{{ route('ranking') }}">ランキング</a>
+        <a href="{{ route('tweet.ranking.index') }}">Xランキング</a>
         <a href="{{ route('genre.index') }}">ジャンル</a>
         <a href="{{ route('actress.index') }}">女優</a>
     </div>
@@ -107,6 +109,7 @@
                     <h4>メニュー</h4>
                     <ul>
                         <li><a href="{{ route('ranking') }}">ランキング</a></li>
+                        <li><a href="{{ route('tweet.ranking.index') }}">Xランキング</a></li>
                         <li><a href="{{ route('genre.index') }}">ジャンル</a></li>
                         <li><a href="{{ route('actress.index') }}">女優</a></li>
                         <li><a href="{{ route('search') }}">検索</a></li>
