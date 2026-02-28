@@ -1,43 +1,24 @@
-@extends('layouts.app')
+@extends('layouts.tweet')
 
 @section('title', '新着AV作品 - FanzaGate')
 @section('description', '最近リリースされた話題のFANZA作品を新しい順に表示。')
 
 @section('content')
-    <div class="page-header">
-        <div class="container">
-            <h1>新着AV作品</h1>
-            <p>最近リリースされた作品を新しい順に表示</p>
-        </div>
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold mb-4">新着AV作品</h1>
+        <p class="text-gray-400 text-sm">最近リリースされた作品を新しい順に表示</p>
     </div>
 
-    <div class="container">
-        @include('partials.breadcrumb', ['items' => [
-            ['label' => 'ホーム', 'url' => route('home')],
-            ['label' => 'Xランキング', 'url' => route('tweet.ranking.index')],
-            ['label' => '新着'],
-        ]])
-
-        <div class="filter-bar">
-            <a href="{{ route('tweet.ranking.index') }}" class="tab-btn">ランキング</a>
-            <a href="{{ route('tweet.ranking.popular-tweets') }}" class="tab-btn">話題のツイート</a>
-            <a href="{{ route('tweet.ranking.latest') }}" class="tab-btn active">新着</a>
+    @if($videos->isEmpty())
+        <div class="text-center py-20 text-gray-500">
+            <p class="text-lg mb-2">まだデータがありません</p>
         </div>
-
-        @if($videos->isEmpty())
-            <div class="empty-state">
-                <p>まだデータがありません</p>
-            </div>
-        @else
-            <div class="grid-4col">
-                @foreach($videos as $video)
-                    @include('components.tweet-video-card', ['video' => $video])
-                @endforeach
-            </div>
-
-            <div style="margin-top: 32px;">
-                {{ $videos->links() }}
-            </div>
-        @endif
-    </div>
+    @else
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            @foreach($videos as $video)
+                @include('components.tweet-video-card', ['video' => $video])
+            @endforeach
+        </div>
+        <div class="mt-8">{{ $videos->links() }}</div>
+    @endif
 @endsection
