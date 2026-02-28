@@ -23,7 +23,6 @@ Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap')
 
 // Xツイートランキング
 Route::get('/tweet-ranking', [RankingController::class, 'tweetIndex'])->name('tweet.ranking.index');
-Route::get('/tweet-ranking/latest', [RankingController::class, 'tweetLatest'])->name('tweet.ranking.latest');
 Route::get('/tweet-video/{video}', [TweetVideoController::class, 'show'])->name('tweet.video.show');
 Route::get('/tweet-go/{video}', [TweetVideoController::class, 'redirect'])->name('tweet.video.redirect');
 

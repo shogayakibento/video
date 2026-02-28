@@ -79,13 +79,4 @@ class RankingController extends Controller
         return view('tweet-ranking.index', compact('videos', 'period', 'genre', 'genres'));
     }
 
-    public function tweetLatest()
-    {
-        $videos = Video::orderByDesc('release_date')
-            ->orderByDesc('total_likes')
-            ->paginate(20);
-
-        return view('tweet-ranking.latest', compact('videos'));
-    }
-
 }
