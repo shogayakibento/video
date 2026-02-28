@@ -187,7 +187,7 @@
         <a href="{{ route('actress.index') }}">女優</a>
     </div>
 
-    <main class="max-w-6xl mx-auto px-4 py-8" style="padding-top: calc(64px + 2rem);">
+    <main class="container" style="padding-top: calc(64px + 2rem); padding-bottom: 2rem;">
         @yield('content')
     </main>
 
