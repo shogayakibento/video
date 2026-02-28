@@ -208,6 +208,7 @@ class AdminController extends Controller
             $video->update([
                 'total_likes' => (int) $request->input('like_count'),
                 'total_retweets' => (int) $request->input('retweet_count', 0),
+                'weekly_likes' => (int) $request->input('like_count'),
             ]);
         }
 

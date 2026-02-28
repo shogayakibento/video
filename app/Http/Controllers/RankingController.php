@@ -66,7 +66,7 @@ class RankingController extends Controller
             $query->where('genre', 'like', "%{$genre}%");
         }
 
-        $videos = $query->orderByDesc('total_likes')->paginate(20);
+        $videos = $query->orderByDesc('weekly_likes')->orderByDesc('total_likes')->paginate(20);
 
         $genres = Video::whereNotNull('genre')
             ->where('genre', '!=', '')

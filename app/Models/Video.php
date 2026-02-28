@@ -19,6 +19,7 @@ class Video extends Model
         'release_date',
         'total_likes',
         'total_retweets',
+        'weekly_likes',
         'click_count',
     ];
 
@@ -26,6 +27,7 @@ class Video extends Model
         'release_date' => 'date',
         'total_likes' => 'integer',
         'total_retweets' => 'integer',
+        'weekly_likes' => 'integer',
         'click_count' => 'integer',
     ];
 
@@ -42,8 +44,11 @@ class Video extends Model
     public function recalculateEngagement(): void
     {
         $this->update([
-            'total_likes' => $this->tweets()->sum('like_count'),
+            'total_likes'    => $this->tweets()->sum('like_count'),
             'total_retweets' => $this->tweets()->sum('retweet_count'),
+            'weekly_likes'   => $this->tweets()
+                ->whereBetween('tweeted_at', [now()->subDays(7), now()->subHours(24)])
+                ->sum('like_count'),
         ]);
     }
 }
