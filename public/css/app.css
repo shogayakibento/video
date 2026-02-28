@@ -158,6 +158,41 @@ img {
     color: var(--primary-light);
 }
 
+/* Xバズりランキング — 特別バッジスタイル */
+@keyframes buzz-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 45, 120, 0); }
+    50%       { box-shadow: 0 0 0 4px rgba(255, 45, 120, 0.18); }
+}
+
+.nav-link-buzz {
+    padding: 7px 14px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: #fff !important;
+    border-radius: 50px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    animation: buzz-pulse 2.8s ease-in-out infinite;
+    transition: var(--transition);
+}
+
+.nav-link-buzz:hover,
+.nav-link-buzz.active {
+    background: linear-gradient(135deg, var(--primary-light), var(--primary));
+    color: #fff !important;
+    background-color: transparent;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(255, 45, 120, 0.5) !important;
+    animation: none;
+}
+
+/* モバイルナビ内でも同スタイルを適用 */
+.mobile-nav .nav-link-buzz {
+    display: inline-block;
+    margin: 8px 0;
+    border: none;
+}
+
 .menu-toggle {
     display: none;
     flex-direction: column;
