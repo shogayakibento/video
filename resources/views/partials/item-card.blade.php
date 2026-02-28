@@ -6,9 +6,20 @@
     $actress = $item['iteminfo']['actress'][0]['name'] ?? null;
     $maker = $item['iteminfo']['maker'][0]['name'] ?? null;
     $price = $item['prices']['price'] ?? null;
+    $contentId = $item['content_id'] ?? null;
 @endphp
 
+@if($contentId)
+<div class="item-card item-card-clickable"
+     data-content-id="{{ $contentId }}"
+     data-title="{{ $title }}"
+     data-actress="{{ $actress }}"
+     data-url="{{ $url }}"
+     data-price="{{ $price }}"
+     role="button" tabindex="0">
+@else
 <a href="{{ $url }}" class="item-card" target="_blank" rel="noopener noreferrer">
+@endif
     <div class="item-thumb">
         @if($imageUrl)
             <img src="{{ $imageUrl }}" alt="{{ $title }}" loading="lazy">
@@ -25,6 +36,11 @@
         @if($review)
             <span class="rating-badge">★ {{ $review }}</span>
         @endif
+        @if($contentId)
+            <div class="play-overlay" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+        @endif
     </div>
     <div class="item-info">
         <h3 class="item-title">{{ $title }}</h3>
@@ -40,4 +56,8 @@
             @endif
         </div>
     </div>
+@if($contentId)
+</div>
+@else
 </a>
+@endif

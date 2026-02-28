@@ -8,6 +8,7 @@
         setupMobileMenu();
         setupFAQ();
         setupScrollAnimations();
+        setupSampleModal();
     });
 
     // ===== Mobile Menu =====
@@ -65,6 +66,79 @@
             el.style.opacity = '0';
             el.style.transform = 'translateY(20px)';
             observer.observe(el);
+        });
+    }
+
+    // ===== Sample Preview Modal =====
+    function setupSampleModal() {
+        var modalOverlay = document.getElementById('sampleModal');
+        if (!modalOverlay) return;
+
+        var iframe    = document.getElementById('sampleModalIframe');
+        var titleEl   = document.getElementById('sampleModalTitle');
+        var actressEl = document.getElementById('sampleModalActress');
+        var priceEl   = document.getElementById('sampleModalPrice');
+        var linkEl    = document.getElementById('sampleModalLink');
+        var closeBtn  = document.getElementById('sampleModalClose');
+        var affiliateId = modalOverlay.dataset.affiliateId || '';
+
+        function openModal(card) {
+            var cid     = card.dataset.contentId;
+            var title   = card.dataset.title || '';
+            var actress = card.dataset.actress || '';
+            var url     = card.dataset.url || '#';
+            var price   = card.dataset.price || '';
+
+            titleEl.textContent   = title;
+            actressEl.textContent = actress ? '出演: ' + actress : '';
+            actressEl.style.display = actress ? '' : 'none';
+            priceEl.textContent   = price ? price.replace(/~$/, '円〜') + (price.endsWith('~') ? '' : '円') : '';
+            linkEl.href           = url;
+
+            iframe.src = 'https://www.dmm.co.jp/litevideo/-/part/=/affi_id=' + affiliateId + '/cid=' + cid + '/size=1280_720/';
+
+            modalOverlay.classList.add('active');
+            modalOverlay.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+            modalOverlay.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+            // Stop video playback by clearing src
+            iframe.src = '';
+        }
+
+        // Open on clickable cards
+        document.addEventListener('click', function (e) {
+            var card = e.target.closest('.item-card-clickable');
+            if (card) {
+                e.preventDefault();
+                openModal(card);
+                return;
+            }
+        });
+
+        // Keyboard support for clickable cards
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                var card = e.target.closest('.item-card-clickable');
+                if (card) {
+                    e.preventDefault();
+                    openModal(card);
+                }
+            }
+            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        closeBtn.addEventListener('click', closeModal);
+
+        // Close when clicking backdrop
+        modalOverlay.addEventListener('click', function (e) {
+            if (e.target === modalOverlay) closeModal();
         });
     }
 })();
