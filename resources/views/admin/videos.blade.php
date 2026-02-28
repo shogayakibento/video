@@ -70,6 +70,6 @@
     </div>
 
     <div class="mt-4">
-        {{ $videos->withQueryString()->links() }}
+        {{ $videos->withQueryString()->links('vendor.pagination.tailwind') }}
     </div>
 @endsection
