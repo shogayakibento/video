@@ -136,6 +136,16 @@
             background: linear-gradient(180deg, #ff2d78, #9b5df5);
             border-radius: 9999px;
         }
+
+        /* Tailwindの.containerが動的注入されても上書きされないよう保護 */
+        .container {
+            max-width: 1200px !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            padding-left: 20px !important;
+            padding-right: 20px !important;
+            width: auto !important;
+        }
     </style>
 </head>
 <body class="text-gray-200 min-h-screen">
