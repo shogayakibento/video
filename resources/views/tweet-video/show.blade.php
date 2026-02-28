@@ -18,6 +18,17 @@
                         <source src="{{ $video->sample_video_url }}" type="video/mp4">
                         お使いのブラウザは動画再生に対応していません。
                     </video>
+                @elseif($video->dmm_content_id)
+                    <div class="relative" style="padding-top: 65%;">
+                        <iframe
+                            src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id={{ config('dmm.affiliate_id') }}/cid={{ $video->dmm_content_id }}/size=1280_720/"
+                            class="absolute left-0 right-0 w-full"
+                            style="top: -15%; height: 125%;"
+                            frameborder="0"
+                            allowfullscreen
+                            scrolling="no"
+                        ></iframe>
+                    </div>
                 @else
                     <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" class="w-full aspect-video object-cover">
                 @endif
