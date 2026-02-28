@@ -7,7 +7,8 @@
     <meta name="description" content="@yield('description', 'X(Twitter)でいいね数が多くバズったFANZA動画を毎日更新でランキング。今SNSで話題の人気AV作品をチェック！')">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -49,44 +50,6 @@
             overflow: hidden;
         }
 
-        /* ヘッダー - ガラスモーフィズム */
-        .header-glass {
-            background: rgba(5, 5, 20, 0.75);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border-bottom: 1px solid rgba(255, 45, 120, 0.18);
-        }
-
-        /* サイトタイトル - シマーアニメーション */
-        @keyframes shimmer {
-            0%   { background-position: -200% center; }
-            100% { background-position: 200% center; }
-        }
-
-        .site-title {
-            background: linear-gradient(
-                135deg,
-                #ffb3d9 0%,
-                #ff2d78 25%,
-                #9b5df5 50%,
-                #ff2d78 75%,
-                #ffb3d9 100%
-            );
-            background-size: 250% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            animation: shimmer 5s linear infinite;
-            filter: drop-shadow(0 0 14px rgba(255, 45, 120, 0.45));
-            transition: filter 0.3s ease;
-        }
-        .site-title:hover {
-            filter: drop-shadow(0 0 28px rgba(255, 45, 120, 0.85));
-        }
-
         /* ページH1タイトル */
         .page-title {
             background: linear-gradient(135deg, #ffe0f0 0%, #ff2d78 50%, #9b5df5 100%);
@@ -103,31 +66,6 @@
             border-radius: 9999px;
             background: linear-gradient(90deg, #ff2d78, #9b5df5, transparent);
         }
-
-        /* ナビリンク */
-        .nav-link {
-            position: relative;
-            padding-bottom: 2px;
-            transition: color 0.2s ease;
-        }
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #ff2d78, #9b5df5);
-            transition: width 0.3s ease;
-            border-radius: 9999px;
-        }
-        .nav-link:hover::after,
-        .nav-link.active::after {
-            width: 100%;
-        }
-        .nav-link.active { color: #ff2d78; }
-        .nav-link:not(.active) { color: #b0b0c8; }
-        .nav-link:not(.active):hover { color: #ffffff; }
 
         /* ビデオカード - ガラスエフェクト */
         .video-card {
@@ -197,37 +135,46 @@
         }
     </style>
 </head>
-<body class="bg-dark text-gray-200 min-h-screen">
-    <header class="header-glass sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 py-3.5">
-            <div class="flex items-center justify-between">
-                <a href="{{ route('tweet.ranking.index') }}" class="text-xl font-bold site-title">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="-webkit-text-fill-color:initial; filter:none;">
-                        <defs>
-                            <linearGradient id="playGrad" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
-                                <stop offset="0%" stop-color="#ff2d78"/>
-                                <stop offset="100%" stop-color="#9b5df5"/>
-                            </linearGradient>
-                        </defs>
-                        <circle cx="12" cy="12" r="10" fill="url(#playGrad)" opacity="0.15"/>
-                        <circle cx="12" cy="12" r="10" stroke="url(#playGrad)" stroke-width="1.5"/>
-                        <path d="M10 8.5L16.5 12L10 15.5V8.5Z" fill="url(#playGrad)"/>
-                    </svg>
-                    バズりFANZAランキング
-                </a>
-                <nav class="flex gap-6 text-sm font-medium">
-                    <a href="{{ route('tweet.ranking.index') }}" class="nav-link {{ request()->routeIs('tweet.ranking.index') ? 'active' : '' }}">ランキング</a>
-                    <a href="{{ route('tweet.ranking.latest') }}" class="nav-link {{ request()->routeIs('tweet.ranking.latest') ? 'active' : '' }}">新着</a>
-                    <a href="{{ route('home') }}" class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border border-white/15 text-gray-400 hover:text-white hover:border-pink-500/50 hover:bg-pink-500/10 transition-all duration-200">
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M7.5 2L3.5 6L7.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        FanzaGate
-                    </a>
-                </nav>
-            </div>
+<body class="text-gray-200 min-h-screen">
+    {{-- Header (FanzaGate共通) --}}
+    <header class="header">
+        <div class="container header-inner">
+            <a href="{{ route('home') }}" class="logo">
+                <span class="logo-icon">F</span>
+                <span class="logo-text">FanzaGate</span>
+            </a>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="{{ route('home') }}" class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}">ホーム</a></li>
+                    @foreach(config('fanza.categories') as $slug => $cat)
+                        <li><a href="{{ route('category.show', $slug) }}" class="nav-link {{ request()->is('category/'.$slug) ? 'active' : '' }}">{{ $cat['label'] }}</a></li>
+                    @endforeach
+                    <li><a href="{{ route('ranking') }}" class="nav-link {{ request()->routeIs('ranking') ? 'active' : '' }}">ランキング</a></li>
+                    <li><a href="{{ route('tweet.ranking.index') }}" class="nav-link nav-link-buzz {{ request()->routeIs('tweet.ranking.*') || request()->routeIs('tweet.video.*') ? 'active' : '' }}">X バズりランキング</a></li>
+                    <li><a href="{{ route('genre.index') }}" class="nav-link {{ request()->routeIs('genre.*') ? 'active' : '' }}">ジャンル</a></li>
+                    <li><a href="{{ route('actress.index') }}" class="nav-link {{ request()->routeIs('actress.*') ? 'active' : '' }}">女優</a></li>
+                </ul>
+            </nav>
+            <button class="menu-toggle" aria-label="メニュー" id="menuToggle">
+                <span></span><span></span><span></span>
+            </button>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 py-8">
+    {{-- Mobile Nav --}}
+    <div class="mobile-nav-overlay" id="mobileOverlay"></div>
+    <div class="mobile-nav" id="mobileNav">
+        <a href="{{ route('home') }}">ホーム</a>
+        @foreach(config('fanza.categories') as $slug => $cat)
+            <a href="{{ route('category.show', $slug) }}">{{ $cat['label'] }}</a>
+        @endforeach
+        <a href="{{ route('ranking') }}">ランキング</a>
+        <a href="{{ route('tweet.ranking.index') }}" class="nav-link-buzz">X バズりランキング</a>
+        <a href="{{ route('genre.index') }}">ジャンル</a>
+        <a href="{{ route('actress.index') }}">女優</a>
+    </div>
+
+    <main class="max-w-6xl mx-auto px-4 py-8" style="padding-top: calc(64px + 2rem);">
         @yield('content')
     </main>
 
@@ -237,5 +184,7 @@
             <p class="mt-2">&copy; {{ date('Y') }} FanzaGate</p>
         </div>
     </footer>
+
+    <script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>
