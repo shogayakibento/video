@@ -514,7 +514,7 @@ img {
     right: 8px;
     padding: 3px 8px;
     background: rgba(0, 0, 0, 0.75);
-    color: var(--accent);
+    color: #f59e0b;
     font-size: 0.78rem;
     font-weight: 700;
     border-radius: 4px;
@@ -561,7 +561,7 @@ img {
 .item-price {
     font-size: 0.8rem;
     font-weight: 700;
-    color: var(--accent);
+    color: var(--primary-light);
     white-space: nowrap;
 }
 
@@ -826,7 +826,7 @@ img {
 .price {
     font-size: 0.9rem;
     font-weight: 700;
-    color: var(--accent);
+    color: var(--primary-light);
 }
 
 /* ===== Filter Bar ===== */

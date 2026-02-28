@@ -36,7 +36,7 @@
                 <span class="item-maker">{{ $maker }}</span>
             @endif
             @if($price)
-                <span class="item-price">{{ $price }}</span>
+                <span class="item-price">{{ preg_replace('/~$/', '円〜', $price) }}{{ str_ends_with($price, '~') ? '' : '円' }}</span>
             @endif
         </div>
     </div>
