@@ -34,7 +34,7 @@
                 @endif
             </div>
 
-            <h1 class="text-xl font-bold mb-3">{{ $video->title }}</h1>
+            <h1 class="text-xl font-bold mb-3 page-title">{{ $video->title }}</h1>
 
             <div class="flex flex-wrap items-center gap-4 mb-4 text-sm text-gray-400">
                 @if($video->actress)<span>出演: {{ $video->actress }}</span>@endif
@@ -43,8 +43,8 @@
             </div>
 
             {{-- エンゲージメント --}}
-            <div class="flex items-center gap-6 mb-6 py-3 border-t border-b border-gray-700">
-                <div class="flex items-center gap-2 text-accent">
+            <div class="flex items-center gap-6 mb-6 py-3 border-t border-b" style="border-color: rgba(255,255,255,0.08);">
+                <div class="flex items-center gap-2" style="color: #ff2d78;">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                     <span class="font-bold">{{ number_format($video->total_likes) }}</span>
                     <span class="text-gray-400 text-sm">いいね</span>
@@ -58,7 +58,7 @@
 
             {{-- FANZAリンク --}}
             <a href="{{ route('tweet.video.redirect', $video) }}" target="_blank" rel="nofollow noopener"
-               class="inline-block bg-accent hover:bg-red-600 text-white font-bold px-8 py-3 rounded-lg transition text-center mb-6">
+               class="fanza-btn inline-block text-white font-bold px-8 py-3 rounded-lg text-center mb-6">
                 FANZAで詳細を見る
             </a>
 
@@ -69,7 +69,7 @@
                     <div class="flex flex-wrap gap-2">
                         @foreach(explode(', ', $video->genre) as $g)
                             <a href="{{ route('tweet.ranking.index', ['genre' => $g]) }}"
-                               class="bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs px-3 py-1 rounded-full transition">{{ $g }}</a>
+                               class="filter-pill text-xs px-3 py-1 rounded-full transition">{{ $g }}</a>
                         @endforeach
                     </div>
                 </div>
@@ -81,7 +81,7 @@
                     <h3 class="text-lg font-bold mb-3">関連ツイート</h3>
                     <div class="space-y-3">
                         @foreach($video->tweets->sortByDesc('like_count')->take(5) as $tweet)
-                            <div class="bg-primary rounded-lg p-4">
+                            <div class="video-card rounded-lg p-4">
                                 <div class="flex items-center justify-between mb-2">
                                     <span class="text-sm text-gray-400">&#64;{{ $tweet->author_username }}</span>
                                     @if($tweet->tweet_url)
