@@ -218,7 +218,10 @@
                 <nav class="flex gap-6 text-sm font-medium">
                     <a href="{{ route('tweet.ranking.index') }}" class="nav-link {{ request()->routeIs('tweet.ranking.index') ? 'active' : '' }}">ランキング</a>
                     <a href="{{ route('tweet.ranking.latest') }}" class="nav-link {{ request()->routeIs('tweet.ranking.latest') ? 'active' : '' }}">新着</a>
-                    <a href="{{ route('home') }}" class="nav-link text-xs border border-gray-700 px-2 py-0.5 rounded">FanzaGate</a>
+                    <a href="{{ route('home') }}" class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border border-white/15 text-gray-400 hover:text-white hover:border-pink-500/50 hover:bg-pink-500/10 transition-all duration-200">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M7.5 2L3.5 6L7.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        FanzaGate
+                    </a>
                 </nav>
             </div>
         </div>
