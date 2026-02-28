@@ -29,19 +29,10 @@
                         @endif
 
                         <div class="flex-1 min-w-0">
-                            <div class="flex items-center justify-between mb-2">
+                            <div class="mb-2">
                                 <span class="text-sm font-medium text-gray-300">
                                     @if($tweet->author_username)&#64;{{ $tweet->author_username }}@else匿名ユーザー@endif
                                 </span>
-                                @if($tweet->tweet_url)
-                                    <a href="{{ $tweet->tweet_url }}" target="_blank" rel="noopener noreferrer"
-                                       class="text-xs text-accent hover:underline flex items-center gap-1">
-                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                                        </svg>
-                                        ツイートを見る
-                                    </a>
-                                @endif
                             </div>
 
                             @if($tweet->tweet_text)

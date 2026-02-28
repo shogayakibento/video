@@ -84,11 +84,8 @@
                     <div class="space-y-3">
                         @foreach($video->tweets->sortByDesc('like_count')->take(5) as $tweet)
                             <div class="bg-primary rounded-lg p-4">
-                                <div class="flex items-center justify-between mb-2">
+                                <div class="mb-2">
                                     <span class="text-sm text-gray-400">&#64;{{ $tweet->author_username }}</span>
-                                    @if($tweet->tweet_url)
-                                        <a href="{{ $tweet->tweet_url }}" target="_blank" rel="noopener" class="text-accent text-xs hover:underline">ツイートを見る</a>
-                                    @endif
                                 </div>
                                 @if($tweet->tweet_text)
                                     <p class="text-sm text-gray-300 mb-2">{{ $tweet->tweet_text }}</p>
