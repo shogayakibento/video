@@ -68,10 +68,13 @@ class RankingController extends Controller
 
         $videos = $query->orderByDesc('weekly_likes')->orderByDesc('total_likes')->paginate(20);
 
+        $excludeGenres = ['単体作品', 'ハイビジョン', '独占配信', '4K', 'デジモ', 'ギリモザ'];
+
         $genres = Video::whereNotNull('genre')
             ->where('genre', '!=', '')
             ->pluck('genre')
             ->flatMap(fn($g) => explode(', ', $g))
+            ->filter(fn($g) => !in_array($g, $excludeGenres))
             ->countBy()
             ->sortDesc()
             ->keys()
