@@ -8,23 +8,26 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#0a0a1e',
-                        secondary: '#0f0f28',
-                        accent: '#ff2d78',
-                        purple: '#9b5df5',
-                        dark: '#05050f',
+        tailwind = {
+            config: {
+                corePlugins: { preflight: false },
+                theme: {
+                    extend: {
+                        colors: {
+                            primary: '#0a0a1e',
+                            secondary: '#0f0f28',
+                            accent: '#ff2d78',
+                            purple: '#9b5df5',
+                            dark: '#05050f',
+                        }
                     }
                 }
             }
         }
     </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
     <style>
         * { box-sizing: border-box; }
 
