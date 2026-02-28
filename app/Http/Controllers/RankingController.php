@@ -72,8 +72,9 @@ class RankingController extends Controller
             ->where('genre', '!=', '')
             ->pluck('genre')
             ->flatMap(fn($g) => explode(', ', $g))
-            ->unique()
-            ->sort()
+            ->countBy()
+            ->sortDesc()
+            ->keys()
             ->values();
 
         return view('tweet-ranking.index', compact('videos', 'period', 'genre', 'genres'));
