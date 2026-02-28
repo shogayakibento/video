@@ -8,7 +8,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RankingController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SitemapController;
-use App\Http\Controllers\ExtensionApiController;
 use App\Http\Controllers\TweetVideoController;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +43,3 @@ Route::prefix('admin')->middleware('admin.auth')->group(function () {
     Route::get('/quick-add', [AdminController::class, 'quickAdd'])->name('admin.quick-add');
     Route::post('/quick-add', [AdminController::class, 'quickAddStore'])->name('admin.quick-add.store');
 });
-
-// Chrome拡張用API (CSRF除外)
-Route::post('/api/extension/store', [ExtensionApiController::class, 'store']);
