@@ -12,7 +12,6 @@ class Video extends Model
         'title',
         'actress',
         'thumbnail_url',
-        'sample_video_url',
         'affiliate_url',
         'genre',
         'maker',

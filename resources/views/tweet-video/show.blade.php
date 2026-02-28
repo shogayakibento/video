@@ -18,14 +18,7 @@
         <div class="lg:col-span-2">
             {{-- サンプル動画 or サムネイル --}}
             <div class="bg-black rounded-lg overflow-hidden mb-4">
-                @if($video->sample_video_url)
-                    <video
-                        src="{{ $video->sample_video_url }}"
-                        controls
-                        class="w-full"
-                        poster="{{ $video->thumbnail_url }}"
-                    ></video>
-                @elseif($video->dmm_content_id)
+                @if($video->dmm_content_id)
                     <div class="relative" style="padding-top: 65%;">
                         <iframe
                             src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id={{ config('dmm.affiliate_id') }}/cid={{ $video->dmm_content_id }}/size=1280_720/"
