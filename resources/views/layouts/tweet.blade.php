@@ -11,7 +11,7 @@
     <script>
         tailwind = {
             config: {
-                corePlugins: { preflight: false },
+                corePlugins: { preflight: false, container: false },
                 theme: {
                     extend: {
                         colors: {
