@@ -1,9 +1,14 @@
-@extends('layouts.tweet')
+@extends('layouts.app')
 
 @section('title', '新着AV作品 - FanzaGate')
 @section('description', '最近リリースされた話題のFANZA作品を新しい順に表示。')
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/tweet.css') }}?v={{ filemtime(public_path('css/tweet.css')) }}">
+@endpush
+
 @section('content')
+<div class="tweet-page">
     <div class="mb-8">
         <h1 class="text-2xl font-bold mb-3 page-title">新着AV作品</h1>
         <p class="text-sm" style="color: #6a6a8a;">最近リリースされた作品を新しい順に表示</p>
@@ -22,4 +27,5 @@
         </div>
         <div class="mt-10">{{ $videos->links() }}</div>
     @endif
+</div>
 @endsection

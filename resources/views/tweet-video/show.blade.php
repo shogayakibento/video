@@ -1,9 +1,14 @@
-@extends('layouts.tweet')
+@extends('layouts.app')
 
 @section('title', $video->title . ' - FanzaGate')
 @section('description', $video->title . 'のサンプル動画とレビュー。' . ($video->actress ? '出演: ' . $video->actress : ''))
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/tweet.css') }}?v={{ filemtime(public_path('css/tweet.css')) }}">
+@endpush
+
 @section('content')
+<div class="tweet-page">
     <div class="mb-4">
         <a href="{{ url()->previous() }}" class="text-gray-400 hover:text-accent text-sm transition">&larr; 戻る</a>
     </div>
@@ -127,4 +132,5 @@
             @endif
         </div>
     </div>
+</div>
 @endsection

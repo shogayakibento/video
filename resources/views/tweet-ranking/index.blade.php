@@ -1,9 +1,14 @@
-@extends('layouts.tweet')
+@extends('layouts.app')
 
 @section('title', 'X(Twitter)バズりFANZA動画ランキング - FanzaGate')
 @section('description', 'X(Twitter)でいいね数が多くバズったFANZA動画を毎日更新でランキング。今SNSで話題の人気AV作品をチェック！')
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/tweet.css') }}?v={{ filemtime(public_path('css/tweet.css')) }}">
+@endpush
+
 @section('content')
+<div class="tweet-page">
     <div class="mb-8">
         <h1 class="text-2xl font-bold mb-3 page-title">X(Twitter)バズりFANZA動画ランキング</h1>
         <p class="text-sm mb-6" style="color: #6a6a8a;">X(Twitter)でいいね数が多くバズったFANZAサンプル動画を毎日更新でランキング</p>
@@ -60,4 +65,5 @@
             {{ $videos->appends(request()->query())->links() }}
         </div>
     @endif
+</div>
 @endsection
