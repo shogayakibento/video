@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Xで話題のAVランキング - FanzaGate')</title>
-    <meta name="description" content="@yield('description', 'X(Twitter)でいいねが多い話題のFANZA動画をランキング形式で紹介。')">
+    <title>@yield('title', 'X(Twitter)バズりFANZA動画ランキング - FanzaGate')</title>
+    <meta name="description" content="@yield('description', 'X(Twitter)でいいね数が多くバズったFANZA動画を毎日更新でランキング。今SNSで話題の人気AV作品をチェック！')">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -213,7 +213,7 @@
                         <circle cx="12" cy="12" r="10" stroke="url(#playGrad)" stroke-width="1.5"/>
                         <path d="M10 8.5L16.5 12L10 15.5V8.5Z" fill="url(#playGrad)"/>
                     </svg>
-                    話題のAVランキング
+                    バズりFANZAランキング
                 </a>
                 <nav class="flex gap-6 text-sm font-medium">
                     <a href="{{ route('tweet.ranking.index') }}" class="nav-link {{ request()->routeIs('tweet.ranking.index') ? 'active' : '' }}">ランキング</a>
