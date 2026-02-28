@@ -48,16 +48,8 @@
 
     @if($videos->isEmpty())
         <div class="text-center py-24" style="color: #4a4a6a;">
-            @if(!empty($genre))
-                <p class="text-lg mb-2">「{{ $genre }}」の動画はまだ登録されていません</p>
-                <a href="{{ route('tweet.ranking.index', ['period' => $period]) }}"
-                   class="inline-block mt-4 px-6 py-2 rounded-full text-sm font-medium filter-pill-active transition">
-                    すべてのランキングを見る
-                </a>
-            @else
-                <p class="text-lg mb-2">まだランキングデータがありません</p>
-                <p class="text-sm opacity-70">データが取り込まれるとここにランキングが表示されます</p>
-            @endif
+            <p class="text-lg mb-2">まだランキングデータがありません</p>
+            <p class="text-sm opacity-70">データが取り込まれるとここにランキングが表示されます</p>
         </div>
     @else
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
