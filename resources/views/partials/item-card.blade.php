@@ -6,7 +6,7 @@
     $actress = $item['iteminfo']['actress'][0]['name'] ?? null;
     $maker = $item['iteminfo']['maker'][0]['name'] ?? null;
     $price = $item['prices']['price'] ?? null;
-    $contentId = $item['content_id'] ?? null;
+    $contentId = !empty($item['sampleMovieURL']) ? ($item['content_id'] ?? null) : null;
 @endphp
 
 @if($contentId)

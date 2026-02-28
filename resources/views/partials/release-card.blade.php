@@ -4,7 +4,7 @@
     $imageUrl = $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? $item['imageURL']['list'] ?? '';
     $actress = $item['iteminfo']['actress'][0]['name'] ?? null;
     $date = isset($item['date']) ? \Carbon\Carbon::parse($item['date'])->format('m/d') : null;
-    $contentId = $item['content_id'] ?? null;
+    $contentId = !empty($item['sampleMovieURL']) ? ($item['content_id'] ?? null) : null;
     $price = $item['prices']['price'] ?? null;
 @endphp
 
