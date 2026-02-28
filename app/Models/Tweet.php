@@ -10,7 +10,6 @@ class Tweet extends Model
     protected $fillable = [
         'video_id',
         'tweet_id',
-        'tweet_url',
         'tweet_text',
         'author_username',
         'like_count',

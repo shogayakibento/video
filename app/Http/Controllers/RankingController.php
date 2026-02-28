@@ -91,7 +91,6 @@ class RankingController extends Controller
     public function tweetPopularTweets()
     {
         $tweets = Tweet::with('video')
-            ->whereNotNull('tweet_url')
             ->orderByDesc('like_count')
             ->paginate(20);
 

@@ -96,27 +96,16 @@ class AdminController extends Controller
         $request->validate([
             'like_count' => 'required|integer|min:0',
             'retweet_count' => 'nullable|integer|min:0',
-            'tweet_url' => 'nullable|url',
             'author_username' => 'nullable|string|max:255',
             'tweet_text' => 'nullable|string|max:1000',
         ]);
 
-        $tweetUrl = $request->input('tweet_url');
-        $tweetId = null;
-
-        if ($tweetUrl) {
-            preg_match('/status\/(\d+)/', $tweetUrl, $matches);
-            $tweetId = $matches[1] ?? md5($tweetUrl);
-        } else {
-            $tweetId = 'manual_' . $video->id . '_' . time();
-            $tweetUrl = '';
-        }
+        $tweetId = 'manual_' . $video->id . '_' . time();
 
         Tweet::updateOrCreate(
             ['tweet_id' => $tweetId],
             [
                 'video_id' => $video->id,
-                'tweet_url' => $tweetUrl,
                 'tweet_text' => $request->input('tweet_text'),
                 'author_username' => $request->input('author_username'),
                 'like_count' => (int) $request->input('like_count'),
@@ -152,7 +141,6 @@ class AdminController extends Controller
             'dmm_content_id' => 'required|string',
             'like_count' => 'required|integer|min:0',
             'retweet_count' => 'nullable|integer|min:0',
-            'tweet_url' => 'nullable|url',
         ]);
 
         $video = Video::where('dmm_content_id', $request->input('dmm_content_id'))->first();
@@ -187,30 +175,11 @@ class AdminController extends Controller
             ]);
         }
 
-        $tweetUrl = $request->input('tweet_url');
-
-        if ($tweetUrl) {
-            preg_match('/status\/(\d+)/', $tweetUrl, $matches);
-            $tweetId = $matches[1] ?? md5($tweetUrl);
-
-            Tweet::updateOrCreate(
-                ['tweet_id' => $tweetId],
-                [
-                    'video_id' => $video->id,
-                    'tweet_url' => $tweetUrl,
-                    'like_count' => (int) $request->input('like_count'),
-                    'retweet_count' => (int) $request->input('retweet_count', 0),
-                    'tweeted_at' => now(),
-                ]
-            );
-            $video->recalculateEngagement();
-        } else {
-            $video->update([
-                'total_likes' => (int) $request->input('like_count'),
-                'total_retweets' => (int) $request->input('retweet_count', 0),
-                'weekly_likes' => (int) $request->input('like_count'),
-            ]);
-        }
+        $video->update([
+            'total_likes' => (int) $request->input('like_count'),
+            'total_retweets' => (int) $request->input('retweet_count', 0),
+            'weekly_likes' => (int) $request->input('like_count'),
+        ]);
 
         $video->refresh();
 
