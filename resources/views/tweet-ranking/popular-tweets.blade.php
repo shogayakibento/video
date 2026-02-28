@@ -4,20 +4,20 @@
 @section('description', 'X(Twitter)でいいねが多かったFANZA関連ツイートを一覧表示。')
 
 @section('content')
-    <div class="mb-6">
-        <h1 class="text-2xl font-bold mb-2">Xで話題のツイート</h1>
-        <p class="text-gray-400 text-sm">いいねが多い順に表示しています</p>
+    <div class="mb-8">
+        <h1 class="text-2xl font-bold mb-3 page-title">Xで話題のツイート</h1>
+        <p class="text-sm" style="color: #6a6a8a;">いいねが多い順に表示しています</p>
     </div>
 
     @if($tweets->isEmpty())
-        <div class="text-center py-20 text-gray-500">
+        <div class="text-center py-24" style="color: #4a4a6a;">
             <p class="text-lg mb-2">まだツイートデータがありません</p>
-            <p class="text-sm">管理画面からデータを登録すると表示されます</p>
+            <p class="text-sm opacity-70">管理画面からデータを登録すると表示されます</p>
         </div>
     @else
         <div class="space-y-4">
             @foreach($tweets as $tweet)
-                <div class="bg-secondary rounded-lg p-4 border border-gray-700 hover:border-gray-500 transition">
+                <div class="video-card rounded-2xl p-4">
                     <div class="flex gap-4">
                         @if($tweet->video)
                             <a href="{{ route('tweet.video.show', $tweet->video) }}" class="flex-shrink-0">
@@ -76,6 +76,6 @@
                 </div>
             @endforeach
         </div>
-        <div class="mt-8">{{ $tweets->links() }}</div>
+        <div class="mt-10">{{ $tweets->links() }}</div>
     @endif
 @endsection
