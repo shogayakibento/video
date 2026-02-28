@@ -561,7 +561,7 @@ img {
 .item-price {
     font-size: 0.8rem;
     font-weight: 700;
-    color: var(--primary-light);
+    color: #6ee7b7;
     white-space: nowrap;
 }
 
@@ -826,7 +826,7 @@ img {
 .price {
     font-size: 0.9rem;
     font-weight: 700;
-    color: var(--primary-light);
+    color: #6ee7b7;
 }
 
 /* ===== Filter Bar ===== */
