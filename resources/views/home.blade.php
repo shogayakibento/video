@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
-@section('title', 'FanzaGate - 人気作品ランキング＆レビューガイド')
-@section('description', 'FANZAの人気作品ランキング、新着情報、レビューをお届け。動画・VR・DVD・コミックの最新おすすめ作品を毎日更新。')
+@section('title', 'FANZA人気作品ランキング・新着動画まとめ | FanzaGate')
+@section('description', 'FANZAの人気ランキング・新着動画・VR・DVDを毎日更新。X(Twitter)でバズった話題作もチェックできるFANZA専門ガイドサイト。')
 
 @section('content')
     {{-- Hero Section --}}
     <section class="hero">
         <div class="hero-bg"></div>
         <div class="container hero-content">
-            <h1 class="hero-title">あなたの<span class="highlight">お気に入り</span>を見つけよう</h1>
-            <p class="hero-subtitle">FANZAの人気作品ランキング・新着情報を毎日更新</p>
+            <h1 class="hero-title">FANZA<span class="highlight">人気作品</span>ランキング</h1>
+            <p class="hero-subtitle">動画・VR・DVD・コミック｜毎日更新の最新ランキングで今日のおすすめを探そう</p>
             <form action="{{ route('search') }}" method="GET" class="search-box">
                 <input type="text" name="q" class="search-input" placeholder="作品名・キーワードで検索..." value="">
                 <button type="submit" class="search-btn">検索</button>
