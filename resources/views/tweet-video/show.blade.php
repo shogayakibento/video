@@ -11,6 +11,12 @@
 
 @section('content')
 <div class="tweet-page">
+    @include('partials.breadcrumb', ['items' => [
+        ['label' => 'ホーム', 'url' => route('home')],
+        ['label' => 'バズり動画ランキング', 'url' => route('tweet.ranking.index')],
+        ['label' => $video->title],
+    ]])
+
     <div class="mb-4">
         <a href="{{ url()->previous() }}" class="text-gray-400 hover:text-accent text-sm transition">&larr; 戻る</a>
     </div>
