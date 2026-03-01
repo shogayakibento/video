@@ -157,12 +157,16 @@
             "interactionType": "https://schema.org/ShareAction",
             "userInteractionCount": {{ $video->total_retweets }}
         }
-    ]@if($video->dmm_content_id),
-    "embedUrl": "https://www.dmm.co.jp/litevideo/-/part/=/affi_id={{ config('dmm.affiliate_id') }}/cid={{ $video->dmm_content_id }}/size=1280_720/"@endif@if($video->actress),
-    "actor": {
+    ]
+    @if($video->dmm_content_id)
+    ,"embedUrl": "https://www.dmm.co.jp/litevideo/-/part/=/affi_id={{ config('dmm.affiliate_id') }}/cid={{ $video->dmm_content_id }}/size=1280_720/"
+    @endif
+    @if($video->actress)
+    ,"actor": {
         "@@type": "Person",
         "name": "{{ addslashes(explode(',', $video->actress)[0]) }}"
-    }@endif
+    }
+    @endif
 }
 </script>
 @endpush
