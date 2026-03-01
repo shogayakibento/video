@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Video;
 use App\Services\FanzaApiService;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
@@ -13,12 +14,15 @@ class SitemapController extends Controller
         $categories = config('fanza.categories');
         $genres = config('fanza.genres');
 
+        $today = now()->toAtomString();
+
         $urls = [
-            ['loc' => route('home'),          'priority' => '1.0', 'changefreq' => 'daily'],
-            ['loc' => route('ranking'),        'priority' => '0.9', 'changefreq' => 'daily'],
-            ['loc' => route('actress.index'),  'priority' => '0.8', 'changefreq' => 'weekly'],
-            ['loc' => route('genre.index'),    'priority' => '0.8', 'changefreq' => 'weekly'],
-            ['loc' => route('search'),         'priority' => '0.7', 'changefreq' => 'weekly'],
+            ['loc' => route('home'),                 'priority' => '1.0', 'changefreq' => 'daily',  'lastmod' => $today],
+            ['loc' => route('ranking'),              'priority' => '0.9', 'changefreq' => 'daily',  'lastmod' => $today],
+            ['loc' => route('tweet.ranking.index'),  'priority' => '0.9', 'changefreq' => 'daily',  'lastmod' => $today],
+            ['loc' => route('actress.index'),        'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => $today],
+            ['loc' => route('genre.index'),          'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => $today],
+            ['loc' => route('search'),               'priority' => '0.7', 'changefreq' => 'weekly', 'lastmod' => $today],
         ];
 
         // カテゴリページ
@@ -27,6 +31,7 @@ class SitemapController extends Controller
                 'loc'        => route('category.show', $slug),
                 'priority'   => '0.8',
                 'changefreq' => 'daily',
+                'lastmod'    => $today,
             ];
         }
 
@@ -36,6 +41,7 @@ class SitemapController extends Controller
                 'loc'        => route('genre.show', $slug),
                 'priority'   => '0.7',
                 'changefreq' => 'weekly',
+                'lastmod'    => $today,
             ];
         }
 
@@ -67,8 +73,20 @@ class SitemapController extends Controller
                 'loc'        => route('actress.show', $id),
                 'priority'   => '0.6',
                 'changefreq' => 'weekly',
+                'lastmod'    => $today,
             ];
         }
+
+        // Xバズり動画詳細ページ
+        Video::orderByDesc('total_likes')->limit(200)->get(['id', 'updated_at'])
+            ->each(function ($video) use (&$urls) {
+                $urls[] = [
+                    'loc'        => route('tweet.video.show', $video->id),
+                    'priority'   => '0.7',
+                    'changefreq' => 'weekly',
+                    'lastmod'    => $video->updated_at->toAtomString(),
+                ];
+            });
 
         $content  = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         $content .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
@@ -76,6 +94,9 @@ class SitemapController extends Controller
         foreach ($urls as $url) {
             $content .= "  <url>\n";
             $content .= "    <loc>{$url['loc']}</loc>\n";
+            if (!empty($url['lastmod'])) {
+                $content .= "    <lastmod>{$url['lastmod']}</lastmod>\n";
+            }
             $content .= "    <changefreq>{$url['changefreq']}</changefreq>\n";
             $content .= "    <priority>{$url['priority']}</priority>\n";
             $content .= "  </url>\n";

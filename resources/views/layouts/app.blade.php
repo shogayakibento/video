@@ -6,10 +6,16 @@
     <title>@yield('title', 'FANZA人気作品ランキング・新着動画まとめ | FanzaGate')</title>
     <meta name="description" content="@yield('description', 'FANZAの人気ランキング・新着動画・VR・DVDを毎日更新。X(Twitter)でバズった話題作もチェックできるFANZA専門ガイドサイト。')">
     <meta name="keywords" content="@yield('keywords', 'FANZA, 動画, VR, DVD, コミック, ランキング, 新着, おすすめ, バズり')">
+    <meta name="robots" content="@yield('robots', 'index, follow')">
     <meta property="og:title" content="@yield('og_title', 'FANZA人気作品ランキング・新着動画まとめ | FanzaGate')">
     <meta property="og:description" content="@yield('og_description', 'FANZAの人気ランキング・新着動画・VR・DVDを毎日更新。X(Twitter)でバズった話題作もチェック！')">
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="@yield('og_type', 'website')">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:image" content="@yield('og_image', asset('images/og-default.jpg'))">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:site_name" content="FanzaGate">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="@yield('og_image', asset('images/og-default.jpg'))">
     <link rel="canonical" href="{{ url()->current() }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
