@@ -219,7 +219,7 @@ img {
     min-height: 420px;
     display: flex;
     align-items: center;
-    padding: 90px 0;
+    padding: 90px 0 50px;
     overflow: hidden;
 }
 
@@ -1768,7 +1768,7 @@ img {
 
     .hero {
         min-height: 360px;
-        padding: 80px 0;
+        padding: 80px 0 40px;
     }
 
     .section {
