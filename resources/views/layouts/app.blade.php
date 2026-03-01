@@ -20,9 +20,12 @@
     <meta property="og:type" content="@yield('og_type', 'website')">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:image" content="@yield('og_image', asset('images/og-default.jpg'))">
+    <meta property="og:image:width" content="@yield('og_image_width', '1200')">
+    <meta property="og:image:height" content="@yield('og_image_height', '630')">
     <meta property="og:locale" content="ja_JP">
     <meta property="og:site_name" content="FanzaGate">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@FanzaGate">
     <meta name="twitter:title" content="{{ $ogTitle }}">
     <meta name="twitter:description" content="{{ $ogDesc }}">
     <meta name="twitter:image" content="@yield('og_image', asset('images/og-default.jpg'))">
@@ -31,6 +34,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="preload" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}" as="style">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
     @stack('styles')
 </head>
