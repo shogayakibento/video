@@ -164,6 +164,8 @@
         </div>
     </section>
 
+@endsection
+
 @push('scripts')
 <script>
 window.addEventListener('load', function () {
@@ -211,5 +213,3 @@ window.addEventListener('load', function () {
 }
 </script>
 @endpush
-
-@endsection
