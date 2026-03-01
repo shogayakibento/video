@@ -15,6 +15,8 @@
     <meta property="og:locale" content="ja_JP">
     <meta property="og:site_name" content="FanzaGate">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('og_title', 'FANZA人気作品ランキング・新着動画まとめ | FanzaGate')">
+    <meta name="twitter:description" content="@yield('og_description', 'FANZAの人気ランキング・新着動画・VR・DVDを毎日更新。X(Twitter)でバズった話題作もチェック！')">
     <meta name="twitter:image" content="@yield('og_image', asset('images/og-default.jpg'))">
     <link rel="canonical" href="{{ url()->current() }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
