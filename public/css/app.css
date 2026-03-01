@@ -344,8 +344,9 @@ img {
     padding: 40px 0;
 }
 
-.ranking-section {
-    padding-top: 16px;
+.ranking-section,
+.new-releases-section {
+    padding-bottom: 20px;
 }
 
 .section-title {
