@@ -264,7 +264,7 @@ img {
 
 .search-box {
     display: flex;
-    max-width: 750px;
+    max-width: 540px;
     margin: 0 auto 24px;
     background: var(--bg-light);
     border: 1px solid var(--border);
