@@ -216,7 +216,7 @@ img {
 /* ===== Hero ===== */
 .hero {
     position: relative;
-    min-height: 420px;
+    min-height: 396px;
     display: flex;
     align-items: center;
     padding: 90px 0 26px;
@@ -1767,7 +1767,7 @@ img {
     }
 
     .hero {
-        min-height: 360px;
+        min-height: 336px;
         padding: 80px 0 16px;
     }
 
