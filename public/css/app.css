@@ -219,7 +219,7 @@ img {
     min-height: 420px;
     display: flex;
     align-items: center;
-    padding: 90px 0 24px;
+    padding: 90px 0 50px;
     overflow: hidden;
 }
 
@@ -342,6 +342,10 @@ img {
 /* ===== Sections ===== */
 .section {
     padding: 40px 0;
+}
+
+.ranking-section {
+    padding-top: 16px;
 }
 
 .section-title {
