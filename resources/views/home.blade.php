@@ -172,6 +172,7 @@ window.addEventListener('load', function () {
     fetch('/actress?tab=ranking', { priority: 'low' }).catch(function(){});
 });
 </script>
+@verbatim
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
@@ -212,4 +213,5 @@ window.addEventListener('load', function () {
     ]
 }
 </script>
+@endverbatim
 @endpush
