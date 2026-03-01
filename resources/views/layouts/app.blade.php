@@ -7,18 +7,27 @@
     <meta name="description" content="@yield('description', 'FANZAの人気ランキング・新着動画・VR・DVDを毎日更新。X(Twitter)でバズった話題作もチェックできるFANZA専門ガイドサイト。')">
     <meta name="keywords" content="@yield('keywords', 'FANZA, 動画, VR, DVD, コミック, ランキング, 新着, おすすめ, バズり')">
     <meta name="robots" content="@yield('robots', 'index, follow')">
-    <meta property="og:title" content="@yield('og_title', 'FANZA人気作品ランキング・新着動画まとめ | FanzaGate')">
-    <meta property="og:description" content="@yield('og_description', 'FANZAの人気ランキング・新着動画・VR・DVDを毎日更新。X(Twitter)でバズった話題作もチェック！')">
+    @php
+        $ogTitle = $__env->hasSection('og_title')
+            ? $__env->yieldContent('og_title')
+            : $__env->yieldContent('title', 'FANZA人気作品ランキング・新着動画まとめ | FanzaGate');
+        $ogDesc = $__env->hasSection('og_description')
+            ? $__env->yieldContent('og_description')
+            : $__env->yieldContent('description', 'FANZAの人気ランキング・新着動画・VR・DVDを毎日更新。X(Twitter)でバズった話題作もチェック！');
+    @endphp
+    <meta property="og:title" content="{{ $ogTitle }}">
+    <meta property="og:description" content="{{ $ogDesc }}">
     <meta property="og:type" content="@yield('og_type', 'website')">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:image" content="@yield('og_image', asset('images/og-default.jpg'))">
     <meta property="og:locale" content="ja_JP">
     <meta property="og:site_name" content="FanzaGate">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="@yield('og_title', 'FANZA人気作品ランキング・新着動画まとめ | FanzaGate')">
-    <meta name="twitter:description" content="@yield('og_description', 'FANZAの人気ランキング・新着動画・VR・DVDを毎日更新。X(Twitter)でバズった話題作もチェック！')">
+    <meta name="twitter:title" content="{{ $ogTitle }}">
+    <meta name="twitter:description" content="{{ $ogDesc }}">
     <meta name="twitter:image" content="@yield('og_image', asset('images/og-default.jpg'))">
     <link rel="canonical" href="{{ url()->current() }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23e53935'/><text x='16' y='23' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='20' fill='white'>F</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -139,6 +148,22 @@
 
     @include('partials.sample-modal')
     <script src="{{ asset('js/app.js') }}"></script>
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "WebSite",
+        "name": "FanzaGate",
+        "url": "{{ url('/') }}",
+        "potentialAction": {
+            "@@type": "SearchAction",
+            "target": {
+                "@@type": "EntryPoint",
+                "urlTemplate": "{{ route('search') }}?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
     @stack('scripts')
 </body>
 </html>

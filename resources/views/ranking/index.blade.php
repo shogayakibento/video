@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'ランキング - FanzaGate')
-@section('description', 'FANZAの人気作品ランキング。動画・VR・DVD・コミックのランキングをリアルタイムで更新。')
+@section('title', ($categories[$activeCategory]['label'] ?? 'ランキング') . 'ランキング - FanzaGate')
+@section('description', 'FANZAの' . ($categories[$activeCategory]['label'] ?? '人気作品') . 'ランキング。' . ($categories[$activeCategory]['label'] ?? '動画・VR・DVD・コミック') . 'の人気作品をリアルタイムで更新。')
 
 @section('content')
     <div class="page-header">

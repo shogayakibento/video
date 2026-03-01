@@ -145,7 +145,8 @@
     "name": "{{ addslashes($video->title) }}",
     "description": "{{ addslashes($video->title) }}のサンプル動画とレビュー。{{ $video->actress ? '出演: ' . addslashes($video->actress) : '' }}",
     "thumbnailUrl": "{{ $video->thumbnail_url }}",
-    "uploadDate": "{{ $video->release_date ? $video->release_date->format('c') : $video->created_at->format('c') }}"@if($video->actress),
+    "uploadDate": "{{ $video->release_date ? $video->release_date->format('c') : $video->created_at->format('c') }}"@if($video->dmm_content_id),
+    "embedUrl": "https://www.dmm.co.jp/litevideo/-/part/=/affi_id={{ config('dmm.affiliate_id') }}/cid={{ $video->dmm_content_id }}/size=1280_720/"@endif@if($video->actress),
     "actor": {
         "@@type": "Person",
         "name": "{{ addslashes(explode(',', $video->actress)[0]) }}"
