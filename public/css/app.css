@@ -216,10 +216,10 @@ img {
 /* ===== Hero ===== */
 .hero {
     position: relative;
-    min-height: 360px;
+    min-height: 420px;
     display: flex;
     align-items: center;
-    padding: 90px 0 24px;
+    padding: 90px 0 50px;
     overflow: hidden;
 }
 
@@ -1767,8 +1767,8 @@ img {
     }
 
     .hero {
-        min-height: 300px;
-        padding: 80px 0 20px;
+        min-height: 360px;
+        padding: 80px 0 40px;
     }
 
     .section {
