@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', $category['label'] . ' - FanzaGate')
-@section('description', $category['label'] . 'の人気作品一覧。FANZAの' . $category['label'] . 'ランキング、新着情報をチェック。')
+@section('title', $category['label'] . ' 人気ランキング・おすすめ作品一覧 - FanzaGate')
+@section('description', $category['label'] . 'の人気FANZA作品一覧。' . $category['label'] . 'の人気ランキング・新着・レビュー高評価作品をまとめてチェック。毎日更新される最新' . $category['label'] . '情報をお届けします。FANZA公式の豊富な作品ラインナップから厳選。')
 
 @section('content')
     {{-- Page Header --}}
@@ -82,3 +82,27 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+@if($items->isNotEmpty())
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@@type": "ItemList",
+    "name": "{{ addslashes($category['label']) }} 人気ランキング",
+    "description": "FANZAの{{ addslashes($category['label']) }}人気作品一覧",
+    "numberOfItems": {{ $items->count() }},
+    "itemListElement": [
+        @foreach($items as $index => $item)
+        {
+            "@@type": "ListItem",
+            "position": {{ ($currentPage - 1) * 20 + $index + 1 }},
+            "name": "{{ addslashes($item['title'] ?? '') }}",
+            "url": "{{ $item['URL'] ?? '' }}"
+        }{{ !$loop->last ? ',' : '' }}
+        @endforeach
+    ]
+}
+</script>
+@endif
+@endpush

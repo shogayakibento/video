@@ -82,3 +82,27 @@
         @include('partials.ad-inline', ['bannerId' => '1782_300_250', 'adDomain' => 'dmm.com'])
     </div>
 @endsection
+
+@push('scripts')
+@if($items->isNotEmpty())
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@@type": "ItemList",
+    "name": "FANZA {{ $categories[$activeCategory]['label'] ?? 'ランキング' }}",
+    "description": "FANZAの人気{{ $categories[$activeCategory]['label'] ?? '作品' }}ランキング一覧",
+    "numberOfItems": {{ $items->count() }},
+    "itemListElement": [
+        @foreach($items as $index => $item)
+        {
+            "@@type": "ListItem",
+            "position": {{ $index + 1 }},
+            "name": "{{ addslashes($item['title'] ?? '') }}",
+            "url": "{{ $item['URL'] ?? '' }}"
+        }{{ !$loop->last ? ',' : '' }}
+        @endforeach
+    ]
+}
+</script>
+@endif
+@endpush

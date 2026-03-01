@@ -107,3 +107,22 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@@type": "Person",
+    "name": "{{ addslashes($name) }}"@if($ruby),
+    "alternateName": "{{ addslashes($ruby) }}"@endif@if($imageUrl),
+    "image": "{{ $imageUrl }}"@endif@if($birthday),
+    "birthDate": "{{ $birthday }}"@endif@if($height),
+    "height": {
+        "@@type": "QuantitativeValue",
+        "value": {{ (int) $height }},
+        "unitCode": "CMT"
+    }@endif,
+    "url": "{{ route('actress.show', $actressId) }}"
+}
+</script>
+@endpush

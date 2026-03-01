@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', $genre['label'] . 'の動画一覧 - FanzaGate')
-@section('description', $genre['label'] . 'ジャンルの人気FANZA動画一覧。最新作・人気作品をランキング・新着順でチェック。')
+@section('description', $genre['label'] . 'の人気FANZA動画を一覧でご紹介。' . $genre['label'] . 'ジャンルの最新作・人気ランキング・レビュー高評価作品を随時更新。お気に入りの' . $genre['label'] . '作品をランキング・新着順で探せます。FANZAの豊富な' . $genre['label'] . '作品ラインナップ。')
 
 @section('content')
     <div class="page-header">
