@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <!-- 背景グラデーション -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#05050f"/>
+      <stop offset="50%" style="stop-color:#0d0d22"/>
+      <stop offset="100%" style="stop-color:#05050f"/>
+    </linearGradient>
+    <!-- ピンク→パープル グラデーション (ロゴ用) -->
+    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff2d78"/>
+      <stop offset="100%" style="stop-color:#9b5df5"/>
+    </linearGradient>
+    <!-- タイトルグラデーション -->
+    <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff6ba8"/>
+      <stop offset="50%" style="stop-color:#ffffff"/>
+      <stop offset="100%" style="stop-color:#c49af8"/>
+    </linearGradient>
+    <!-- 光のグロー -->
+    <radialGradient id="glow1" cx="30%" cy="40%" r="40%">
+      <stop offset="0%" style="stop-color:#ff2d78;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#ff2d78;stop-opacity:0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="75%" cy="60%" r="40%">
+      <stop offset="0%" style="stop-color:#9b5df5;stop-opacity:0.12"/>
+      <stop offset="100%" style="stop-color:#9b5df5;stop-opacity:0"/>
+    </radialGradient>
+    <!-- ボーダーグラデーション -->
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff2d78;stop-opacity:0.8"/>
+      <stop offset="50%" style="stop-color:#9b5df5;stop-opacity:0.8"/>
+      <stop offset="100%" style="stop-color:#ff2d78;stop-opacity:0.8"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#ff2d78" flood-opacity="0.4"/>
+    </filter>
+    <filter id="textShadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- グロー効果 -->
+  <rect width="1200" height="630" fill="url(#glow1)"/>
+  <rect width="1200" height="630" fill="url(#glow2)"/>
+
+  <!-- 装飾ライン (上) -->
+  <rect x="0" y="0" width="1200" height="3" fill="url(#borderGrad)"/>
+
+  <!-- 装飾ライン (下) -->
+  <rect x="0" y="627" width="1200" height="3" fill="url(#borderGrad)"/>
+
+  <!-- 背景の装飾円 (左上) -->
+  <circle cx="80" cy="80" r="120" fill="none" stroke="#ff2d78" stroke-width="1" opacity="0.12"/>
+  <circle cx="80" cy="80" r="80" fill="none" stroke="#ff2d78" stroke-width="0.5" opacity="0.08"/>
+
+  <!-- 背景の装飾円 (右下) -->
+  <circle cx="1130" cy="560" r="150" fill="none" stroke="#9b5df5" stroke-width="1" opacity="0.12"/>
+  <circle cx="1130" cy="560" r="100" fill="none" stroke="#9b5df5" stroke-width="0.5" opacity="0.08"/>
+
+  <!-- 背景の装飾ドット -->
+  <circle cx="200" cy="500" r="2" fill="#ff2d78" opacity="0.3"/>
+  <circle cx="350" cy="120" r="1.5" fill="#9b5df5" opacity="0.3"/>
+  <circle cx="950" cy="100" r="2" fill="#ff2d78" opacity="0.25"/>
+  <circle cx="1050" cy="200" r="1.5" fill="#9b5df5" opacity="0.3"/>
+  <circle cx="150" cy="380" r="1.5" fill="#ff6ba8" opacity="0.2"/>
+  <circle cx="1000" cy="450" r="2" fill="#c49af8" opacity="0.25"/>
+
+  <!-- ロゴアイコン (F マーク) -->
+  <rect x="460" y="160" width="70" height="70" rx="16" fill="url(#logoGrad)" filter="url(#shadow)"/>
+  <text x="495" y="212" font-family="Arial, sans-serif" font-size="42" font-weight="900" fill="white" text-anchor="middle" filter="url(#textShadow)">F</text>
+
+  <!-- サイト名 "FanzaGate" -->
+  <text x="600" y="230" font-family="Arial, 'Noto Sans JP', sans-serif" font-size="72" font-weight="900" fill="url(#titleGrad)" text-anchor="middle" letter-spacing="2" filter="url(#textShadow)">FanzaGate</text>
+
+  <!-- 区切り線 -->
+  <rect x="480" y="258" width="240" height="2" rx="1" fill="url(#borderGrad)" opacity="0.6"/>
+
+  <!-- キャッチコピー -->
+  <text x="600" y="310" font-family="'Noto Sans JP', Arial, sans-serif" font-size="24" font-weight="500" fill="#e2e8f0" text-anchor="middle" opacity="0.9">FANZAの人気・新着・バズり動画を毎日更新</text>
+
+  <!-- タグ風バッジ -->
+  <rect x="330" y="360" width="140" height="38" rx="19" fill="#ff2d78" opacity="0.15" stroke="#ff2d78" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="400" y="384" font-family="'Noto Sans JP', Arial, sans-serif" font-size="16" fill="#ff6ba8" text-anchor="middle" font-weight="500">人気ランキング</text>
+
+  <rect x="490" y="360" width="110" height="38" rx="19" fill="#9b5df5" opacity="0.15" stroke="#9b5df5" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="545" y="384" font-family="'Noto Sans JP', Arial, sans-serif" font-size="16" fill="#c49af8" text-anchor="middle" font-weight="500">新着動画</text>
+
+  <rect x="620" y="360" width="90" height="38" rx="19" fill="#ff2d78" opacity="0.15" stroke="#ff2d78" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="665" y="384" font-family="'Noto Sans JP', Arial, sans-serif" font-size="16" fill="#ff6ba8" text-anchor="middle" font-weight="500">VR対応</text>
+
+  <rect x="730" y="360" width="150" height="38" rx="19" fill="#9b5df5" opacity="0.15" stroke="#9b5df5" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="805" y="384" font-family="'Noto Sans JP', Arial, sans-serif" font-size="16" fill="#c49af8" text-anchor="middle" font-weight="500">Xバズりランキング</text>
+
+  <!-- URL表示 -->
+  <text x="600" y="490" font-family="Arial, sans-serif" font-size="20" fill="#8892a4" text-anchor="middle" letter-spacing="1">owstrategy.com/fanzavideo</text>
+</svg>
