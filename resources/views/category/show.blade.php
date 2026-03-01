@@ -2,6 +2,9 @@
 
 @section('title', $category['label'] . ' 人気ランキング・おすすめ作品一覧 - FanzaGate')
 @section('description', $category['label'] . 'の人気FANZA作品一覧。' . $category['label'] . 'の人気ランキング・新着・レビュー高評価作品をまとめてチェック。毎日更新される最新' . $category['label'] . '情報をお届けします。FANZA公式の豊富な作品ラインナップから厳選。')
+@if($sort !== 'rank')
+@section('robots', 'noindex, follow')
+@endif
 
 @section('content')
     {{-- Page Header --}}

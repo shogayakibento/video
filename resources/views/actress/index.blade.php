@@ -2,6 +2,9 @@
 
 @section('title', '女優から探す - FanzaGate')
 @section('description', 'FANZA女優ランキング・検索。人気女優ランキング、カップ・身長・年齢での絞り込み、名前検索でお気に入りの女優を見つけよう。')
+@if($tab !== 'ranking')
+@section('robots', 'noindex, follow')
+@endif
 
 @section('content')
     <div class="page-header">

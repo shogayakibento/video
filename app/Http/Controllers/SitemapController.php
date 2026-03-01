@@ -11,6 +11,17 @@ class SitemapController extends Controller
 {
     public function index(FanzaApiService $api): Response
     {
+        $content = Cache::remember('sitemap_xml', 3600, function () use ($api) {
+            return $this->buildSitemap($api);
+        });
+
+        return response($content, 200, [
+            'Content-Type' => 'application/xml',
+        ]);
+    }
+
+    private function buildSitemap(FanzaApiService $api): string
+    {
         $categories = config('fanza.categories');
         $genres = config('fanza.genres');
 
@@ -104,8 +115,6 @@ class SitemapController extends Controller
 
         $content .= '</urlset>';
 
-        return response($content, 200, [
-            'Content-Type' => 'application/xml',
-        ]);
+        return $content;
     }
 }
