@@ -8,79 +8,156 @@
       <stop offset="0%" style="stop-color:#ff2d78"/>
       <stop offset="100%" style="stop-color:#9b5df5"/>
     </linearGradient>
-    <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#ffffff"/>
-      <stop offset="60%" style="stop-color:#f0e0ff"/>
-      <stop offset="100%" style="stop-color:#c49af8"/>
+    <linearGradient id="card1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2a1040"/>
+      <stop offset="100%" style="stop-color:#1a0828"/>
+    </linearGradient>
+    <linearGradient id="card2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1040"/>
+      <stop offset="100%" style="stop-color:#0d0828"/>
+    </linearGradient>
+    <linearGradient id="card3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#280d38"/>
+      <stop offset="100%" style="stop-color:#180820"/>
+    </linearGradient>
+    <linearGradient id="card4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d1838"/>
+      <stop offset="100%" style="stop-color:#081020"/>
+    </linearGradient>
+    <linearGradient id="overlay" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#08081a;stop-opacity:0"/>
+      <stop offset="45%" style="stop-color:#08081a;stop-opacity:0.1"/>
+      <stop offset="65%" style="stop-color:#08081a;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#08081a;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="cardOverlay" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#000000;stop-opacity:0"/>
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:0.75"/>
     </linearGradient>
     <linearGradient id="btnGrad" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" style="stop-color:#ff2d78"/>
-      <stop offset="100%" style="stop-color:#c41057"/>
+      <stop offset="100%" style="stop-color:#e01060"/>
     </linearGradient>
-    <radialGradient id="glowLeft" cx="15%" cy="50%" r="45%">
-      <stop offset="0%" style="stop-color:#ff2d78;stop-opacity:0.18"/>
-      <stop offset="100%" style="stop-color:#ff2d78;stop-opacity:0"/>
-    </radialGradient>
-    <radialGradient id="glowRight" cx="85%" cy="50%" r="45%">
-      <stop offset="0%" style="stop-color:#9b5df5;stop-opacity:0.15"/>
-      <stop offset="100%" style="stop-color:#9b5df5;stop-opacity:0"/>
-    </radialGradient>
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="3" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
+    <linearGradient id="rankBadge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff2d78"/>
+      <stop offset="100%" style="stop-color:#9b5df5"/>
+    </linearGradient>
     <filter id="btnShadow">
-      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#ff2d78" flood-opacity="0.5"/>
+      <feDropShadow dx="0" dy="4" stdDeviation="10" flood-color="#ff2d78" flood-opacity="0.6"/>
     </filter>
-    <filter id="textGlow">
-      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#ff2d78" flood-opacity="0.4"/>
+    <filter id="cardShadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.5"/>
     </filter>
+    <clipPath id="card1clip"><rect x="20" y="80" width="270" height="152" rx="8"/></clipPath>
+    <clipPath id="card2clip"><rect x="300" y="80" width="270" height="152" rx="8"/></clipPath>
+    <clipPath id="card3clip"><rect x="20" y="244" width="270" height="152" rx="8"/></clipPath>
+    <clipPath id="card4clip"><rect x="300" y="244" width="270" height="152" rx="8"/></clipPath>
+    <clipPath id="card5clip"><rect x="20" y="408" width="270" height="152" rx="8"/></clipPath>
+    <clipPath id="card6clip"><rect x="300" y="408" width="270" height="152" rx="8"/></clipPath>
   </defs>
 
   <!-- 背景 -->
   <rect width="1200" height="630" fill="url(#bg)"/>
-  <rect width="1200" height="630" fill="url(#glowLeft)"/>
-  <rect width="1200" height="630" fill="url(#glowRight)"/>
 
-  <!-- 上下のラインバー -->
+  <!-- ===== 左側: サムネイルグリッド ===== -->
+
+  <!-- カード1 -->
+  <rect x="20" y="80" width="270" height="152" rx="8" fill="url(#card1)"/>
+  <!-- 動画っぽい模様 -->
+  <rect x="20" y="80" width="270" height="152" rx="8" fill="none" stroke="#ff2d78" stroke-width="0.5" opacity="0.3"/>
+  <rect x="35" y="95" width="240" height="100" rx="4" fill="#1e0a30" opacity="0.8"/>
+  <polygon points="135,125 165,145 135,165" fill="#ff2d78" opacity="0.7"/>
+  <!-- カードオーバーレイ -->
+  <rect x="20" y="190" width="270" height="42" rx="0" fill="#000" opacity="0.6"/>
+  <text x="32" y="207" font-family="Noto Sans CJK JP, sans-serif" font-size="11" fill="#ffffff" opacity="0.9">人気No.1 新作VR作品</text>
+  <text x="32" y="222" font-family="sans-serif" font-size="10" fill="#ff6ba8">♥ 4,821</text>
+  <!-- ランクバッジ -->
+  <rect x="20" y="80" width="32" height="24" rx="4" fill="url(#rankBadge)"/>
+  <text x="36" y="97" font-family="Arial Black, sans-serif" font-size="13" font-weight="900" fill="white" text-anchor="middle">1</text>
+
+  <!-- カード2 -->
+  <rect x="300" y="80" width="270" height="152" rx="8" fill="url(#card2)"/>
+  <rect x="300" y="80" width="270" height="152" rx="8" fill="none" stroke="#9b5df5" stroke-width="0.5" opacity="0.3"/>
+  <rect x="315" y="95" width="240" height="100" rx="4" fill="#0d1030" opacity="0.8"/>
+  <polygon points="415,125 445,145 415,165" fill="#9b5df5" opacity="0.7"/>
+  <rect x="300" y="190" width="270" height="42" rx="0" fill="#000" opacity="0.6"/>
+  <text x="312" y="207" font-family="Noto Sans CJK JP, sans-serif" font-size="11" fill="#ffffff" opacity="0.9">Xバズり急上昇ランキング</text>
+  <text x="312" y="222" font-family="sans-serif" font-size="10" fill="#ff6ba8">♥ 3,204</text>
+  <rect x="300" y="80" width="32" height="24" rx="4" fill="url(#rankBadge)"/>
+  <text x="316" y="97" font-family="Arial Black, sans-serif" font-size="13" font-weight="900" fill="white" text-anchor="middle">2</text>
+
+  <!-- カード3 -->
+  <rect x="20" y="244" width="270" height="152" rx="8" fill="url(#card3)"/>
+  <rect x="20" y="244" width="270" height="152" rx="8" fill="none" stroke="#ff2d78" stroke-width="0.5" opacity="0.25"/>
+  <rect x="35" y="259" width="240" height="100" rx="4" fill="#200830" opacity="0.8"/>
+  <polygon points="135,289 165,309 135,329" fill="#ff2d78" opacity="0.6"/>
+  <rect x="20" y="354" width="270" height="42" rx="0" fill="#000" opacity="0.6"/>
+  <text x="32" y="371" font-family="Noto Sans CJK JP, sans-serif" font-size="11" fill="#ffffff" opacity="0.9">週間ランキング1位作品</text>
+  <text x="32" y="386" font-family="sans-serif" font-size="10" fill="#ff6ba8">♥ 2,988</text>
+  <rect x="20" y="244" width="32" height="24" rx="4" fill="url(#rankBadge)"/>
+  <text x="36" y="261" font-family="Arial Black, sans-serif" font-size="13" font-weight="900" fill="white" text-anchor="middle">3</text>
+
+  <!-- カード4 -->
+  <rect x="300" y="244" width="270" height="152" rx="8" fill="url(#card4)"/>
+  <rect x="300" y="244" width="270" height="152" rx="8" fill="none" stroke="#9b5df5" stroke-width="0.5" opacity="0.25"/>
+  <rect x="315" y="259" width="240" height="100" rx="4" fill="#081028" opacity="0.8"/>
+  <polygon points="415,289 445,309 415,329" fill="#9b5df5" opacity="0.6"/>
+  <rect x="300" y="354" width="270" height="42" rx="0" fill="#000" opacity="0.6"/>
+  <text x="312" y="371" font-family="Noto Sans CJK JP, sans-serif" font-size="11" fill="#ffffff" opacity="0.9">新着VR・DVD最新作</text>
+  <text x="312" y="386" font-family="sans-serif" font-size="10" fill="#ff6ba8">♥ 2,541</text>
+  <rect x="300" y="244" width="32" height="24" rx="4" fill="url(#rankBadge)"/>
+  <text x="316" y="261" font-family="Arial Black, sans-serif" font-size="13" font-weight="900" fill="white" text-anchor="middle">4</text>
+
+  <!-- カード5 (下段) -->
+  <rect x="20" y="408" width="270" height="152" rx="8" fill="url(#card1)" opacity="0.7"/>
+  <rect x="35" y="423" width="240" height="100" rx="4" fill="#1e0a30" opacity="0.8"/>
+  <polygon points="135,453 165,473 135,493" fill="#ff2d78" opacity="0.5"/>
+  <rect x="20" y="408" width="32" height="24" rx="4" fill="url(#rankBadge)" opacity="0.8"/>
+  <text x="36" y="425" font-family="Arial Black, sans-serif" font-size="13" font-weight="900" fill="white" text-anchor="middle">5</text>
+
+  <!-- カード6 (下段) -->
+  <rect x="300" y="408" width="270" height="152" rx="8" fill="url(#card2)" opacity="0.7"/>
+  <rect x="315" y="423" width="240" height="100" rx="4" fill="#0d1030" opacity="0.8"/>
+  <polygon points="415,453 445,473 415,493" fill="#9b5df5" opacity="0.5"/>
+  <rect x="300" y="408" width="32" height="24" rx="4" fill="url(#rankBadge)" opacity="0.8"/>
+  <text x="316" y="425" font-family="Arial Black, sans-serif" font-size="13" font-weight="900" fill="white" text-anchor="middle">6</text>
+
+  <!-- グラデーションオーバーレイ (右側へのフェード) -->
+  <rect width="1200" height="630" fill="url(#overlay)"/>
+
+  <!-- 上下ライン -->
   <rect x="0" y="0" width="1200" height="4" fill="url(#pinkPurple)"/>
   <rect x="0" y="626" width="1200" height="4" fill="url(#pinkPurple)"/>
 
-  <!-- 背景の装飾グリッド線 -->
-  <line x1="0" y1="315" x2="1200" y2="315" stroke="#ffffff" stroke-width="0.3" opacity="0.05"/>
-  <line x1="600" y1="0" x2="600" y2="630" stroke="#ffffff" stroke-width="0.3" opacity="0.05"/>
+  <!-- ===== 右側: テキストエリア ===== -->
 
-  <!-- 背景の装飾円 -->
-  <circle cx="100" cy="100" r="180" fill="none" stroke="#ff2d78" stroke-width="0.8" opacity="0.1"/>
-  <circle cx="1100" cy="530" r="200" fill="none" stroke="#9b5df5" stroke-width="0.8" opacity="0.1"/>
-  <circle cx="1100" cy="530" r="120" fill="none" stroke="#9b5df5" stroke-width="0.5" opacity="0.07"/>
+  <!-- ロゴ -->
+  <rect x="660" y="60" width="40" height="40" rx="10" fill="url(#pinkPurple)"/>
+  <text x="680" y="88" font-family="Arial Black, Arial, sans-serif" font-size="22" font-weight="900" fill="white" text-anchor="middle">F</text>
+  <text x="712" y="88" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#c49af8" text-anchor="start">FanzaGate</text>
 
-  <!-- ドット装飾 -->
-  <circle cx="180" cy="490" r="2.5" fill="#ff2d78" opacity="0.4"/>
-  <circle cx="240" cy="150" r="2" fill="#9b5df5" opacity="0.35"/>
-  <circle cx="980" cy="120" r="2.5" fill="#ff2d78" opacity="0.35"/>
-  <circle cx="1050" cy="320" r="2" fill="#c49af8" opacity="0.35"/>
-  <circle cx="120" cy="380" r="1.5" fill="#ff6ba8" opacity="0.3"/>
-  <circle cx="1080" cy="200" r="1.5" fill="#9b5df5" opacity="0.3"/>
-
-  <!-- ロゴ (左上) -->
-  <rect x="80" y="48" width="44" height="44" rx="12" fill="url(#pinkPurple)"/>
-  <text x="102" y="79" font-family="Arial Black, Arial, sans-serif" font-size="26" font-weight="900" fill="white" text-anchor="middle">F</text>
-  <text x="138" y="79" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#e2e8f0" text-anchor="start" letter-spacing="1">FanzaGate</text>
-
-  <!-- メインキャッチコピー -->
-  <text x="600" y="210" font-family="Noto Sans CJK JP, sans-serif" font-size="28" font-weight="700" fill="#ff6ba8" text-anchor="middle" letter-spacing="3" filter="url(#textGlow)">FANZA 人気・新着・バズり動画を毎日更新</text>
+  <!-- キャッチコピー上 -->
+  <text x="660" y="190" font-family="Noto Sans CJK JP, sans-serif" font-size="20" font-weight="500" fill="#ff6ba8" text-anchor="start" letter-spacing="2">FANZA 動画ランキング専門サイト</text>
 
   <!-- メインタイトル -->
-  <text x="600" y="310" font-family="Arial Black, Arial, sans-serif" font-size="96" font-weight="900" fill="url(#titleGrad)" text-anchor="middle" letter-spacing="-2">FanzaGate</text>
+  <text x="655" y="290" font-family="Arial Black, Arial, sans-serif" font-size="80" font-weight="900" fill="#ffffff" text-anchor="start" letter-spacing="-1">Fanza</text>
+  <text x="655" y="370" font-family="Arial Black, Arial, sans-serif" font-size="80" font-weight="900" fill="url(#pinkPurple)" text-anchor="start" letter-spacing="-1">Gate</text>
 
-  <!-- サブタイトル -->
-  <text x="600" y="370" font-family="Noto Sans CJK JP, sans-serif" font-size="22" fill="#8892a4" text-anchor="middle" letter-spacing="2">ランキング｜新着｜VR｜Xバズり｜女優</text>
+  <!-- 区切り線 -->
+  <rect x="655" y="390" width="160" height="3" rx="1" fill="url(#pinkPurple)" opacity="0.7"/>
+
+  <!-- 特徴リスト -->
+  <circle cx="672" cy="418" r="8" fill="#ff2d78" opacity="0.9"/>
+  <text x="690" y="425" font-family="Noto Sans CJK JP, sans-serif" font-size="17" fill="#e2e8f0" text-anchor="start">毎日更新の人気ランキング</text>
+  <circle cx="672" cy="446" r="8" fill="#9b5df5" opacity="0.9"/>
+  <text x="690" y="453" font-family="Noto Sans CJK JP, sans-serif" font-size="17" fill="#e2e8f0" text-anchor="start">VR・新着・Xバズり作品</text>
+  <circle cx="672" cy="474" r="8" fill="#ff2d78" opacity="0.9"/>
+  <text x="690" y="481" font-family="Noto Sans CJK JP, sans-serif" font-size="17" fill="#e2e8f0" text-anchor="start">女優・ジャンル別に検索</text>
 
   <!-- CTAボタン -->
-  <rect x="430" y="410" width="340" height="64" rx="32" fill="url(#btnGrad)" filter="url(#btnShadow)"/>
-  <text x="600" y="450" font-family="Noto Sans CJK JP, Arial, sans-serif" font-size="22" font-weight="700" fill="white" text-anchor="middle" letter-spacing="2">今すぐランキングを見る  →</text>
+  <rect x="655" y="510" width="300" height="58" rx="29" fill="url(#btnGrad)" filter="url(#btnShadow)"/>
+  <text x="805" y="546" font-family="Noto Sans CJK JP, Arial, sans-serif" font-size="20" font-weight="700" fill="white" text-anchor="middle" letter-spacing="1">ランキングを見る  →</text>
 
   <!-- URL -->
-  <text x="600" y="558" font-family="Arial, sans-serif" font-size="18" fill="#555e70" text-anchor="middle" letter-spacing="1">owstrategy.com/fanzavideo</text>
+  <text x="660" y="598" font-family="Arial, sans-serif" font-size="15" fill="#555e70" text-anchor="start">owstrategy.com/fanzavideo</text>
 </svg>
