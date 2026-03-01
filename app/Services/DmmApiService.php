@@ -138,13 +138,6 @@ class DmmApiService
 
             $thumbnailUrl = $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? '';
 
-            $sampleVideoUrl = '';
-            if (isset($item['sampleMovieURL']['size_720_480'])) {
-                $sampleVideoUrl = $item['sampleMovieURL']['size_720_480'];
-            } elseif (isset($item['sampleMovieURL']['size_476_306'])) {
-                $sampleVideoUrl = $item['sampleMovieURL']['size_476_306'];
-            }
-
             $affiliateUrl = $item['affiliateURL'] ?? $item['URL'] ?? '';
 
             Video::updateOrCreate(
@@ -153,7 +146,6 @@ class DmmApiService
                     'title' => $item['title'] ?? '',
                     'actress' => $actresses,
                     'thumbnail_url' => $thumbnailUrl,
-                    'sample_video_url' => $sampleVideoUrl,
                     'affiliate_url' => $affiliateUrl,
                     'genre' => $genres,
                     'maker' => $maker,

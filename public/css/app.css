@@ -514,7 +514,7 @@ img {
     right: 8px;
     padding: 3px 8px;
     background: rgba(0, 0, 0, 0.75);
-    color: var(--accent);
+    color: #f59e0b;
     font-size: 0.78rem;
     font-weight: 700;
     border-radius: 4px;
@@ -561,7 +561,7 @@ img {
 .item-price {
     font-size: 0.8rem;
     font-weight: 700;
-    color: var(--accent);
+    color: #6ee7b7;
     white-space: nowrap;
 }
 
@@ -826,7 +826,7 @@ img {
 .price {
     font-size: 0.9rem;
     font-weight: 700;
-    color: var(--accent);
+    color: #6ee7b7;
 }
 
 /* ===== Filter Bar ===== */
@@ -1924,4 +1924,185 @@ img {
     color: var(--text-muted, #888);
     margin: 0 2px;
     font-size: 0.9rem;
+}
+
+/* ===== Sample Preview Modal ===== */
+.item-card-clickable {
+    cursor: pointer;
+}
+
+.play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0);
+    transition: background 0.25s ease;
+    z-index: 3;
+}
+
+.play-overlay svg {
+    width: 48px;
+    height: 48px;
+    color: #fff;
+    opacity: 0;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.8));
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    transform: scale(0.85);
+}
+
+.item-card-clickable:hover .play-overlay {
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.item-card-clickable:hover .play-overlay svg {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.sample-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.sample-modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.sample-modal {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    width: 100%;
+    max-width: 760px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    transform: scale(0.95) translateY(12px);
+    transition: transform 0.2s ease;
+}
+
+.sample-modal-overlay.active .sample-modal {
+    transform: scale(1) translateY(0);
+}
+
+.sample-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    background: rgba(255,255,255,0.08);
+    border: none;
+    color: var(--text);
+    font-size: 1.5rem;
+    line-height: 1;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    z-index: 1;
+}
+
+.sample-modal-close:hover {
+    background: rgba(255,255,255,0.18);
+}
+
+.sample-modal-player {
+    position: relative;
+    width: 100%;
+    background: #000;
+    border-radius: var(--radius) var(--radius) 0 0;
+    overflow: hidden;
+    padding-top: 65%;
+}
+
+.sample-modal-player iframe {
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 100%;
+    top: -15%;
+    height: 125%;
+    display: block;
+}
+
+.sample-modal-info {
+    padding: 16px 20px 20px;
+}
+
+.sample-modal-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    line-height: 1.4;
+    margin-bottom: 6px;
+    padding-right: 40px;
+}
+
+.sample-modal-actress {
+    font-size: 0.85rem;
+    color: var(--primary-light);
+    margin-bottom: 14px;
+}
+
+.sample-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.sample-modal-price {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #6ee7b7;
+}
+
+.sample-modal-btn {
+    display: inline-block;
+    background: var(--primary);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.sample-modal-btn:hover {
+    background: var(--primary-dark);
+}
+
+@media (max-width: 480px) {
+    .sample-modal-info {
+        padding: 12px 14px 16px;
+    }
+    .sample-modal-title {
+        font-size: 0.9rem;
+    }
+    .sample-modal-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .sample-modal-btn {
+        width: 100%;
+        text-align: center;
+    }
 }

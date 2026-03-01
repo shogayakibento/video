@@ -67,7 +67,8 @@
                             詳細を見る
                         </a>
                         @if(!empty($item['prices']['price']))
-                            <span class="price">{{ $item['prices']['price'] }}</span>
+                            @php $p = $item['prices']['price']; @endphp
+                            <span class="price">{{ preg_replace('/~$/', '円〜', $p) }}{{ str_ends_with($p, '~') ? '' : '円' }}</span>
                         @endif
                     </div>
                 </div>

@@ -20,7 +20,7 @@
             <img
                 src="{{ $video->thumbnail_url }}"
                 alt="{{ $video->title }}"
-                class="w-full aspect-video object-cover transition-transform duration-500 group-hover:scale-105"
+                class="w-full object-cover transition-transform duration-500 group-hover:scale-105" style="aspect-ratio: 3/2"
                 loading="lazy"
             >
             <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>

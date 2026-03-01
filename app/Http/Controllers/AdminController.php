@@ -153,14 +153,12 @@ class AdminController extends Controller
                 $genres = collect($item['iteminfo']['genre'] ?? [])->pluck('name')->implode(', ');
                 $maker = collect($item['iteminfo']['maker'] ?? [])->pluck('name')->first() ?? '';
                 $thumbnailUrl = $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? '';
-                $sampleVideoUrl = $item['sampleMovieURL']['size_720_480'] ?? $item['sampleMovieURL']['size_476_306'] ?? '';
 
                 $video = Video::create([
                     'dmm_content_id' => $item['content_id'],
                     'title' => $item['title'] ?? '',
                     'actress' => $actresses,
                     'thumbnail_url' => $thumbnailUrl,
-                    'sample_video_url' => $sampleVideoUrl,
                     'affiliate_url' => $item['affiliateURL'] ?? $item['URL'] ?? '',
                     'genre' => $genres,
                     'maker' => $maker,

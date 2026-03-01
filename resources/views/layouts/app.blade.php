@@ -129,6 +129,7 @@
         </div>
     </footer>
 
+    @include('partials.sample-modal')
     <script src="{{ asset('js/app.js') }}"></script>
     @stack('scripts')
 </body>
