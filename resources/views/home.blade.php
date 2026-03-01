@@ -23,24 +23,6 @@
         </div>
     </section>
 
-    {{-- Categories Section --}}
-    <section class="section categories-section">
-        <div class="container">
-            <h2 class="section-title">カテゴリから探す</h2>
-            <div class="categories-grid">
-                @foreach($categories as $slug => $cat)
-                    <a href="{{ route('category.show', $slug) }}" class="category-card animate-on-scroll">
-                        <div class="category-icon">
-                            @include('partials.icon', ['icon' => $cat['icon']])
-                        </div>
-                        <h3>{{ $cat['label'] }}</h3>
-                        <p>{{ $cat['description'] }}</p>
-                    </a>
-                @endforeach
-            </div>
-        </div>
-    </section>
-
     {{-- Ranking Section --}}
     <section class="section ranking-section">
         <div class="container">
