@@ -2,6 +2,8 @@
 
 @section('title', $video->title . ' - FanzaGate')
 @section('description', $video->title . 'のサンプル動画とレビュー。' . ($video->actress ? '出演: ' . $video->actress : ''))
+@section('og_type', 'video.movie')
+@section('og_image', $video->thumbnail_url)
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/tweet.css') }}?v={{ filemtime(public_path('css/tweet.css')) }}">
@@ -126,4 +128,21 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    "name": "{{ addslashes($video->title) }}",
+    "description": "{{ addslashes($video->title) }}のサンプル動画とレビュー。{{ $video->actress ? '出演: ' . addslashes($video->actress) : '' }}",
+    "thumbnailUrl": "{{ $video->thumbnail_url }}",
+    "uploadDate": "{{ $video->release_date ? $video->release_date->format('c') : $video->created_at->format('c') }}"@if($video->actress),
+    "actor": {
+        "@type": "Person",
+        "name": "{{ addslashes(explode(',', $video->actress)[0]) }}"
+    }@endif
+}
+</script>
+@endpush
 @endsection

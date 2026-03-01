@@ -170,6 +170,46 @@ window.addEventListener('load', function () {
     fetch('/actress?tab=ranking', { priority: 'low' }).catch(function(){});
 });
 </script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "FANZAとは？",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "FANZAは、DMMが運営する大手デジタルコンテンツプラットフォームです。動画配信、VRコンテンツ、DVD販売・レンタル、電子書籍など、幅広いサービスを提供しています。"
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "どんなデバイスで見られる？",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "PC（Windows/Mac）、スマートフォン（iOS/Android）、タブレット、VRヘッドセットなど幅広いデバイスに対応しています。"
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "支払い方法は？",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "クレジットカード（Visa、Mastercard、JCB、American Express）、DMMポイント、電子マネー、キャリア決済に対応しています。"
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "このサイトは何？",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "当サイトはFANZAの作品情報をまとめたガイドサイトです。ランキングや新着情報を通じて、お気に入りの作品を見つけるお手伝いをします。当サイトはアフィリエイトプログラムに参加しています。"
+            }
+        }
+    ]
+}
+</script>
 @endpush
 
 @endsection
