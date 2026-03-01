@@ -20,6 +20,8 @@ Route::get('/actress/{id}', [ActressController::class, 'show'])->name('actress.s
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/ranking', [RankingController::class, 'index'])->name('ranking');
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+Route::view('/privacy', 'privacy')->name('privacy');
+Route::view('/contact', 'contact')->name('contact');
 
 // Xツイートランキング
 Route::get('/tweet-ranking', [RankingController::class, 'tweetIndex'])->name('tweet.ranking.index');

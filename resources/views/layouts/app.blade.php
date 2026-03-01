@@ -126,8 +126,8 @@
                 <div class="footer-col">
                     <h4>サイトについて</h4>
                     <ul>
-                        <li><a href="#">プライバシーポリシー</a></li>
-                        <li><a href="#">お問い合わせ</a></li>
+                        <li><a href="{{ route('privacy') }}">プライバシーポリシー</a></li>
+                        <li><a href="{{ route('contact') }}">お問い合わせ</a></li>
                     </ul>
                 </div>
             </div>

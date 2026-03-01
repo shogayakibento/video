@@ -2145,3 +2145,78 @@ img {
         text-align: center;
     }
 }
+
+/* ========================================
+   Static Pages (Privacy / Contact)
+   ======================================== */
+.static-page {
+    max-width: 800px;
+    margin: 2rem auto 4rem;
+    padding: 0 1rem;
+}
+
+.static-page-updated {
+    color: var(--text-muted, #9ca3af);
+    font-size: 0.85rem;
+    margin-bottom: 2rem;
+}
+
+.static-section {
+    margin-bottom: 2.5rem;
+}
+
+.static-section h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    border-left: 4px solid var(--accent, #e53e3e);
+    padding-left: 0.75rem;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+.static-section p {
+    color: #d1d5db;
+    line-height: 1.8;
+    margin-bottom: 0.75rem;
+}
+
+.static-list {
+    color: #d1d5db;
+    line-height: 1.8;
+    padding-left: 1.5rem;
+    list-style: disc;
+}
+
+.static-list li {
+    margin-bottom: 0.4rem;
+}
+
+.contact-x-link {
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.btn-x-contact {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: #000;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.9rem 2rem;
+    border-radius: 9999px;
+    text-decoration: none;
+    border: 1px solid #333;
+    transition: background 0.2s;
+}
+
+.btn-x-contact:hover {
+    background: #1a1a1a;
+}
+
+.x-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
