@@ -45,13 +45,34 @@ public function index(Request $request, FanzaApiService $api)
 
     private function ranking(int $page, FanzaApiService $api)
     {
-        $hits   = 30;
-        $offset = (($page - 1) * $hits) + 1;
+        $hits = 30;
 
-        $result     = $api->getActresses(['sort' => 'popular', 'hits' => $hits, 'offset' => $offset]);
-        $actresses  = $result['result']['actress'] ?? [];
-        $totalCount = (int) ($result['result']['total_count'] ?? 0);
-        $totalPages = min((int) ceil($totalCount / $hits), 50);
+        // Collect actress IDs in popularity order from top-ranked products (API results are cached)
+        $seen = [];
+        $pool = [];
+        foreach ([1, 101, 201] as $itemOffset) {
+            $result = $api->getItems(['hits' => 100, 'offset' => $itemOffset, 'sort' => 'rank']);
+            foreach ($result['result']['items'] ?? [] as $item) {
+                foreach ($item['iteminfo']['actress'] ?? [] as $a) {
+                    $id = $a['id'] ?? null;
+                    if ($id && !isset($seen[$id])) {
+                        $seen[$id] = true;
+                        $pool[] = ['id' => $id, 'name' => $a['name'] ?? '', 'ruby' => $a['ruby'] ?? ''];
+                    }
+                }
+            }
+        }
+
+        $totalCount = count($pool);
+        $pageItems  = array_slice($pool, ($page - 1) * $hits, $hits);
+        $totalPages = min((int) ceil($totalCount / $hits), 10);
+
+        // Enrich each actress with profile photo via ActressSearch (individual results are cached)
+        $actresses = array_map(function ($a) use ($api) {
+            $detail = $api->getActresses(['actress_id' => $a['id']]);
+            $info   = $detail['result']['actress'][0] ?? null;
+            return array_merge($a, ['imageURL' => $info['imageURL'] ?? []]);
+        }, $pageItems);
 
         return view('actress.index', [
             'tab'         => 'ranking',
