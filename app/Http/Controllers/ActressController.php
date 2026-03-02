@@ -48,7 +48,7 @@ class ActressController extends Controller
         $hits = 30;
         $offset = (($page - 1) * $hits) + 1;
 
-        $result = Cache::remember('actress_ranking_p' . $page, 7200, fn() => $api->getActresses([
+        $result = Cache::remember('actress_ranking_v2_p' . $page, 7200, fn() => $api->getActresses([
             'hits' => $hits,
             'offset' => $offset,
             'sort' => 'popular',
@@ -81,7 +81,7 @@ class ActressController extends Controller
         $ageMax = (string) ($request->input('age_max') ?? '');
 
         // Fetch and cache popular actresses directly from ActressSearch API
-        $popularActressDetails = Cache::remember('popular_actress_details', 7200, function () use ($api) {
+        $popularActressDetails = Cache::remember('popular_actress_details_v2', 7200, function () use ($api) {
             $all = [];
             foreach ([1, 101, 201] as $offset) {
                 $result = $api->getActresses([
