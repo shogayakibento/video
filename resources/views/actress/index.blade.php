@@ -142,7 +142,7 @@
         @endif
 
         {{-- Actress Grid --}}
-        <div class="actress-grid {{ $tab === 'ranking' ? 'actress-grid-ranking' : '' }}">
+        <div class="actress-grid actress-grid-ranking">
             @forelse($actresses as $index => $actress)
                 @php
                     $actressId = $actress['id'] ?? '';
@@ -151,7 +151,7 @@
                     // Prefer actress face photo (imageURL), fall back to product cover
                     $imageUrl = $actress['imageURL']['large'] ?? $actress['imageURL']['small'] ?? $actress['top_item_image'] ?? '';
                 @endphp
-                <a href="{{ route('actress.show', $actressId) }}" class="actress-card animate-on-scroll {{ $tab === 'ranking' ? 'actress-card-ranking' : '' }}">
+                <a href="{{ route('actress.show', $actressId) }}" class="actress-card actress-card-ranking animate-on-scroll">
                     @if($tab === 'ranking')
                         @php $rankNum = $rankOffset + $index + 1; @endphp
                         <span class="actress-rank-badge{{ $rankNum <= 3 ? ' rank-' . $rankNum : '' }}">

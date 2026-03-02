@@ -43,36 +43,33 @@ public function index(Request $request, FanzaApiService $api)
         return $this->search($request, $page, $api);
     }
 
-    private function ranking(int $page, FanzaApiService $api)
+    /**
+     * Paginate and photo-enrich a pre-built pool for the current page.
+     * Only 24 ActressSearch calls are made per page; each result is individually
+     * cached in the service, so repeat page loads are instant.
+     */
+    private function paginatePool(array $pool, int $page, int $hits, FanzaApiService $api, int $maxPages = 10): array
     {
-        $hits = 30;
-
-        // Collect actress IDs in popularity order from top-ranked products (API results are cached)
-        $seen = [];
-        $pool = [];
-        foreach ([1, 101, 201] as $itemOffset) {
-            $result = $api->getItems(['hits' => 100, 'offset' => $itemOffset, 'sort' => 'rank']);
-            foreach ($result['result']['items'] ?? [] as $item) {
-                foreach ($item['iteminfo']['actress'] ?? [] as $a) {
-                    $id = $a['id'] ?? null;
-                    if ($id && !isset($seen[$id])) {
-                        $seen[$id] = true;
-                        $pool[] = ['id' => $id, 'name' => $a['name'] ?? '', 'ruby' => $a['ruby'] ?? ''];
-                    }
-                }
-            }
-        }
-
         $totalCount = count($pool);
-        $pageItems  = array_slice($pool, ($page - 1) * $hits, $hits);
-        $totalPages = min((int) ceil($totalCount / $hits), 10);
+        $totalPages = min((int) ceil($totalCount / $hits), $maxPages);
+        $slice      = array_slice($pool, ($page - 1) * $hits, $hits);
 
-        // Enrich each actress with profile photo via ActressSearch (individual results are cached)
         $actresses = array_map(function ($a) use ($api) {
             $detail = $api->getActresses(['actress_id' => $a['id']]);
             $info   = $detail['result']['actress'][0] ?? null;
             return array_merge($a, ['imageURL' => $info['imageURL'] ?? []]);
-        }, $pageItems);
+        }, $slice);
+
+        return compact('actresses', 'totalCount', 'totalPages');
+    }
+
+    private function ranking(int $page, FanzaApiService $api)
+    {
+        $hits = 24;
+        $pool = $api->getRankingPool();
+
+        ['actresses' => $actresses, 'totalCount' => $totalCount, 'totalPages' => $totalPages]
+            = $this->paginatePool($pool, $page, $hits, $api);
 
         return view('actress.index', [
             'tab'         => 'ranking',
@@ -96,33 +93,35 @@ public function index(Request $request, FanzaApiService $api)
         $ageMin    = (string) ($request->input('age_min') ?? '');
         $ageMax    = (string) ($request->input('age_max') ?? '');
 
-        $hits   = 30;
-        $offset = (($page - 1) * $hits) + 1;
-
-        // Pass filter conditions directly to the API so all actresses are covered
-        $params = ['hits' => $hits, 'offset' => $offset];
-
-        if ($cup && isset(self::CUP_BUST_MAP[$cup])) {
-            [$bustMin, $bustMax] = self::CUP_BUST_MAP[$cup];
-            $params['gte_bust'] = $bustMin;
-            $params['lte_bust'] = $bustMax;
-        }
-
-        if ($heightMin) $params['gte_height'] = $heightMin;
-        if ($heightMax) $params['lte_height'] = $heightMax;
-
-        $today = new \DateTime();
-        // age >= ageMin  →  birthday <= today - ageMin years
-        if ($ageMin) $params['lte_birthday'] = (clone $today)->modify("-{$ageMin} years")->format('Y-m-d');
-        // age <= ageMax  →  birthday >= today - (ageMax+1) years + 1 day
-        if ($ageMax) $params['gte_birthday'] = (clone $today)->modify('-' . ($ageMax + 1) . ' years + 1 day')->format('Y-m-d');
-
-        $result     = $api->getActresses($params);
-        $actresses  = $result['result']['actress'] ?? [];
-        $totalCount = (int) ($result['result']['total_count'] ?? 0);
-        $totalPages = min((int) ceil($totalCount / $hits), 50);
-
         $filters = compact('cup', 'heightMin', 'heightMax', 'ageMin', 'ageMax');
+        $hits    = 24;
+
+        // No active filters → show popular ranking pool
+        if (!array_filter($filters)) {
+            $pool = $api->getRankingPool();
+            ['actresses' => $actresses, 'totalCount' => $totalCount, 'totalPages' => $totalPages]
+                = $this->paginatePool($pool, $page, $hits, $api);
+        } else {
+            $offset = (($page - 1) * $hits) + 1;
+            $params = ['hits' => $hits, 'offset' => $offset];
+
+            if ($cup && isset(self::CUP_BUST_MAP[$cup])) {
+                [$bustMin, $bustMax] = self::CUP_BUST_MAP[$cup];
+                $params['gte_bust'] = $bustMin;
+                $params['lte_bust'] = $bustMax;
+            }
+            if ($heightMin) $params['gte_height'] = $heightMin;
+            if ($heightMax) $params['lte_height'] = $heightMax;
+
+            $today = new \DateTime();
+            if ($ageMin) $params['lte_birthday'] = (clone $today)->modify("-{$ageMin} years")->format('Y-m-d');
+            if ($ageMax) $params['gte_birthday'] = (clone $today)->modify('-' . ($ageMax + 1) . ' years + 1 day')->format('Y-m-d');
+
+            $result     = $api->getActresses($params);
+            $actresses  = $result['result']['actress'] ?? [];
+            $totalCount = (int) ($result['result']['total_count'] ?? 0);
+            $totalPages = min((int) ceil($totalCount / $hits), 50);
+        }
 
         return view('actress.index', [
             'tab'         => 'filter',
@@ -142,36 +141,37 @@ public function index(Request $request, FanzaApiService $api)
     {
         $keyword = $request->input('keyword', '');
         $initial = $request->input('initial', '');
-        $hits = 30;
-        $offset = (($page - 1) * $hits) + 1;
+        $hits    = 24;
 
-        $params = [
-            'hits' => $hits,
-            'offset' => $offset,
-        ];
-
-        if ($keyword) {
-            $params['keyword'] = $keyword;
-        } elseif ($initial) {
-            $params['initial'] = $initial;
+        // No keyword/initial → show popular ranking pool
+        if (!$keyword && !$initial) {
+            $pool = $api->getRankingPool();
+            ['actresses' => $actresses, 'totalCount' => $totalCount, 'totalPages' => $totalPages]
+                = $this->paginatePool($pool, $page, $hits, $api);
+        } else {
+            $params = ['hits' => $hits, 'offset' => (($page - 1) * $hits) + 1];
+            if ($keyword) {
+                $params['keyword'] = $keyword;
+            } else {
+                $params['initial'] = $initial;
+            }
+            $result     = $api->getActresses($params);
+            $actresses  = $result['result']['actress'] ?? [];
+            $totalCount = $result['result']['total_count'] ?? 0;
+            $totalPages = min((int) ceil($totalCount / $hits), 50);
         }
 
-        $result = $api->getActresses($params);
-        $actresses = $result['result']['actress'] ?? [];
-        $totalCount = $result['result']['total_count'] ?? 0;
-        $totalPages = (int) ceil($totalCount / $hits);
-
         return view('actress.index', [
-            'tab' => 'search',
-            'actresses' => $actresses,
-            'keyword' => $keyword,
-            'initial' => $initial,
-            'initials' => self::INITIALS,
+            'tab'         => 'search',
+            'actresses'   => $actresses,
+            'keyword'     => $keyword,
+            'initial'     => $initial,
+            'initials'    => self::INITIALS,
             'currentPage' => $page,
-            'totalPages' => min($totalPages, 50),
-            'totalCount' => $totalCount,
-            'rankOffset' => 0,
-            'filters' => [],
+            'totalPages'  => $totalPages,
+            'totalCount'  => $totalCount,
+            'rankOffset'  => 0,
+            'filters'     => [],
         ]);
     }
 
