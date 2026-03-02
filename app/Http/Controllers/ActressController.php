@@ -14,6 +14,7 @@ class ActressController extends Controller
         'ら' => 'ら行', 'わ' => 'わ行',
     ];
 
+    // Cup size → approximate bust (cm) range used for API gte_bust/lte_bust params
     private const CUP_BUST_MAP = [
         'A' => [72, 80],
         'B' => [75, 83],
@@ -26,7 +27,7 @@ class ActressController extends Controller
         'I' => [96, 120],
     ];
 
-    public function index(Request $request, FanzaApiService $api)
+public function index(Request $request, FanzaApiService $api)
     {
         $tab = $request->input('tab', 'ranking');
         $page = max(1, (int) $request->input('page', 1));
@@ -99,75 +100,52 @@ class ActressController extends Controller
 
     private function filter(Request $request, int $page, FanzaApiService $api)
     {
-        $cup = (string) ($request->input('cup') ?? '');
+        $cup       = (string) ($request->input('cup') ?? '');
         $heightMin = (string) ($request->input('height_min') ?? '');
         $heightMax = (string) ($request->input('height_max') ?? '');
-        $ageMin = (string) ($request->input('age_min') ?? '');
-        $ageMax = (string) ($request->input('age_max') ?? '');
+        $ageMin    = (string) ($request->input('age_min') ?? '');
+        $ageMax    = (string) ($request->input('age_max') ?? '');
 
-        // Fetch and cache popular actresses directly from ActressSearch API
-        $popularActressDetails = Cache::remember('popular_actress_details_v3', 7200, function () use ($api) {
-            $all = [];
-            foreach ([1, 101, 201] as $offset) {
-                $r = $api->getActresses(['hits' => 100, 'offset' => $offset]);
-                $all = array_merge($all, $r['result']['actress'] ?? []);
-                if (count($all) >= 300) break;
-            }
-            return array_slice($all, 0, 300);
-        });
+        $hits   = 30;
+        $offset = (($page - 1) * $hits) + 1;
 
-        // Apply filters in memory (no API calls)
-        $allMatching = array_values(array_filter($popularActressDetails, fn($actress) => $this->matchesFilter($actress, $cup, $heightMin, $heightMax, $ageMin, $ageMax)));
+        // Pass filter conditions directly to the API so all actresses are covered
+        $params = ['hits' => $hits, 'offset' => $offset];
 
-        $hits = 30;
-        $totalCount = count($allMatching);
-        $actresses = array_slice($allMatching, ($page - 1) * $hits, $hits);
-        $totalPages = (int) ceil($totalCount / $hits);
+        if ($cup && isset(self::CUP_BUST_MAP[$cup])) {
+            [$bustMin, $bustMax] = self::CUP_BUST_MAP[$cup];
+            $params['gte_bust'] = $bustMin;
+            $params['lte_bust'] = $bustMax;
+        }
+
+        if ($heightMin) $params['gte_height'] = $heightMin;
+        if ($heightMax) $params['lte_height'] = $heightMax;
+
+        $today = new \DateTime();
+        // age >= ageMin  →  birthday <= today - ageMin years
+        if ($ageMin) $params['lte_birthday'] = (clone $today)->modify("-{$ageMin} years")->format('Y-m-d');
+        // age <= ageMax  →  birthday >= today - (ageMax+1) years + 1 day
+        if ($ageMax) $params['gte_birthday'] = (clone $today)->modify('-' . ($ageMax + 1) . ' years + 1 day')->format('Y-m-d');
+
+        $result     = $api->getActresses($params);
+        $actresses  = $result['result']['actress'] ?? [];
+        $totalCount = (int) ($result['result']['total_count'] ?? 0);
+        $totalPages = min((int) ceil($totalCount / $hits), 50);
 
         $filters = compact('cup', 'heightMin', 'heightMax', 'ageMin', 'ageMax');
 
         return view('actress.index', [
-            'tab' => 'filter',
-            'actresses' => $actresses,
-            'keyword' => '',
-            'initial' => '',
-            'initials' => self::INITIALS,
+            'tab'         => 'filter',
+            'actresses'   => $actresses,
+            'keyword'     => '',
+            'initial'     => '',
+            'initials'    => self::INITIALS,
             'currentPage' => $page,
-            'totalPages' => $totalPages,
-            'totalCount' => $totalCount,
-            'rankOffset' => 0,
-            'filters' => $filters,
+            'totalPages'  => $totalPages,
+            'totalCount'  => $totalCount,
+            'rankOffset'  => 0,
+            'filters'     => $filters,
         ]);
-    }
-
-    private function matchesFilter(array $actress, string $cup, string $heightMin, string $heightMax, string $ageMin, string $ageMax): bool
-    {
-        if ($cup && isset(self::CUP_BUST_MAP[$cup])) {
-            [$bustMin, $bustMax] = self::CUP_BUST_MAP[$cup];
-            $bust = (int) ($actress['bust'] ?? 0);
-            if (!$bust || $bust < $bustMin || $bust > $bustMax) return false;
-        }
-
-        if ($heightMin || $heightMax) {
-            $height = (int) ($actress['height'] ?? 0);
-            if (!$height) return false;
-            if ($heightMin && $height < (int) $heightMin) return false;
-            if ($heightMax && $height > (int) $heightMax) return false;
-        }
-
-        if ($ageMin || $ageMax) {
-            $birthday = $actress['birthday'] ?? '';
-            if (!$birthday) return false;
-            try {
-                $age = (new \DateTime())->diff(new \DateTime($birthday))->y;
-            } catch (\Exception $e) {
-                return false;
-            }
-            if ($ageMin && $age < (int) $ageMin) return false;
-            if ($ageMax && $age > (int) $ageMax) return false;
-        }
-
-        return true;
     }
 
     private function search(Request $request, int $page, FanzaApiService $api)
