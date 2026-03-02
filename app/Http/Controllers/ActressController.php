@@ -45,7 +45,7 @@ public function index(Request $request, FanzaApiService $api)
 
     /**
      * Paginate and photo-enrich a pre-built pool for the current page.
-     * Only 30 ActressSearch calls are made per page; each result is individually
+     * Only 24 ActressSearch calls are made per page; each result is individually
      * cached in the service, so repeat page loads are instant.
      */
     private function paginatePool(array $pool, int $page, int $hits, FanzaApiService $api, int $maxPages = 10): array
@@ -65,7 +65,7 @@ public function index(Request $request, FanzaApiService $api)
 
     private function ranking(int $page, FanzaApiService $api)
     {
-        $hits = 30;
+        $hits = 24;
         $pool = $api->getRankingPool();
 
         ['actresses' => $actresses, 'totalCount' => $totalCount, 'totalPages' => $totalPages]
@@ -94,7 +94,7 @@ public function index(Request $request, FanzaApiService $api)
         $ageMax    = (string) ($request->input('age_max') ?? '');
 
         $filters = compact('cup', 'heightMin', 'heightMax', 'ageMin', 'ageMax');
-        $hits    = 30;
+        $hits    = 24;
 
         // No active filters → show popular ranking pool
         if (!array_filter($filters)) {
@@ -141,7 +141,7 @@ public function index(Request $request, FanzaApiService $api)
     {
         $keyword = $request->input('keyword', '');
         $initial = $request->input('initial', '');
-        $hits    = 30;
+        $hits    = 24;
 
         // No keyword/initial → show popular ranking pool
         if (!$keyword && !$initial) {
