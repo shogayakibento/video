@@ -46,27 +46,54 @@ class ActressController extends Controller
     private function ranking(int $page, FanzaApiService $api)
     {
         $hits = 30;
-        $offset = (($page - 1) * $hits) + 1;
 
-        $result = Cache::remember('actress_ranking_v3_p' . $page, 7200,
-            fn() => $api->getActresses(['hits' => $hits, 'offset' => $offset])
-        );
+        // Build a pool of popular actresses from the top-300 ranked items.
+        // Paginate in memory so page sizes are fixed and ranks are accurate.
+        $pool = Cache::remember('actress_ranking_pool_v1', 7200, function () use ($api) {
+            $seen = [];
+            $pool = [];
+            foreach ([1, 101, 201] as $offset) {
+                $result = $api->getItems([
+                    'service' => 'digital',
+                    'floor' => 'videoa',
+                    'hits' => 100,
+                    'offset' => $offset,
+                    'sort' => 'rank',
+                ]);
+                foreach ($result['result']['items'] ?? [] as $item) {
+                    foreach ($item['iteminfo']['actress'] ?? [] as $a) {
+                        $id = $a['id'] ?? null;
+                        if ($id && !isset($seen[$id])) {
+                            $seen[$id] = true;
+                            $pool[] = [
+                                'id'             => $id,
+                                'name'           => $a['name'] ?? '',
+                                'ruby'           => $a['ruby'] ?? '',
+                                'imageURL'       => [],
+                                'top_item_image' => $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? '',
+                            ];
+                        }
+                    }
+                }
+            }
+            return $pool;
+        });
 
-        $actresses = $result['result']['actress'] ?? [];
-        $totalCount = (int) ($result['result']['total_count'] ?? 0);
+        $totalCount = count($pool);
+        $actresses  = array_slice($pool, ($page - 1) * $hits, $hits);
         $totalPages = min((int) ceil($totalCount / $hits), 10);
 
         return view('actress.index', [
-            'tab' => 'ranking',
-            'actresses' => $actresses,
-            'keyword' => '',
-            'initial' => '',
-            'initials' => self::INITIALS,
+            'tab'         => 'ranking',
+            'actresses'   => $actresses,
+            'keyword'     => '',
+            'initial'     => '',
+            'initials'    => self::INITIALS,
             'currentPage' => $page,
-            'totalPages' => $totalPages,
-            'totalCount' => $totalCount,
-            'rankOffset' => ($page - 1) * $hits,
-            'filters' => [],
+            'totalPages'  => $totalPages,
+            'totalCount'  => $totalCount,
+            'rankOffset'  => ($page - 1) * $hits,
+            'filters'     => [],
         ]);
     }
 
