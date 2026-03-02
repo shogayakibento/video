@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Services\FanzaApiService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 class ActressController extends Controller
 {
@@ -46,43 +45,13 @@ public function index(Request $request, FanzaApiService $api)
 
     private function ranking(int $page, FanzaApiService $api)
     {
-        $hits = 30;
+        $hits   = 30;
+        $offset = (($page - 1) * $hits) + 1;
 
-        // Build a pool of popular actresses from the top-300 ranked items.
-        // Paginate in memory so page sizes are fixed and ranks are accurate.
-        $pool = Cache::remember('actress_ranking_pool_v1', 7200, function () use ($api) {
-            $seen = [];
-            $pool = [];
-            foreach ([1, 101, 201] as $offset) {
-                $result = $api->getItems([
-                    'service' => 'digital',
-                    'floor' => 'videoa',
-                    'hits' => 100,
-                    'offset' => $offset,
-                    'sort' => 'rank',
-                ]);
-                foreach ($result['result']['items'] ?? [] as $item) {
-                    foreach ($item['iteminfo']['actress'] ?? [] as $a) {
-                        $id = $a['id'] ?? null;
-                        if ($id && !isset($seen[$id])) {
-                            $seen[$id] = true;
-                            $pool[] = [
-                                'id'             => $id,
-                                'name'           => $a['name'] ?? '',
-                                'ruby'           => $a['ruby'] ?? '',
-                                'imageURL'       => [],
-                                'top_item_image' => $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? '',
-                            ];
-                        }
-                    }
-                }
-            }
-            return $pool;
-        });
-
-        $totalCount = count($pool);
-        $actresses  = array_slice($pool, ($page - 1) * $hits, $hits);
-        $totalPages = min((int) ceil($totalCount / $hits), 10);
+        $result     = $api->getActresses(['sort' => 'popular', 'hits' => $hits, 'offset' => $offset]);
+        $actresses  = $result['result']['actress'] ?? [];
+        $totalCount = (int) ($result['result']['total_count'] ?? 0);
+        $totalPages = min((int) ceil($totalCount / $hits), 50);
 
         return view('actress.index', [
             'tab'         => 'ranking',
