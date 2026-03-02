@@ -48,11 +48,14 @@ class ActressController extends Controller
         $hits = 30;
         $offset = (($page - 1) * $hits) + 1;
 
-        $result = Cache::remember('actress_ranking_v2_p' . $page, 7200, fn() => $api->getActresses([
-            'hits' => $hits,
-            'offset' => $offset,
-            'sort' => 'popular',
-        ]));
+        $result = Cache::remember('actress_ranking_v2_p' . $page, 7200, function () use ($hits, $offset, $api) {
+            $r = $api->getActresses(['hits' => $hits, 'offset' => $offset, 'sort' => 'popular']);
+            if (!empty($r['result']['actress'])) {
+                return $r;
+            }
+            // Fallback: sort=popular not supported or returned empty
+            return $api->getActresses(['hits' => $hits, 'offset' => $offset]);
+        });
 
         $actresses = $result['result']['actress'] ?? [];
         $totalCount = (int) ($result['result']['total_count'] ?? 0);
@@ -84,12 +87,12 @@ class ActressController extends Controller
         $popularActressDetails = Cache::remember('popular_actress_details_v2', 7200, function () use ($api) {
             $all = [];
             foreach ([1, 101, 201] as $offset) {
-                $result = $api->getActresses([
-                    'hits' => 100,
-                    'offset' => $offset,
-                    'sort' => 'popular',
-                ]);
-                $all = array_merge($all, $result['result']['actress'] ?? []);
+                $r = $api->getActresses(['hits' => 100, 'offset' => $offset, 'sort' => 'popular']);
+                if (empty($r['result']['actress']) && $offset === 1) {
+                    // sort=popular not supported; fall back to default sort
+                    $r = $api->getActresses(['hits' => 100, 'offset' => $offset]);
+                }
+                $all = array_merge($all, $r['result']['actress'] ?? []);
                 if (count($all) >= 300) break;
             }
             return array_slice($all, 0, 300);
