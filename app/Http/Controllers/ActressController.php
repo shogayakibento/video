@@ -98,6 +98,7 @@ class ActressController extends Controller
             'currentPage' => $page,
             'totalPages' => 5,
             'totalCount' => count($actresses),
+            'rankOffset' => ($page - 1) * $hits,
             'filters' => [],
         ]);
     }
@@ -112,25 +113,28 @@ class ActressController extends Controller
 
         // Fetch and cache popular actress details (independent of filter params)
         $popularActressDetails = Cache::remember('popular_actress_details', 7200, function () use ($api) {
-            $popularResult = $api->getItems([
-                'service' => 'digital',
-                'floor' => 'videoa',
-                'hits' => 100,
-                'offset' => 1,
-                'sort' => 'rank',
-            ]);
             $popularActressIds = [];
             $seen = [];
-            foreach ($popularResult['result']['items'] ?? [] as $item) {
-                foreach ($item['iteminfo']['actress'] ?? [] as $a) {
-                    $aid = $a['id'] ?? null;
-                    if ($aid && !isset($seen[$aid])) {
-                        $seen[$aid] = true;
-                        $popularActressIds[] = $aid;
-                        if (count($popularActressIds) >= 60) break 2;
+            foreach ([1, 101, 201] as $offset) {
+                $popularResult = $api->getItems([
+                    'service' => 'digital',
+                    'floor' => 'videoa',
+                    'hits' => 100,
+                    'offset' => $offset,
+                    'sort' => 'rank',
+                ]);
+                foreach ($popularResult['result']['items'] ?? [] as $item) {
+                    foreach ($item['iteminfo']['actress'] ?? [] as $a) {
+                        $aid = $a['id'] ?? null;
+                        if ($aid && !isset($seen[$aid])) {
+                            $seen[$aid] = true;
+                            $popularActressIds[] = $aid;
+                        }
                     }
                 }
+                if (count($popularActressIds) >= 150) break;
             }
+            $popularActressIds = array_slice($popularActressIds, 0, 150);
 
             $details = [];
             foreach ($popularActressIds as $id) {
@@ -162,6 +166,7 @@ class ActressController extends Controller
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'totalCount' => $totalCount,
+            'rankOffset' => 0,
             'filters' => $filters,
         ]);
     }
@@ -228,6 +233,7 @@ class ActressController extends Controller
             'currentPage' => $page,
             'totalPages' => min($totalPages, 50),
             'totalCount' => $totalCount,
+            'rankOffset' => 0,
             'filters' => [],
         ]);
     }

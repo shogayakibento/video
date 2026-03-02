@@ -153,7 +153,7 @@
                 @endphp
                 <a href="{{ route('actress.show', $actressId) }}" class="actress-card animate-on-scroll {{ $tab === 'ranking' ? 'actress-card-ranking' : '' }}">
                     @if($tab === 'ranking')
-                        @php $rankNum = ($currentPage - 1) * 100 + $index + 1; @endphp
+                        @php $rankNum = $rankOffset + $index + 1; @endphp
                         <span class="actress-rank-badge{{ $rankNum <= 3 ? ' rank-' . $rankNum : '' }}">
                             {{ $rankNum }}
                         </span>
