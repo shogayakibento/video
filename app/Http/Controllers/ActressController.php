@@ -44,13 +44,21 @@ public function index(Request $request, FanzaApiService $api)
     }
 
     /**
-     * Paginate a pre-built pool array and return common view variables.
+     * Paginate and photo-enrich a pre-built pool for the current page.
+     * Only 30 ActressSearch calls are made per page; each result is individually
+     * cached in the service, so repeat page loads are instant.
      */
-    private function paginatePool(array $pool, int $page, int $hits, int $maxPages = 10): array
+    private function paginatePool(array $pool, int $page, int $hits, FanzaApiService $api, int $maxPages = 10): array
     {
         $totalCount = count($pool);
         $totalPages = min((int) ceil($totalCount / $hits), $maxPages);
-        $actresses  = array_slice($pool, ($page - 1) * $hits, $hits);
+        $slice      = array_slice($pool, ($page - 1) * $hits, $hits);
+
+        $actresses = array_map(function ($a) use ($api) {
+            $detail = $api->getActresses(['actress_id' => $a['id']]);
+            $info   = $detail['result']['actress'][0] ?? null;
+            return array_merge($a, ['imageURL' => $info['imageURL'] ?? []]);
+        }, $slice);
 
         return compact('actresses', 'totalCount', 'totalPages');
     }
@@ -61,7 +69,7 @@ public function index(Request $request, FanzaApiService $api)
         $pool = $api->getRankingPool();
 
         ['actresses' => $actresses, 'totalCount' => $totalCount, 'totalPages' => $totalPages]
-            = $this->paginatePool($pool, $page, $hits);
+            = $this->paginatePool($pool, $page, $hits, $api);
 
         return view('actress.index', [
             'tab'         => 'ranking',
@@ -92,7 +100,7 @@ public function index(Request $request, FanzaApiService $api)
         if (!array_filter($filters)) {
             $pool = $api->getRankingPool();
             ['actresses' => $actresses, 'totalCount' => $totalCount, 'totalPages' => $totalPages]
-                = $this->paginatePool($pool, $page, $hits);
+                = $this->paginatePool($pool, $page, $hits, $api);
         } else {
             $offset = (($page - 1) * $hits) + 1;
             $params = ['hits' => $hits, 'offset' => $offset];
@@ -139,7 +147,7 @@ public function index(Request $request, FanzaApiService $api)
         if (!$keyword && !$initial) {
             $pool = $api->getRankingPool();
             ['actresses' => $actresses, 'totalCount' => $totalCount, 'totalPages' => $totalPages]
-                = $this->paginatePool($pool, $page, $hits);
+                = $this->paginatePool($pool, $page, $hits, $api);
         } else {
             $params = ['hits' => $hits, 'offset' => (($page - 1) * $hits) + 1];
             if ($keyword) {

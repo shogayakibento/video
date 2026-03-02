@@ -90,15 +90,16 @@ class FanzaApiService
     }
 
     /**
-     * Build and cache a pool of popular actresses derived from ranked products.
-     * Returns an ordered array of actress data (id, name, ruby, imageURL).
-     * Cached for 2 hours; individual ActressSearch results are also cached inside getActresses().
+     * Build and cache an ordered list of popular actress IDs derived from ranked products.
+     * Returns [{id, name, ruby}] only — photo enrichment is done per page in the controller
+     * to avoid bulk API calls that may be rate-limited or time out.
+     * Cached for 2 hours (only 3 ItemList calls needed to build).
      */
     public function getRankingPool(): array
     {
-        return Cache::remember('actress_ranking_pool_v1', 7200, function () {
+        return Cache::remember('actress_ranking_pool_v2', 7200, function () {
             $seen = [];
-            $raw  = [];
+            $pool = [];
 
             foreach ([1, 101, 201] as $offset) {
                 $result = $this->getItems(['hits' => 100, 'offset' => $offset, 'sort' => 'rank']);
@@ -107,17 +108,13 @@ class FanzaApiService
                         $id = $a['id'] ?? null;
                         if ($id && !isset($seen[$id])) {
                             $seen[$id] = true;
-                            $raw[] = ['id' => $id, 'name' => $a['name'] ?? '', 'ruby' => $a['ruby'] ?? ''];
+                            $pool[] = ['id' => $id, 'name' => $a['name'] ?? '', 'ruby' => $a['ruby'] ?? ''];
                         }
                     }
                 }
             }
 
-            return array_map(function ($a) {
-                $detail = $this->getActresses(['actress_id' => $a['id']]);
-                $info   = $detail['result']['actress'][0] ?? null;
-                return array_merge($a, ['imageURL' => $info['imageURL'] ?? []]);
-            }, $raw);
+            return $pool;
         });
     }
 
