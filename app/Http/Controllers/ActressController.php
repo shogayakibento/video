@@ -95,25 +95,33 @@ public function index(Request $request, FanzaApiService $api)
 
         $filters = compact('cup', 'heightMin', 'heightMax', 'ageMin', 'ageMax');
         $hits    = 24;
-        $offset  = (($page - 1) * $hits) + 1;
-        $params  = ['hits' => $hits, 'offset' => $offset];
 
-        if ($cup && isset(self::CUP_BUST_MAP[$cup])) {
-            [$bustMin, $bustMax] = self::CUP_BUST_MAP[$cup];
-            $params['gte_bust'] = $bustMin;
-            $params['lte_bust'] = $bustMax;
+        // No active filters → show popular ranking pool
+        if (!array_filter($filters)) {
+            $pool = $api->getRankingPool();
+            ['actresses' => $actresses, 'totalCount' => $totalCount, 'totalPages' => $totalPages]
+                = $this->paginatePool($pool, $page, $hits, $api);
+        } else {
+            $offset = (($page - 1) * $hits) + 1;
+            $params = ['hits' => $hits, 'offset' => $offset];
+
+            if ($cup && isset(self::CUP_BUST_MAP[$cup])) {
+                [$bustMin, $bustMax] = self::CUP_BUST_MAP[$cup];
+                $params['gte_bust'] = $bustMin;
+                $params['lte_bust'] = $bustMax;
+            }
+            if ($heightMin) $params['gte_height'] = $heightMin;
+            if ($heightMax) $params['lte_height'] = $heightMax;
+
+            $today = new \DateTime();
+            if ($ageMin) $params['lte_birthday'] = (clone $today)->modify("-{$ageMin} years")->format('Y-m-d');
+            if ($ageMax) $params['gte_birthday'] = (clone $today)->modify('-' . ($ageMax + 1) . ' years + 1 day')->format('Y-m-d');
+
+            $result     = $api->getActresses($params);
+            $actresses  = $result['result']['actress'] ?? [];
+            $totalCount = (int) ($result['result']['total_count'] ?? 0);
+            $totalPages = min((int) ceil($totalCount / $hits), 50);
         }
-        if ($heightMin) $params['gte_height'] = $heightMin;
-        if ($heightMax) $params['lte_height'] = $heightMax;
-
-        $today = new \DateTime();
-        if ($ageMin) $params['lte_birthday'] = (clone $today)->modify("-{$ageMin} years")->format('Y-m-d');
-        if ($ageMax) $params['gte_birthday'] = (clone $today)->modify('-' . ($ageMax + 1) . ' years + 1 day')->format('Y-m-d');
-
-        $result     = $api->getActresses($params);
-        $actresses  = $result['result']['actress'] ?? [];
-        $totalCount = (int) ($result['result']['total_count'] ?? 0);
-        $totalPages = min((int) ceil($totalCount / $hits), 50);
 
         return view('actress.index', [
             'tab'         => 'filter',
@@ -134,18 +142,24 @@ public function index(Request $request, FanzaApiService $api)
         $keyword = $request->input('keyword', '');
         $initial = $request->input('initial', '');
         $hits    = 24;
-        $params  = ['hits' => $hits, 'offset' => (($page - 1) * $hits) + 1];
 
-        if ($keyword) {
-            $params['keyword'] = $keyword;
-        } elseif ($initial) {
-            $params['initial'] = $initial;
+        // No keyword/initial → show popular ranking pool
+        if (!$keyword && !$initial) {
+            $pool = $api->getRankingPool();
+            ['actresses' => $actresses, 'totalCount' => $totalCount, 'totalPages' => $totalPages]
+                = $this->paginatePool($pool, $page, $hits, $api);
+        } else {
+            $params = ['hits' => $hits, 'offset' => (($page - 1) * $hits) + 1];
+            if ($keyword) {
+                $params['keyword'] = $keyword;
+            } else {
+                $params['initial'] = $initial;
+            }
+            $result     = $api->getActresses($params);
+            $actresses  = $result['result']['actress'] ?? [];
+            $totalCount = $result['result']['total_count'] ?? 0;
+            $totalPages = min((int) ceil($totalCount / $hits), 50);
         }
-
-        $result     = $api->getActresses($params);
-        $actresses  = $result['result']['actress'] ?? [];
-        $totalCount = $result['result']['total_count'] ?? 0;
-        $totalPages = min((int) ceil($totalCount / $hits), 50);
 
         return view('actress.index', [
             'tab'         => 'search',
