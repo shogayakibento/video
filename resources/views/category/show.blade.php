@@ -87,25 +87,24 @@
 @endsection
 
 @push('scripts')
-@if($items->isNotEmpty())
+@if(!empty($items))
+@php
+    $schema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'ItemList',
+        'name' => addslashes($category['label']) . ' 人気ランキング',
+        'description' => 'FANZAの' . addslashes($category['label']) . '人気作品一覧',
+        'numberOfItems' => count($items),
+        'itemListElement' => array_map(fn($item, $index) => [
+            '@type' => 'ListItem',
+            'position' => ($currentPage - 1) * 20 + $index + 1,
+            'name' => addslashes($item['title'] ?? ''),
+            'url' => $item['URL'] ?? '',
+        ], $items, array_keys($items)),
+    ];
+@endphp
 <script type="application/ld+json">
-{
-    "@@context": "https://schema.org",
-    "@@type": "ItemList",
-    "name": "{{ addslashes($category['label']) }} 人気ランキング",
-    "description": "FANZAの{{ addslashes($category['label']) }}人気作品一覧",
-    "numberOfItems": {{ $items->count() }},
-    "itemListElement": [
-        @foreach($items as $index => $item)
-        {
-            "@@type": "ListItem",
-            "position": {{ ($currentPage - 1) * 20 + $index + 1 }},
-            "name": "{{ addslashes($item['title'] ?? '') }}",
-            "url": "{{ $item['URL'] ?? '' }}"
-        }{{ !$loop->last ? ',' : '' }}
-        @endforeach
-    ]
-}
+{!! json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) !!}
 </script>
 @endif
 @endpush
