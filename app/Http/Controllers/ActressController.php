@@ -46,48 +46,17 @@ class ActressController extends Controller
     private function ranking(int $page, FanzaApiService $api)
     {
         $hits = 30;
+        $offset = (($page - 1) * $hits) + 1;
 
-        $actresses = Cache::remember('actress_ranking_p' . $page, 7200, function () use ($page, $hits, $api) {
-            $offset = (($page - 1) * $hits) + 1;
+        $result = Cache::remember('actress_ranking_p' . $page, 7200, fn() => $api->getActresses([
+            'hits' => $hits,
+            'offset' => $offset,
+            'sort' => 'popular',
+        ]));
 
-            $itemResult = $api->getItems([
-                'service' => 'digital',
-                'floor' => 'videoa',
-                'hits' => $hits,
-                'offset' => $offset,
-                'sort' => 'rank',
-            ]);
-
-            $items = $itemResult['result']['items'] ?? [];
-
-            // Extract unique actresses and fetch their face photos
-            $seen = [];
-            $actresses = [];
-            foreach ($items as $item) {
-                $actressInfo = $item['iteminfo']['actress'] ?? [];
-                foreach ($actressInfo as $a) {
-                    $id = $a['id'] ?? null;
-                    if ($id && !isset($seen[$id])) {
-                        $seen[$id] = true;
-
-                        // Fetch actress face photo from ActressSearch API
-                        $actressResult = $api->getActresses(['actress_id' => $id, 'hits' => 1]);
-                        $actressData = $actressResult['result']['actress'][0] ?? null;
-
-                        $actresses[] = [
-                            'id' => $id,
-                            'name' => $a['name'] ?? '',
-                            'ruby' => $a['ruby'] ?? '',
-                            'imageURL' => $actressData['imageURL'] ?? [],
-                            'top_item_image' => $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? '',
-                            'top_item_title' => $item['title'] ?? '',
-                        ];
-                    }
-                }
-            }
-
-            return $actresses;
-        });
+        $actresses = $result['result']['actress'] ?? [];
+        $totalCount = (int) ($result['result']['total_count'] ?? 0);
+        $totalPages = min((int) ceil($totalCount / $hits), 10);
 
         return view('actress.index', [
             'tab' => 'ranking',
@@ -96,8 +65,8 @@ class ActressController extends Controller
             'initial' => '',
             'initials' => self::INITIALS,
             'currentPage' => $page,
-            'totalPages' => 5,
-            'totalCount' => count($actresses),
+            'totalPages' => $totalPages,
+            'totalCount' => $totalCount,
             'rankOffset' => ($page - 1) * $hits,
             'filters' => [],
         ]);
@@ -111,40 +80,19 @@ class ActressController extends Controller
         $ageMin = (string) ($request->input('age_min') ?? '');
         $ageMax = (string) ($request->input('age_max') ?? '');
 
-        // Fetch and cache popular actress details (independent of filter params)
+        // Fetch and cache popular actresses directly from ActressSearch API
         $popularActressDetails = Cache::remember('popular_actress_details', 7200, function () use ($api) {
-            $popularActressIds = [];
-            $seen = [];
+            $all = [];
             foreach ([1, 101, 201] as $offset) {
-                $popularResult = $api->getItems([
-                    'service' => 'digital',
-                    'floor' => 'videoa',
+                $result = $api->getActresses([
                     'hits' => 100,
                     'offset' => $offset,
-                    'sort' => 'rank',
+                    'sort' => 'popular',
                 ]);
-                foreach ($popularResult['result']['items'] ?? [] as $item) {
-                    foreach ($item['iteminfo']['actress'] ?? [] as $a) {
-                        $aid = $a['id'] ?? null;
-                        if ($aid && !isset($seen[$aid])) {
-                            $seen[$aid] = true;
-                            $popularActressIds[] = $aid;
-                        }
-                    }
-                }
-                if (count($popularActressIds) >= 150) break;
+                $all = array_merge($all, $result['result']['actress'] ?? []);
+                if (count($all) >= 300) break;
             }
-            $popularActressIds = array_slice($popularActressIds, 0, 150);
-
-            $details = [];
-            foreach ($popularActressIds as $id) {
-                $actressResult = $api->getActresses(['actress_id' => $id, 'hits' => 1]);
-                $actress = $actressResult['result']['actress'][0] ?? null;
-                if ($actress) {
-                    $details[] = $actress;
-                }
-            }
-            return $details;
+            return array_slice($all, 0, 300);
         });
 
         // Apply filters in memory (no API calls)
