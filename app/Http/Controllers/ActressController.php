@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Services\FanzaApiService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 class ActressController extends Controller
 {
@@ -14,6 +13,7 @@ class ActressController extends Controller
         'ら' => 'ら行', 'わ' => 'わ行',
     ];
 
+    // Cup size → approximate bust (cm) range used for API gte_bust/lte_bust params
     private const CUP_BUST_MAP = [
         'A' => [72, 80],
         'B' => [75, 83],
@@ -26,7 +26,7 @@ class ActressController extends Controller
         'I' => [96, 120],
     ];
 
-    public function index(Request $request, FanzaApiService $api)
+public function index(Request $request, FanzaApiService $api)
     {
         $tab = $request->input('tab', 'ranking');
         $page = max(1, (int) $request->input('page', 1));
@@ -47,153 +47,95 @@ class ActressController extends Controller
     {
         $hits = 30;
 
-        $actresses = Cache::remember('actress_ranking_p' . $page, 7200, function () use ($page, $hits, $api) {
-            $offset = (($page - 1) * $hits) + 1;
-
-            $itemResult = $api->getItems([
-                'service' => 'digital',
-                'floor' => 'videoa',
-                'hits' => $hits,
-                'offset' => $offset,
-                'sort' => 'rank',
-            ]);
-
-            $items = $itemResult['result']['items'] ?? [];
-
-            // Extract unique actresses and fetch their face photos
-            $seen = [];
-            $actresses = [];
-            foreach ($items as $item) {
-                $actressInfo = $item['iteminfo']['actress'] ?? [];
-                foreach ($actressInfo as $a) {
+        // Collect actress IDs in popularity order from top-ranked products (API results are cached)
+        $seen = [];
+        $pool = [];
+        foreach ([1, 101, 201] as $itemOffset) {
+            $result = $api->getItems(['hits' => 100, 'offset' => $itemOffset, 'sort' => 'rank']);
+            foreach ($result['result']['items'] ?? [] as $item) {
+                foreach ($item['iteminfo']['actress'] ?? [] as $a) {
                     $id = $a['id'] ?? null;
                     if ($id && !isset($seen[$id])) {
                         $seen[$id] = true;
-
-                        // Fetch actress face photo from ActressSearch API
-                        $actressResult = $api->getActresses(['actress_id' => $id, 'hits' => 1]);
-                        $actressData = $actressResult['result']['actress'][0] ?? null;
-
-                        $actresses[] = [
-                            'id' => $id,
-                            'name' => $a['name'] ?? '',
-                            'ruby' => $a['ruby'] ?? '',
-                            'imageURL' => $actressData['imageURL'] ?? [],
-                            'top_item_image' => $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? '',
-                            'top_item_title' => $item['title'] ?? '',
-                        ];
+                        $pool[] = ['id' => $id, 'name' => $a['name'] ?? '', 'ruby' => $a['ruby'] ?? ''];
                     }
                 }
             }
+        }
 
-            return $actresses;
-        });
+        $totalCount = count($pool);
+        $pageItems  = array_slice($pool, ($page - 1) * $hits, $hits);
+        $totalPages = min((int) ceil($totalCount / $hits), 10);
+
+        // Enrich each actress with profile photo via ActressSearch (individual results are cached)
+        $actresses = array_map(function ($a) use ($api) {
+            $detail = $api->getActresses(['actress_id' => $a['id']]);
+            $info   = $detail['result']['actress'][0] ?? null;
+            return array_merge($a, ['imageURL' => $info['imageURL'] ?? []]);
+        }, $pageItems);
 
         return view('actress.index', [
-            'tab' => 'ranking',
-            'actresses' => $actresses,
-            'keyword' => '',
-            'initial' => '',
-            'initials' => self::INITIALS,
+            'tab'         => 'ranking',
+            'actresses'   => $actresses,
+            'keyword'     => '',
+            'initial'     => '',
+            'initials'    => self::INITIALS,
             'currentPage' => $page,
-            'totalPages' => 5,
-            'totalCount' => count($actresses),
-            'filters' => [],
+            'totalPages'  => $totalPages,
+            'totalCount'  => $totalCount,
+            'rankOffset'  => ($page - 1) * $hits,
+            'filters'     => [],
         ]);
     }
 
     private function filter(Request $request, int $page, FanzaApiService $api)
     {
-        $cup = (string) ($request->input('cup') ?? '');
+        $cup       = (string) ($request->input('cup') ?? '');
         $heightMin = (string) ($request->input('height_min') ?? '');
         $heightMax = (string) ($request->input('height_max') ?? '');
-        $ageMin = (string) ($request->input('age_min') ?? '');
-        $ageMax = (string) ($request->input('age_max') ?? '');
+        $ageMin    = (string) ($request->input('age_min') ?? '');
+        $ageMax    = (string) ($request->input('age_max') ?? '');
 
-        // Fetch and cache popular actress details (independent of filter params)
-        $popularActressDetails = Cache::remember('popular_actress_details', 7200, function () use ($api) {
-            $popularResult = $api->getItems([
-                'service' => 'digital',
-                'floor' => 'videoa',
-                'hits' => 100,
-                'offset' => 1,
-                'sort' => 'rank',
-            ]);
-            $popularActressIds = [];
-            $seen = [];
-            foreach ($popularResult['result']['items'] ?? [] as $item) {
-                foreach ($item['iteminfo']['actress'] ?? [] as $a) {
-                    $aid = $a['id'] ?? null;
-                    if ($aid && !isset($seen[$aid])) {
-                        $seen[$aid] = true;
-                        $popularActressIds[] = $aid;
-                        if (count($popularActressIds) >= 60) break 2;
-                    }
-                }
-            }
+        $hits   = 30;
+        $offset = (($page - 1) * $hits) + 1;
 
-            $details = [];
-            foreach ($popularActressIds as $id) {
-                $actressResult = $api->getActresses(['actress_id' => $id, 'hits' => 1]);
-                $actress = $actressResult['result']['actress'][0] ?? null;
-                if ($actress) {
-                    $details[] = $actress;
-                }
-            }
-            return $details;
-        });
+        // Pass filter conditions directly to the API so all actresses are covered
+        $params = ['hits' => $hits, 'offset' => $offset];
 
-        // Apply filters in memory (no API calls)
-        $allMatching = array_values(array_filter($popularActressDetails, fn($actress) => $this->matchesFilter($actress, $cup, $heightMin, $heightMax, $ageMin, $ageMax)));
+        if ($cup && isset(self::CUP_BUST_MAP[$cup])) {
+            [$bustMin, $bustMax] = self::CUP_BUST_MAP[$cup];
+            $params['gte_bust'] = $bustMin;
+            $params['lte_bust'] = $bustMax;
+        }
 
-        $hits = 30;
-        $totalCount = count($allMatching);
-        $actresses = array_slice($allMatching, ($page - 1) * $hits, $hits);
-        $totalPages = (int) ceil($totalCount / $hits);
+        if ($heightMin) $params['gte_height'] = $heightMin;
+        if ($heightMax) $params['lte_height'] = $heightMax;
+
+        $today = new \DateTime();
+        // age >= ageMin  →  birthday <= today - ageMin years
+        if ($ageMin) $params['lte_birthday'] = (clone $today)->modify("-{$ageMin} years")->format('Y-m-d');
+        // age <= ageMax  →  birthday >= today - (ageMax+1) years + 1 day
+        if ($ageMax) $params['gte_birthday'] = (clone $today)->modify('-' . ($ageMax + 1) . ' years + 1 day')->format('Y-m-d');
+
+        $result     = $api->getActresses($params);
+        $actresses  = $result['result']['actress'] ?? [];
+        $totalCount = (int) ($result['result']['total_count'] ?? 0);
+        $totalPages = min((int) ceil($totalCount / $hits), 50);
 
         $filters = compact('cup', 'heightMin', 'heightMax', 'ageMin', 'ageMax');
 
         return view('actress.index', [
-            'tab' => 'filter',
-            'actresses' => $actresses,
-            'keyword' => '',
-            'initial' => '',
-            'initials' => self::INITIALS,
+            'tab'         => 'filter',
+            'actresses'   => $actresses,
+            'keyword'     => '',
+            'initial'     => '',
+            'initials'    => self::INITIALS,
             'currentPage' => $page,
-            'totalPages' => $totalPages,
-            'totalCount' => $totalCount,
-            'filters' => $filters,
+            'totalPages'  => $totalPages,
+            'totalCount'  => $totalCount,
+            'rankOffset'  => 0,
+            'filters'     => $filters,
         ]);
-    }
-
-    private function matchesFilter(array $actress, string $cup, string $heightMin, string $heightMax, string $ageMin, string $ageMax): bool
-    {
-        if ($cup && isset(self::CUP_BUST_MAP[$cup])) {
-            [$bustMin, $bustMax] = self::CUP_BUST_MAP[$cup];
-            $bust = (int) ($actress['bust'] ?? 0);
-            if (!$bust || $bust < $bustMin || $bust > $bustMax) return false;
-        }
-
-        if ($heightMin || $heightMax) {
-            $height = (int) ($actress['height'] ?? 0);
-            if (!$height) return false;
-            if ($heightMin && $height < (int) $heightMin) return false;
-            if ($heightMax && $height > (int) $heightMax) return false;
-        }
-
-        if ($ageMin || $ageMax) {
-            $birthday = $actress['birthday'] ?? '';
-            if (!$birthday) return false;
-            try {
-                $age = (new \DateTime())->diff(new \DateTime($birthday))->y;
-            } catch (\Exception $e) {
-                return false;
-            }
-            if ($ageMin && $age < (int) $ageMin) return false;
-            if ($ageMax && $age > (int) $ageMax) return false;
-        }
-
-        return true;
     }
 
     private function search(Request $request, int $page, FanzaApiService $api)
@@ -228,6 +170,7 @@ class ActressController extends Controller
             'currentPage' => $page,
             'totalPages' => min($totalPages, 50),
             'totalCount' => $totalCount,
+            'rankOffset' => 0,
             'filters' => [],
         ]);
     }
