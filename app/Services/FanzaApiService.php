@@ -89,6 +89,38 @@ class FanzaApiService
         });
     }
 
+    /**
+     * Build and cache a pool of popular actresses derived from ranked products.
+     * Returns an ordered array of actress data (id, name, ruby, imageURL).
+     * Cached for 2 hours; individual ActressSearch results are also cached inside getActresses().
+     */
+    public function getRankingPool(): array
+    {
+        return Cache::remember('actress_ranking_pool_v1', 7200, function () {
+            $seen = [];
+            $raw  = [];
+
+            foreach ([1, 101, 201] as $offset) {
+                $result = $this->getItems(['hits' => 100, 'offset' => $offset, 'sort' => 'rank']);
+                foreach ($result['result']['items'] ?? [] as $item) {
+                    foreach ($item['iteminfo']['actress'] ?? [] as $a) {
+                        $id = $a['id'] ?? null;
+                        if ($id && !isset($seen[$id])) {
+                            $seen[$id] = true;
+                            $raw[] = ['id' => $id, 'name' => $a['name'] ?? '', 'ruby' => $a['ruby'] ?? ''];
+                        }
+                    }
+                }
+            }
+
+            return array_map(function ($a) {
+                $detail = $this->getActresses(['actress_id' => $a['id']]);
+                $info   = $detail['result']['actress'][0] ?? null;
+                return array_merge($a, ['imageURL' => $info['imageURL'] ?? []]);
+            }, $raw);
+        });
+    }
+
     public function getActresses(array $overrides = []): array
     {
         $defaults = [
