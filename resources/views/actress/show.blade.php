@@ -3,7 +3,7 @@
 @php
     $name = $actress['name'] ?? '不明';
     $ruby = $actress['ruby'] ?? '';
-    $imageUrl = $actress['imageURL']['large'] ?? $actress['imageURL']['small'] ?? '';
+    $imageUrl = str_replace('http://', 'https://', $actress['imageURL']['large'] ?? $actress['imageURL']['small'] ?? '');
     $bust = $actress['bust'] ?? null;
     $cup = $actress['cup'] ?? null;
     $waist = $actress['waist'] ?? null;

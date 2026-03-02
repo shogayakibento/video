@@ -149,7 +149,7 @@
                     $name = $actress['name'] ?? '不明';
                     $ruby = $actress['ruby'] ?? '';
                     // Prefer actress face photo (imageURL), fall back to product cover
-                    $imageUrl = $actress['imageURL']['large'] ?? $actress['imageURL']['small'] ?? $actress['top_item_image'] ?? '';
+                    $imageUrl = str_replace('http://', 'https://', $actress['imageURL']['large'] ?? $actress['imageURL']['small'] ?? $actress['top_item_image'] ?? '');
                 @endphp
                 <a href="{{ route('actress.show', $actressId) }}" class="actress-card actress-card-ranking animate-on-scroll">
                     @if($tab === 'ranking')
