@@ -117,7 +117,7 @@ public function index(Request $request, FanzaApiService $api)
             if ($ageMin) $params['lte_birthday'] = (clone $today)->modify("-{$ageMin} years")->format('Y-m-d');
             if ($ageMax) $params['gte_birthday'] = (clone $today)->modify('-' . ($ageMax + 1) . ' years + 1 day')->format('Y-m-d');
 
-            $result     = $api->getActresses($params);
+            $result     = $api->getActresses($params) ?? [];
             $actresses  = $result['result']['actress'] ?? [];
             $totalCount = (int) ($result['result']['total_count'] ?? 0);
             $totalPages = min((int) ceil($totalCount / $hits), 50);
@@ -155,7 +155,7 @@ public function index(Request $request, FanzaApiService $api)
             } else {
                 $params['initial'] = $initial;
             }
-            $result     = $api->getActresses($params);
+            $result     = $api->getActresses($params) ?? [];
             $actresses  = $result['result']['actress'] ?? [];
             $totalCount = $result['result']['total_count'] ?? 0;
             $totalPages = min((int) ceil($totalCount / $hits), 50);
@@ -178,6 +178,12 @@ public function index(Request $request, FanzaApiService $api)
     public function show(string $id, Request $request, FanzaApiService $api)
     {
         $actressResult = $api->getActresses(['actress_id' => $id]);
+
+        // null = API通信エラー → 503でGoogleに再クロールを促す
+        if ($actressResult === null) {
+            abort(503, 'Service temporarily unavailable. Please try again later.');
+        }
+
         $actress = $actressResult['result']['actress'][0] ?? null;
 
         if (!$actress) {

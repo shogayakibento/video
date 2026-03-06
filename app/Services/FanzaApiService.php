@@ -39,9 +39,17 @@ class FanzaApiService
         $query = array_merge($defaults, $params);
         $cacheKey = 'fanza_items_' . md5(json_encode($query));
 
-        return Cache::remember($cacheKey, $this->cacheTtl, function () use ($query) {
-            return $this->request('ItemList', $query);
-        });
+        $cached = Cache::get($cacheKey);
+        if ($cached !== null) {
+            return $cached;
+        }
+
+        $result = $this->request('ItemList', $query);
+        if ($result !== null) {
+            Cache::put($cacheKey, $result, $this->cacheTtl);
+        }
+
+        return $result ?? [];
     }
 
     public function getRanking(string $service = 'digital', string $floor = 'videoa', int $hits = 10): array
@@ -118,7 +126,7 @@ class FanzaApiService
         });
     }
 
-    public function getActresses(array $overrides = []): array
+    public function getActresses(array $overrides = []): ?array
     {
         $defaults = [
             'api_id' => $this->apiId,
@@ -131,12 +139,20 @@ class FanzaApiService
         $params = array_merge($defaults, $overrides);
         $cacheKey = 'fanza_actresses_' . md5(json_encode($params));
 
-        return Cache::remember($cacheKey, $this->cacheTtl, function () use ($params) {
-            return $this->request('ActressSearch', $params);
-        });
+        $cached = Cache::get($cacheKey);
+        if ($cached !== null) {
+            return $cached;
+        }
+
+        $result = $this->request('ActressSearch', $params);
+        if ($result !== null) {
+            Cache::put($cacheKey, $result, $this->cacheTtl);
+        }
+
+        return $result;
     }
 
-    private function request(string $endpoint, array $params): array
+    private function request(string $endpoint, array $params): ?array
     {
         try {
             $response = Http::timeout(10)->get($this->baseUrl . $endpoint, $params);
@@ -150,14 +166,14 @@ class FanzaApiService
                 'status' => $response->status(),
             ]);
 
-            return [];
+            return null;
         } catch (\Exception $e) {
             Log::error("FANZA API request exception", [
                 'endpoint' => $endpoint,
                 'message' => $e->getMessage(),
             ]);
 
-            return [];
+            return null;
         }
     }
 
