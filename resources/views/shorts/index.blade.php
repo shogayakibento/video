@@ -77,75 +77,61 @@ body.shorts-page > script[src*="banner_placement"] {
     pointer-events: auto;
 }
 
+/* 女優リンク: meta-tag.actress に準拠 */
 .shorts-actress-link {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    color: #fff;
-    background: rgba(255, 45, 120, 0.22);
-    border: 1px solid rgba(255, 45, 120, 0.45);
-    backdrop-filter: blur(10px);
-    padding: 3px 11px;
-    border-radius: 9999px;
+    color: var(--primary-light);
+    background: rgba(255, 45, 120, 0.15);
+    padding: 2px 10px;
+    border-radius: 4px;
     text-decoration: none;
-    transition: background 0.18s, border-color 0.18s, transform 0.15s;
+    transition: background 0.15s;
     pointer-events: auto;
 }
-
-.shorts-actress-link::before {
-    content: "♀";
-    font-size: 0.7rem;
-    opacity: 0.8;
-}
-
 .shorts-actress-link:hover {
-    background: rgba(255, 45, 120, 0.5);
-    border-color: rgba(255, 45, 120, 0.8);
-    transform: translateY(-1px);
-    color: #fff;
+    background: rgba(255, 45, 120, 0.3);
+    color: var(--primary-light);
 }
 
-/* Actress link (non-linkable fallback) */
+/* 女優バッジ（リンクなし） */
 .shorts-actress-badge {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    color: rgba(255,255,255,0.88);
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.18);
-    backdrop-filter: blur(8px);
-    padding: 3px 11px;
-    border-radius: 9999px;
+    color: var(--primary-light);
+    background: rgba(255, 45, 120, 0.1);
+    padding: 2px 10px;
+    border-radius: 4px;
 }
 
-/* Maker & meta row */
+/* メーカー・評価・ジャンル・価格行 */
 .shorts-meta-row {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     margin-bottom: 5px;
 }
 
+/* メーカー: meta-tag.maker に準拠 */
 .shorts-maker-badge {
-    font-size: 0.72rem;
-    font-weight: 500;
-    color: rgba(255,255,255,0.7);
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.12);
-    padding: 2px 9px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent);
+    background: rgba(155, 93, 245, 0.15);
+    padding: 2px 10px;
     border-radius: 4px;
 }
 
+/* 評価: meta-rating に準拠 */
 .shorts-rating-badge {
-    font-size: 0.78rem;
+    font-size: 0.82rem;
     font-weight: 700;
-    color: #fbbf24;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+    color: var(--accent);
 }
 
 /* Genres */
@@ -156,22 +142,21 @@ body.shorts-page > script[src*="banner_placement"] {
     margin-bottom: 5px;
 }
 
+/* ジャンル: genre-tag に準拠 */
 .shorts-genre-tag {
-    font-size: 0.68rem;
-    color: rgba(255,255,255,0.55);
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 1px 8px;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    background: var(--bg-light);
+    padding: 2px 8px;
     border-radius: 4px;
 }
 
-/* Price */
+/* 価格: item-price / sample-modal-price に準拠 */
 .shorts-price-text {
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     font-weight: 700;
-    color: #f9a8d4;
+    color: #6ee7b7;
     margin: 0;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
 }
 
 /* CTA button */
