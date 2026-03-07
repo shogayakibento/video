@@ -22,7 +22,7 @@ body.shorts-page > script[src*="banner_placement"] {
     transform: translateX(-50%);
     width: min(100%, calc((100vh - 64px) * 16 / 9 * 0.95));
     max-width: 1200px;
-    padding: 12px 16px 14px;
+    padding: 10px 14px 12px;
     background: rgba(12, 12, 12, 0.92);
     backdrop-filter: blur(16px);
     border-radius: 0 0 14px 14px;
@@ -39,16 +39,17 @@ body.shorts-page > script[src*="banner_placement"] {
     flex: 1;
     min-width: 0;
 }
-/* CTA をフロー内配置に */
+/* CTA をフロー内配置に（小さめ） */
 .shorts-cta-btn {
     position: static !important;
     flex-shrink: 0;
     bottom: auto; right: auto;
-    padding: 10px 16px;
-    font-size: 0.8rem;
+    padding: 8px 12px;
+    font-size: 0.72rem;
     white-space: nowrap;
-    line-height: 1.4;
+    line-height: 1.3;
     text-align: center;
+    box-shadow: 0 2px 12px rgba(255, 45, 120, 0.5);
 }
 
 /* Title */
@@ -57,7 +58,7 @@ body.shorts-page > script[src*="banner_placement"] {
     font-weight: 700;
     color: #fff;
     line-height: 1.5;
-    margin: 0 0 10px;
+    margin: 0 0 6px;
     padding-left: 10px;
     border-left: 3px solid var(--primary);
     text-shadow: 0 1px 8px rgba(0,0,0,0.9);
@@ -72,7 +73,7 @@ body.shorts-page > script[src*="banner_placement"] {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
     pointer-events: auto;
 }
 
@@ -127,7 +128,7 @@ body.shorts-page > script[src*="banner_placement"] {
     flex-wrap: wrap;
     align-items: center;
     gap: 8px;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
 }
 
 .shorts-maker-badge {
@@ -152,7 +153,7 @@ body.shorts-page > script[src*="banner_placement"] {
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
 }
 
 .shorts-genre-tag {
