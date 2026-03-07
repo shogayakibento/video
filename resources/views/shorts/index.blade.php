@@ -9,18 +9,15 @@ body.shorts-page footer,
 body.shorts-page .side-ad { display: none !important; }
 
 /* ====== 動画 + 情報を1枚カードとしてまとめるラッパー ====== */
+/* 第1コミットの player-wrap と同じ幅・位置を使用 */
 .shorts-content-wrap {
     position: absolute;
-    top: 50%;
+    top: 42%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 2;
-    /* 横幅: viewport高さの 60% × 16/9 で動画高さを制限 */
-    width: min(
-        calc(100% - 80px),
-        calc((100vh - 64px) * 0.60 * 16 / 9)
-    );
-    max-width: 1400px;
+    width: min(100%, calc((100vh - 64px) * 16 / 9 * 0.95));
+    max-width: 1200px;
     display: flex;
     flex-direction: column;
 }
@@ -35,9 +32,16 @@ body.shorts-page .side-ad { display: none !important; }
     max-width: none;
 }
 
-/* 動画の底角は角丸なし（info-panel に接続） */
+/* 動画の底角は角丸なし（info-panel に接続するため） */
 .shorts-content-wrap .shorts-player-box {
     border-radius: 14px 14px 0 0;
+}
+
+/* max-width: 1200px のパネルでは padding を少し大きめに */
+@media (min-width: 768px) {
+    .shorts-info-panel {
+        padding: 14px 18px 16px;
+    }
 }
 
 /* ====== 情報パネル（動画の直下） ====== */
