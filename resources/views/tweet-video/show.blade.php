@@ -13,6 +13,9 @@
         ->merge($video->genre ? explode(', ', $video->genre) : [])
         ->filter()
         ->join(', ');
+    $actorSchema = $video->actress
+        ? collect(explode(', ', $video->actress))->map(function($a) { return ['@type' => 'Person', 'name' => trim($a)]; })->values()->toJson()
+        : null;
 @endphp
 @section('title', $seoTitle)
 @section('description', $seoDesc)
@@ -176,8 +179,8 @@
             "userInteractionCount": {{ $video->total_retweets }}
         }
     ]
-    @if($video->actress)
-    ,"actor": @json(collect(explode(', ', $video->actress))->map(fn($a) => ['@type' => 'Person', 'name' => trim($a)])->values())
+    @if($actorSchema)
+    ,"actor": {!! $actorSchema !!}
     @endif
 }
 </script>
