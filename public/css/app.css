@@ -602,6 +602,13 @@ img {
     color: var(--primary-light);
     margin-bottom: 6px;
 }
+.item-actress-link {
+    color: var(--primary-light);
+    text-decoration: none;
+}
+.item-actress-link:hover {
+    text-decoration: underline;
+}
 
 .item-bottom {
     display: flex;
@@ -835,14 +842,14 @@ img {
 }
 
 .meta-tag.maker {
-    background: rgba(155, 93, 245, 0.15);
-    color: var(--accent);
+    background: transparent;
+    color: var(--text-muted);
 }
 
 .meta-rating {
     font-size: 0.82rem;
     font-weight: 700;
-    color: var(--accent);
+    color: #f59e0b;
 }
 
 .item-genres {

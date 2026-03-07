@@ -85,13 +85,23 @@
         function openModal(card) {
             var cid     = card.dataset.contentId;
             var title   = card.dataset.title || '';
-            var actress = card.dataset.actress || '';
-            var url     = card.dataset.url || '#';
+            var actress   = card.dataset.actress || '';
+            var actressId = card.dataset.actressId || '';
+            var url       = card.dataset.url || '#';
             var price   = card.dataset.price || '';
 
             titleEl.textContent   = title;
-            actressEl.textContent = actress ? '出演: ' + actress : '';
-            actressEl.style.display = actress ? '' : 'none';
+            if (actress) {
+                if (actressId) {
+                    actressEl.innerHTML = '出演: <a href="/actress/' + actressId + '" style="color:var(--primary-light);text-decoration:none" onclick="event.stopPropagation()">'+actress+'</a>';
+                } else {
+                    actressEl.textContent = '出演: ' + actress;
+                }
+                actressEl.style.display = '';
+            } else {
+                actressEl.textContent = '';
+                actressEl.style.display = 'none';
+            }
             priceEl.textContent   = price ? price.replace(/~$/, '円〜') + (price.endsWith('~') ? '' : '円') : '';
             linkEl.href           = url;
 

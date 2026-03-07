@@ -1,7 +1,25 @@
 @extends('layouts.app')
 
-@section('title', $video->title . ' - FanzaGate')
-@section('description', $video->title . 'のサンプル動画とレビュー。' . ($video->actress ? '出演: ' . $video->actress : ''))
+@php
+    $seoTitle = $video->actress
+        ? $video->title . '｜' . $video->actress . ' - FanzaGate'
+        : $video->title . ' - FanzaGate';
+    $seoDesc = $video->title . 'の無料サンプル動画。'
+        . ($video->actress ? $video->actress . '出演。' : '')
+        . 'X(Twitter)で' . number_format($video->total_likes) . 'いいね獲得の話題作。'
+        . ($video->maker ? $video->maker . '制作。' : '')
+        . 'FANZAで配信中。';
+    $seoKeywords = collect([$video->title, $video->actress, $video->maker, 'FANZA', 'サンプル動画', '無料サンプル'])
+        ->merge($video->genre ? explode(', ', $video->genre) : [])
+        ->filter()
+        ->join(', ');
+    $actorSchema = $video->actress
+        ? collect(explode(', ', $video->actress))->map(function($a) { return ['@type' => 'Person', 'name' => trim($a)]; })->values()->toJson()
+        : null;
+@endphp
+@section('title', $seoTitle)
+@section('description', $seoDesc)
+@section('keywords', $seoKeywords)
 @section('og_type', 'video.movie')
 @section('og_image', $video->thumbnail_url)
 
@@ -143,10 +161,13 @@
     "@@context": "https://schema.org",
     "@@type": "VideoObject",
     "name": "{{ addslashes($video->title) }}",
-    "description": "{{ addslashes($video->title) }}のサンプル動画とレビュー。{{ $video->actress ? '出演: ' . addslashes($video->actress) : '' }}",
+    "description": "{{ addslashes($seoDesc) }}",
     "thumbnailUrl": "{{ $video->thumbnail_url }}",
-    "uploadDate": "{{ $video->release_date ? $video->release_date->format('c') : $video->created_at->format('c') }}",
-    "interactionStatistic": [
+    "uploadDate": "{{ $video->release_date ? $video->release_date->format('c') : $video->created_at->format('c') }}"
+    @if($video->dmm_content_id)
+    ,"embedUrl": "https://www.dmm.co.jp/litevideo/-/part/=/affi_id={{ config('dmm.affiliate_id') }}/cid={{ $video->dmm_content_id }}/size=1280_720/"
+    @endif
+    ,"interactionStatistic": [
         {
             "@@type": "InteractionCounter",
             "interactionType": "https://schema.org/LikeAction",
@@ -158,15 +179,20 @@
             "userInteractionCount": {{ $video->total_retweets }}
         }
     ]
-    @if($video->dmm_content_id)
-    ,"embedUrl": "https://www.dmm.co.jp/litevideo/-/part/=/affi_id={{ config('dmm.affiliate_id') }}/cid={{ $video->dmm_content_id }}/size=1280_720/"
+    @if($actorSchema)
+    ,"actor": {!! $actorSchema !!}
     @endif
-    @if($video->actress)
-    ,"actor": {
-        "@@type": "Person",
-        "name": "{{ addslashes(explode(',', $video->actress)[0]) }}"
-    }
-    @endif
+}
+</script>
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@@type": "BreadcrumbList",
+    "itemListElement": [
+        {"@@type": "ListItem", "position": 1, "name": "ホーム", "item": "{{ route('home') }}"},
+        {"@@type": "ListItem", "position": 2, "name": "バズり動画ランキング", "item": "{{ route('tweet.ranking.index') }}"},
+        {"@@type": "ListItem", "position": 3, "name": "{{ addslashes($video->title) }}", "item": "{{ route('tweet.video.show', $video) }}"}
+    ]
 }
 </script>
 @endpush

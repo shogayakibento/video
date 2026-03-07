@@ -3,6 +3,7 @@
     $url = $item['URL'] ?? '#';
     $imageUrl = $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? $item['imageURL']['list'] ?? '';
     $actress = $item['iteminfo']['actress'][0]['name'] ?? null;
+    $actressId = $item['iteminfo']['actress'][0]['id'] ?? null;
     $date = isset($item['date']) ? \Carbon\Carbon::parse($item['date'])->format('m/d') : null;
     $contentId = !empty($item['sampleMovieURL']) ? ($item['content_id'] ?? null) : null;
     $price = $item['prices']['price'] ?? null;
@@ -13,6 +14,7 @@
      data-content-id="{{ $contentId }}"
      data-title="{{ $title }}"
      data-actress="{{ $actress }}"
+     data-actress-id="{{ $actressId }}"
      data-url="{{ $url }}"
      data-price="{{ $price }}"
      role="button" tabindex="0">
@@ -39,7 +41,13 @@
     <div class="release-info">
         <h3>{{ $title }}</h3>
         @if($actress)
-            <p class="release-actress">{{ $actress }}</p>
+            <p class="release-actress">
+                @if($contentId && $actressId)
+                    <a href="{{ route('actress.show', $actressId) }}" class="item-actress-link" onclick="event.stopPropagation()">{{ $actress }}</a>
+                @else
+                    {{ $actress }}
+                @endif
+            </p>
         @endif
         @if($date)
             <p class="release-date">{{ $date }}</p>

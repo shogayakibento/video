@@ -4,6 +4,7 @@
     $imageUrl = $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? $item['imageURL']['list'] ?? '';
     $review = $item['review']['average'] ?? null;
     $actress = $item['iteminfo']['actress'][0]['name'] ?? null;
+    $actressId = $item['iteminfo']['actress'][0]['id'] ?? null;
     $maker = $item['iteminfo']['maker'][0]['name'] ?? null;
     $price = $item['prices']['price'] ?? null;
     $contentId = !empty($item['sampleMovieURL']) ? ($item['content_id'] ?? null) : null;
@@ -14,6 +15,7 @@
      data-content-id="{{ $contentId }}"
      data-title="{{ $title }}"
      data-actress="{{ $actress }}"
+     data-actress-id="{{ $actressId }}"
      data-url="{{ $url }}"
      data-price="{{ $price }}"
      role="button" tabindex="0">
@@ -45,7 +47,13 @@
     <div class="item-info">
         <h3 class="item-title">{{ $title }}</h3>
         @if($actress)
-            <p class="item-actress">{{ $actress }}</p>
+            <p class="item-actress">
+                @if($contentId && $actressId)
+                    <a href="{{ route('actress.show', $actressId) }}" class="item-actress-link" onclick="event.stopPropagation()">{{ $actress }}</a>
+                @else
+                    {{ $actress }}
+                @endif
+            </p>
         @endif
         <div class="item-bottom">
             @if($maker)

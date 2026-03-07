@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'サンプル動画ショートビュー | FanzaGate')
-@section('description', 'FANZAの人気作品サンプル動画をショート動画感覚でサクサク視聴。スワイプで次々に楽しめます。')
+@section('title', 'FANZAサンプル動画をショートで楽しむ | FanzaGate')
+@section('description', 'FANZAの人気AV・動画サンプルをショート動画感覚でサクサク視聴。スワイプ・矢印キーで次々に楽しめる無料サンプル動画まとめ。')
+@section('keywords', 'FANZA, サンプル動画, 無料サンプル, AV, ショート動画, 人気動画, 女優')
+@section('og_type', 'website')
 
 @push('styles')
 <style>
@@ -13,15 +15,43 @@ body.shorts-page > script[src*="banner_placement"] {
     display: none !important;
 }
 
-/* ====== Info overlay layout ====== */
+/* ====== Info panel（動画の直下に移動） ====== */
 .shorts-info-overlay {
-    padding: 100px 160px 32px 20px;
-    background: linear-gradient(
-        to top,
-        rgba(0, 0, 0, 0.95) 0%,
-        rgba(0, 0, 0, 0.6) 50%,
-        transparent 100%
-    );
+    /* 動画中心(42%) + 動画半高(338px) = 動画の下端、そこから少し下 */
+    top: calc(42% + 342px);
+    bottom: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(100%, calc((100vh - 64px) * 16 / 9 * 0.95));
+    max-width: 1200px;
+    padding: 10px 14px 12px;
+    background: rgba(12, 12, 12, 0.92);
+    backdrop-filter: blur(16px);
+    border-radius: 0 0 14px 14px;
+    pointer-events: auto;
+}
+
+/* info overlay を flex にして CTA を右端に */
+.shorts-info-overlay {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.shorts-info-text {
+    flex: 1;
+    min-width: 0;
+}
+/* CTA をフロー内配置に（小さめ） */
+.shorts-cta-btn {
+    position: static !important;
+    flex-shrink: 0;
+    bottom: auto; right: auto;
+    padding: 8px 12px;
+    font-size: 0.72rem;
+    white-space: nowrap;
+    line-height: 1.3;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(255, 45, 120, 0.5);
 }
 
 /* Title */
@@ -30,7 +60,7 @@ body.shorts-page > script[src*="banner_placement"] {
     font-weight: 700;
     color: #fff;
     line-height: 1.5;
-    margin: 0 0 10px;
+    margin: 0 0 6px;
     padding-left: 10px;
     border-left: 3px solid var(--primary);
     text-shadow: 0 1px 8px rgba(0,0,0,0.9);
@@ -45,79 +75,61 @@ body.shorts-page > script[src*="banner_placement"] {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
     pointer-events: auto;
 }
 
+/* 女優リンク: meta-tag.actress に準拠 */
 .shorts-actress-link {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    color: #fff;
-    background: rgba(255, 45, 120, 0.22);
-    border: 1px solid rgba(255, 45, 120, 0.45);
-    backdrop-filter: blur(10px);
-    padding: 3px 11px;
-    border-radius: 9999px;
+    color: var(--primary-light);
+    background: rgba(255, 45, 120, 0.15);
+    padding: 2px 10px;
+    border-radius: 4px;
     text-decoration: none;
-    transition: background 0.18s, border-color 0.18s, transform 0.15s;
+    transition: background 0.15s;
     pointer-events: auto;
 }
-
-.shorts-actress-link::before {
-    content: "♀";
-    font-size: 0.7rem;
-    opacity: 0.8;
-}
-
 .shorts-actress-link:hover {
-    background: rgba(255, 45, 120, 0.5);
-    border-color: rgba(255, 45, 120, 0.8);
-    transform: translateY(-1px);
-    color: #fff;
+    background: rgba(255, 45, 120, 0.3);
+    color: var(--primary-light);
 }
 
-/* Actress link (non-linkable fallback) */
+/* 女優バッジ（リンクなし） */
 .shorts-actress-badge {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    color: rgba(255,255,255,0.88);
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.18);
-    backdrop-filter: blur(8px);
-    padding: 3px 11px;
-    border-radius: 9999px;
+    color: var(--primary-light);
+    background: rgba(255, 45, 120, 0.1);
+    padding: 2px 10px;
+    border-radius: 4px;
 }
 
-/* Maker & meta row */
+/* メーカー・評価・ジャンル・価格行 */
 .shorts-meta-row {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
+    gap: 6px;
+    margin-bottom: 5px;
 }
 
+/* メーカー: 目立たせない */
 .shorts-maker-badge {
     font-size: 0.72rem;
-    font-weight: 500;
-    color: rgba(255,255,255,0.7);
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.12);
-    padding: 2px 9px;
-    border-radius: 4px;
+    color: var(--text-muted);
 }
 
+/* 評価: 黄色 */
 .shorts-rating-badge {
-    font-size: 0.78rem;
+    font-size: 0.82rem;
     font-weight: 700;
-    color: #fbbf24;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+    color: #f59e0b;
 }
 
 /* Genres */
@@ -125,25 +137,24 @@ body.shorts-page > script[src*="banner_placement"] {
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
 }
 
+/* ジャンル: genre-tag に準拠 */
 .shorts-genre-tag {
-    font-size: 0.68rem;
-    color: rgba(255,255,255,0.55);
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 1px 8px;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    background: var(--bg-light);
+    padding: 2px 8px;
     border-radius: 4px;
 }
 
-/* Price */
+/* 価格: item-price / sample-modal-price に準拠 */
 .shorts-price-text {
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     font-weight: 700;
-    color: #f9a8d4;
+    color: #6ee7b7;
     margin: 0;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
 }
 
 /* CTA button */
@@ -224,59 +235,50 @@ body.shorts-page > script[src*="banner_placement"] {
                 </div>
             </div>
 
-            {{-- Info overlay --}}
+            {{-- Info panel（動画の直下） --}}
             <div class="shorts-info-overlay">
-                <h3 class="shorts-title-text">{{ $title }}</h3>
+                <div class="shorts-info-text">
+                    <h3 class="shorts-title-text">{{ $title }}</h3>
 
-                {{-- Actress links --}}
-                @if(!empty($actresses))
-                <div class="shorts-actress-row">
-                    @foreach($actresses as $actress)
-                        @if(!empty($actress['id']))
-                        <a href="{{ route('actress.show', $actress['id']) }}"
-                           class="shorts-actress-link"
-                           title="{{ $actress['name'] }}">{{ $actress['name'] }}</a>
-                        @else
-                        <span class="shorts-actress-badge">{{ $actress['name'] }}</span>
-                        @endif
-                    @endforeach
-                </div>
-                @endif
-
-                {{-- Maker & rating --}}
-                @if($maker || $rating)
-                <div class="shorts-meta-row">
-                    @if($maker)
-                    <span class="shorts-maker-badge">{{ Str::limit($maker, 24) }}</span>
+                    @if(!empty($actresses))
+                    <div class="shorts-actress-row">
+                        @foreach($actresses as $actress)
+                            @if(!empty($actress['id']))
+                            <a href="{{ route('actress.show', $actress['id']) }}"
+                               class="shorts-actress-link"
+                               title="{{ $actress['name'] }}">{{ $actress['name'] }}</a>
+                            @else
+                            <span class="shorts-actress-badge">{{ $actress['name'] }}</span>
+                            @endif
+                        @endforeach
+                    </div>
                     @endif
-                    @if($rating)
-                    <span class="shorts-rating-badge">★ {{ $rating }}</span>
+
+                    @if($maker || $rating)
+                    <div class="shorts-meta-row">
+                        @if($maker)<span class="shorts-maker-badge">{{ Str::limit($maker, 24) }}</span>@endif
+                        @if($rating)<span class="shorts-rating-badge">★ {{ $rating }}</span>@endif
+                    </div>
+                    @endif
+
+                    @if(!empty($genres))
+                    <div class="shorts-genres">
+                        @foreach($genres as $genre)
+                        <span class="shorts-genre-tag">{{ $genre['name'] }}</span>
+                        @endforeach
+                    </div>
+                    @endif
+
+                    @if($price)
+                    <p class="shorts-price-text">{{ preg_replace('/~$/', '円〜', $price) }}{{ str_ends_with($price, '~') ? '' : '円' }}</p>
                     @endif
                 </div>
-                @endif
 
-                {{-- Genres --}}
-                @if(!empty($genres))
-                <div class="shorts-genres">
-                    @foreach($genres as $genre)
-                    <span class="shorts-genre-tag">{{ $genre['name'] }}</span>
-                    @endforeach
-                </div>
-                @endif
-
-                {{-- Price --}}
-                @if($price)
-                <p class="shorts-price-text">{{ preg_replace('/~$/', '円〜', $price) }}{{ str_ends_with($price, '~') ? '' : '円' }}</p>
-                @endif
+                <a href="{{ $url }}"
+                   target="_blank"
+                   rel="nofollow noopener"
+                   class="shorts-cta-btn">FANZAで<br>詳細を見る →</a>
             </div>
-
-            {{-- CTA button — bottom right, easy to tap --}}
-            <a href="{{ $url }}"
-               target="_blank"
-               rel="nofollow noopener"
-               class="shorts-cta-btn">
-                FANZAで詳細を見る &rarr;
-            </a>
 
         </div>
         @endforeach
@@ -302,6 +304,49 @@ body.shorts-page > script[src*="banner_placement"] {
 @endsection
 
 @push('scripts')
+@if(!empty($items))
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@@type": "ItemList",
+    "name": "FANZAサンプル動画ショートビュー",
+    "description": "FANZAの人気作品サンプル動画をショート動画感覚でサクサク視聴",
+    "numberOfItems": {{ count($items) }},
+    "itemListElement": [
+        @foreach(array_slice($items, 0, 10) as $i => $item)
+        @php
+            $sTitle = addslashes($item['title'] ?? '');
+            $sCid   = $item['content_id'] ?? null;
+            $sImg   = $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? '';
+            $sActresses = $item['iteminfo']['actress'] ?? [];
+            $sDate  = $item['date'] ?? null;
+            $sActorJson = !empty($sActresses)
+                ? collect($sActresses)->map(function($a) { return ['@type' => 'Person', 'name' => $a['name']]; })->values()->toJson()
+                : null;
+        @endphp
+        {
+            "@@type": "ListItem",
+            "position": {{ $i + 1 }},
+            "item": {
+                "@@type": "VideoObject",
+                "name": "{{ $sTitle }}",
+                "thumbnailUrl": "{{ $sImg }}"
+                @if($sCid)
+                ,"embedUrl": "https://www.dmm.co.jp/litevideo/-/part/=/affi_id={{ config('fanza.affiliate_id') }}/cid={{ $sCid }}/size=1280_720/"
+                @endif
+                @if($sDate)
+                ,"uploadDate": "{{ \Carbon\Carbon::parse($sDate)->format('c') }}"
+                @endif
+                @if($sActorJson)
+                ,"actor": {!! $sActorJson !!}
+                @endif
+            }
+        }{{ !$loop->last ? ',' : '' }}
+        @endforeach
+    ]
+}
+</script>
+@endif
 <script>
 (function () {
     'use strict';

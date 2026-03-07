@@ -45,7 +45,12 @@
                         <h3>{{ $item['title'] ?? 'タイトル未設定' }}</h3>
                         <div class="item-meta">
                             @if(!empty($item['iteminfo']['actress']))
-                                <span class="meta-tag actress">{{ $item['iteminfo']['actress'][0]['name'] ?? '' }}</span>
+                                @php $ra = $item['iteminfo']['actress'][0]; @endphp
+                                @if(!empty($ra['id']))
+                                    <a href="{{ route('actress.show', $ra['id']) }}" class="meta-tag actress" style="text-decoration:none">{{ $ra['name'] }}</a>
+                                @else
+                                    <span class="meta-tag actress">{{ $ra['name'] }}</span>
+                                @endif
                             @endif
                             @if(!empty($item['iteminfo']['maker']))
                                 <span class="meta-tag maker">{{ $item['iteminfo']['maker'][0]['name'] ?? '' }}</span>
