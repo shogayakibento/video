@@ -7,11 +7,13 @@ use App\Http\Controllers\GenreController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RankingController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\ShortsController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TweetVideoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
+Route::get('/shorts', ShortsController::class)->name('shorts');
 Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 Route::get('/genre', [GenreController::class, 'index'])->name('genre.index');
 Route::get('/genre/{slug}', [GenreController::class, 'show'])->name('genre.show');
