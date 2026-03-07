@@ -602,6 +602,13 @@ img {
     color: var(--primary-light);
     margin-bottom: 6px;
 }
+.item-actress-link {
+    color: var(--primary-light);
+    text-decoration: none;
+}
+.item-actress-link:hover {
+    text-decoration: underline;
+}
 
 .item-bottom {
     display: flex;
