@@ -58,7 +58,6 @@ body.shorts-page > script[src*="banner_placement"] {
                 <div class="shorts-player-box">
                     <iframe class="shorts-iframe"
                             data-src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id={{ config('fanza.affiliate_id') }}/cid={{ $cid }}/size=1280_720/"
-                            src=""
                             frameborder="0"
                             allow="autoplay; fullscreen"
                             allowfullscreen
@@ -142,7 +141,7 @@ body.shorts-page > script[src*="banner_placement"] {
                 if (counterEl) counterEl.textContent = idx + 1;
 
                 // Load iframe
-                if (iframe && !iframe.src && iframe.dataset.src) {
+                if (iframe && iframe.dataset.src && iframe.src !== iframe.dataset.src) {
                     iframe.src = iframe.dataset.src;
                 }
                 if (thumb) thumb.style.display = 'none';
@@ -150,7 +149,7 @@ body.shorts-page > script[src*="banner_placement"] {
             } else {
                 // Unload iframe to stop video & save resources
                 if (iframe && iframe.src) {
-                    iframe.src = '';
+                    iframe.src = 'about:blank';
                 }
                 if (thumb) thumb.style.display = '';
             }
