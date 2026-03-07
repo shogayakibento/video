@@ -2280,11 +2280,15 @@ img {
 
 /* Edge vignette for cinematic feel */
 .shorts-item::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     z-index: 1;
-    background: radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,0.55) 100%);
+    background: radial-gradient(
+        ellipse at center,
+        transparent 45%,
+        rgba(0, 0, 0, 0.55) 100%
+    );
     pointer-events: none;
 }
 
@@ -2312,27 +2316,33 @@ img {
 
 .shorts-player-box {
     position: relative;
-    padding-bottom: 65%;
+    padding-bottom: 56.25%; /* 16:9 */
     height: 0;
     border-radius: 14px;
     overflow: hidden;
     background: #000;
-    box-shadow: 0 0 80px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.08);
+    box-shadow:
+        0 0 80px rgba(0, 0, 0, 0.9),
+        0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 .shorts-iframe {
     position: absolute;
     inset: 0;
     width: 100%;
-    height: calc(100% + 50px);
-    transform: translateY(-50px);
+    height: calc(100% + 40px);
+    transform: translateY(-40px);
     border: none;
 }
 
 /* Thumbnail placeholder — shimmer loading */
 @keyframes shorts-shimmer {
-    0%   { background-position: -200% 0; }
-    100% { background-position:  200% 0; }
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
 }
 
 .shorts-thumb-placeholder {
@@ -2362,8 +2372,8 @@ img {
 .shorts-play-icon svg {
     width: 56px;
     height: 56px;
-    color: rgba(255,255,255,0.85);
-    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6));
+    color: rgba(255, 255, 255, 0.85);
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
 }
 
 /* Info overlay */
@@ -2373,8 +2383,13 @@ img {
     left: 0;
     right: 0;
     z-index: 10;
-    padding: 120px 170px 32px 24px; /* right padding avoids overlap with CTA button */
-    background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.55) 60%, transparent 100%);
+    padding: 90px 160px 28px 24px; /* right padding avoids overlap with CTA button */
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.92) 0%,
+        rgba(0, 0, 0, 0.5) 55%,
+        transparent 100%
+    );
     pointer-events: none;
 }
 
@@ -2383,47 +2398,31 @@ img {
     font-weight: 700;
     color: #fff;
     line-height: 1.45;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     padding-left: 10px;
     border-left: 3px solid var(--primary);
-    text-shadow: 0 1px 6px rgba(0,0,0,0.8);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
 }
 
-/* Meta row: actress / maker / rating tags (reuses ranking styles) */
-.shorts-meta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 8px;
-}
-
-/* Genre tags row */
-.shorts-genres {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 10px;
-}
-
-/* Dark overlay adjustments for ranking-style tags */
-.shorts-info-overlay .genre-tag {
-    background: rgba(255,255,255,0.12);
-    color: rgba(255,255,255,0.75);
-    border: 1px solid rgba(255,255,255,0.15);
-}
-
-.shorts-info-overlay .meta-rating {
-    color: #fbbf24;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+.shorts-actress-text {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(8px);
+    padding: 2px 10px;
+    border-radius: 9999px;
+    margin-bottom: 6px;
 }
 
 .shorts-price-text {
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     font-weight: 700;
-    color: #6ee7b7;
-    margin-bottom: 0;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+    color: var(--primary-light);
+    margin-bottom: 12px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
 }
 
 .shorts-cta-btn {
@@ -2441,13 +2440,15 @@ img {
     border-radius: 9999px;
     text-decoration: none;
     white-space: nowrap;
-    box-shadow: 0 4px 20px rgba(255,45,120,0.55);
-    transition: box-shadow 0.2s, transform 0.15s;
+    box-shadow: 0 4px 20px rgba(255, 45, 120, 0.55);
+    transition:
+        box-shadow 0.2s,
+        transform 0.15s;
 }
 
 .shorts-cta-btn:hover {
     transform: translateY(-2px) scale(1.03);
-    box-shadow: 0 6px 28px rgba(255,45,120,0.75);
+    box-shadow: 0 6px 28px rgba(255, 45, 120, 0.75);
 }
 
 /* Counter bar */
@@ -2456,7 +2457,7 @@ img {
     top: 12px;
     right: 14px;
     z-index: 20;
-    background: rgba(0,0,0,0.45);
+    background: rgba(0, 0, 0, 0.45);
     color: #fff;
     font-size: 0.78rem;
     font-weight: 700;
@@ -2464,7 +2465,7 @@ img {
     border-radius: 9999px;
     pointer-events: none;
     backdrop-filter: blur(8px);
-    border: 1px solid rgba(255,255,255,0.12);
+    border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .shorts-counter-sep {
@@ -2489,24 +2490,27 @@ img {
     width: 42px;
     height: 42px;
     border-radius: 50%;
-    border: 1px solid rgba(255,255,255,0.2);
-    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.4);
     color: #fff;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    transition:
+        background 0.2s,
+        transform 0.15s,
+        box-shadow 0.2s;
     backdrop-filter: blur(10px);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
 
 .shorts-nav-up:hover,
 .shorts-nav-down:hover {
-    background: rgba(255,45,120,0.55);
-    border-color: rgba(255,45,120,0.5);
+    background: rgba(255, 45, 120, 0.55);
+    border-color: rgba(255, 45, 120, 0.5);
     transform: scale(1.12);
-    box-shadow: 0 4px 16px rgba(255,45,120,0.4);
+    box-shadow: 0 4px 16px rgba(255, 45, 120, 0.4);
 }
 
 .shorts-nav-up:disabled,
