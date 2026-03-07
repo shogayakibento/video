@@ -2379,7 +2379,7 @@ img {
     left: 0;
     right: 0;
     z-index: 10;
-    padding: 90px 24px 28px;
+    padding: 90px 160px 28px 24px; /* right padding avoids overlap with CTA button */
     background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 55%, transparent 100%);
     pointer-events: none;
 }
@@ -2417,23 +2417,27 @@ img {
 }
 
 .shorts-cta-btn {
-    display: inline-block;
-    padding: 9px 22px;
+    position: absolute;
+    bottom: 28px;
+    right: 14px;
+    z-index: 15;
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 22px;
     background: linear-gradient(135deg, var(--primary) 0%, #ff6b9d 100%);
     color: #fff;
-    font-size: 0.84rem;
+    font-size: 0.88rem;
     font-weight: 700;
     border-radius: 9999px;
     text-decoration: none;
-    pointer-events: all;
-    transition: box-shadow 0.2s, transform 0.15s;
     white-space: nowrap;
-    box-shadow: 0 4px 16px rgba(255,45,120,0.45);
+    box-shadow: 0 4px 20px rgba(255,45,120,0.55);
+    transition: box-shadow 0.2s, transform 0.15s;
 }
 
 .shorts-cta-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(255,45,120,0.65);
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 6px 28px rgba(255,45,120,0.75);
 }
 
 /* Counter bar */

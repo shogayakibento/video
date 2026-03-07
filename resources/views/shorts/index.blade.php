@@ -80,13 +80,15 @@ body.shorts-page > script[src*="banner_placement"] {
                 @if($price)
                 <p class="shorts-price-text">{{ preg_replace('/~$/', '円〜', $price) }}{{ str_ends_with($price, '~') ? '' : '円' }}</p>
                 @endif
-                <a href="{{ $url }}"
-                   target="_blank"
-                   rel="nofollow noopener"
-                   class="shorts-cta-btn">
-                    FANZAで詳細を見る &rarr;
-                </a>
             </div>
+
+            {{-- CTA button — bottom right, easy to tap --}}
+            <a href="{{ $url }}"
+               target="_blank"
+               rel="nofollow noopener"
+               class="shorts-cta-btn">
+                FANZAで詳細を見る &rarr;
+            </a>
 
         </div>
         @endforeach
