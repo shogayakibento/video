@@ -5,78 +5,66 @@
 
 @push('styles')
 <style>
-/* ショートビューページはフッター非表示 */
 body.shorts-page footer,
 body.shorts-page .side-ad { display: none !important; }
 
-/* ====== Player: viewport height で高さを制限 ====== */
-.shorts-player-wrap {
+/* ====== 動画 + 情報を1枚カードとしてまとめるラッパー ====== */
+.shorts-content-wrap {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 2;
-    /* 高さが画面の 78% を超えないよう幅を制限 */
+    /* 横幅: viewport高さの 60% × 16/9 で動画高さを制限 */
     width: min(
         calc(100% - 80px),
-        calc((100vh - 64px) * 0.78 * 16 / 9)
+        calc((100vh - 64px) * 0.60 * 16 / 9)
     );
     max-width: 1400px;
+    display: flex;
+    flex-direction: column;
 }
 
-/* ====== 情報overlay: player-box の内側に乗せる ====== */
-.shorts-info-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 10;
-    padding: 80px 180px 18px 18px;
-    background: linear-gradient(
-        to top,
-        rgba(0, 0, 0, 0.93) 0%,
-        rgba(0, 0, 0, 0.6) 50%,
-        transparent 100%
-    );
-    pointer-events: none;
+/* プレイヤー: content-wrap 内では relative に戻す */
+.shorts-content-wrap .shorts-player-wrap {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 100%;
+    max-width: none;
 }
 
-/* CTA ボタン: player-box の右下 */
-.shorts-cta-btn {
-    position: absolute;
-    bottom: 16px;
-    right: 14px;
-    z-index: 15;
-    display: inline-flex;
+/* 動画の底角は角丸なし（info-panel に接続） */
+.shorts-content-wrap .shorts-player-box {
+    border-radius: 14px 14px 0 0;
+}
+
+/* ====== 情報パネル（動画の直下） ====== */
+.shorts-info-panel {
+    background: rgba(14, 14, 14, 0.92);
+    backdrop-filter: blur(16px);
+    border-radius: 0 0 14px 14px;
+    padding: 12px 14px 14px;
+    display: flex;
     align-items: center;
-    padding: 10px 16px;
-    background: linear-gradient(135deg, var(--primary) 0%, #ff6b9d 100%);
-    color: #fff;
-    font-size: 0.82rem;
-    font-weight: 700;
-    border-radius: 10px;
-    text-decoration: none;
-    white-space: nowrap;
-    box-shadow: 0 4px 20px rgba(255, 45, 120, 0.6);
-    transition: box-shadow 0.2s, transform 0.15s;
+    gap: 12px;
 }
 
-.shorts-cta-btn:hover {
-    transform: translateY(-2px) scale(1.03);
-    box-shadow: 0 6px 28px rgba(255, 45, 120, 0.8);
-    color: #fff;
+.shorts-info-text {
+    flex: 1;
+    min-width: 0;
 }
 
 /* タイトル */
 .shorts-title-text {
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     font-weight: 700;
     color: #fff;
-    line-height: 1.45;
-    margin: 0 0 8px;
-    padding-left: 10px;
+    line-height: 1.4;
+    margin: 0 0 6px;
+    padding-left: 9px;
     border-left: 3px solid var(--primary);
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.95);
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -87,116 +75,139 @@ body.shorts-page .side-ad { display: none !important; }
 .shorts-actress-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
-    margin-bottom: 6px;
-    pointer-events: auto;
+    gap: 4px;
+    margin-bottom: 5px;
 }
 
 .shorts-actress-link {
     display: inline-flex;
     align-items: center;
     gap: 3px;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 600;
     color: #fff;
-    background: rgba(255, 45, 120, 0.22);
-    border: 1px solid rgba(255, 45, 120, 0.45);
-    backdrop-filter: blur(10px);
-    padding: 2px 10px;
+    background: rgba(255, 45, 120, 0.2);
+    border: 1px solid rgba(255, 45, 120, 0.4);
+    padding: 2px 9px;
     border-radius: 9999px;
     text-decoration: none;
-    transition: background 0.18s, border-color 0.18s, transform 0.15s;
-    pointer-events: auto;
+    transition: background 0.15s, border-color 0.15s;
 }
 
 .shorts-actress-link::before {
     content: "♀";
-    font-size: 0.65rem;
-    opacity: 0.8;
+    font-size: 0.62rem;
+    opacity: 0.75;
 }
 
 .shorts-actress-link:hover {
-    background: rgba(255, 45, 120, 0.5);
-    border-color: rgba(255, 45, 120, 0.8);
-    transform: translateY(-1px);
+    background: rgba(255, 45, 120, 0.45);
+    border-color: rgba(255, 45, 120, 0.75);
     color: #fff;
 }
 
 .shorts-actress-badge {
     display: inline-flex;
     align-items: center;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.85);
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    padding: 2px 10px;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 2px 9px;
     border-radius: 9999px;
 }
 
-/* メーカー・評価 */
+/* メーカー・評価・ジャンル */
 .shorts-meta-row {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 6px;
-    margin-bottom: 5px;
+    gap: 5px;
+    margin-bottom: 4px;
 }
 
 .shorts-maker-badge {
-    font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.65);
-    background: rgba(255, 255, 255, 0.07);
+    font-size: 0.68rem;
+    color: rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 1px 8px;
+    padding: 1px 7px;
     border-radius: 4px;
 }
 
 .shorts-rating-badge {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 700;
     color: #fbbf24;
 }
 
-/* ジャンル */
 .shorts-genres {
     display: flex;
     flex-wrap: wrap;
-    gap: 4px;
-    margin-bottom: 5px;
+    gap: 3px;
+    margin-bottom: 4px;
 }
 
 .shorts-genre-tag {
-    font-size: 0.65rem;
-    color: rgba(255, 255, 255, 0.5);
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.09);
-    padding: 1px 7px;
+    font-size: 0.63rem;
+    color: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 1px 6px;
     border-radius: 3px;
 }
 
-/* 価格 */
 .shorts-price-text {
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     font-weight: 700;
     color: #f9a8d4;
     margin: 0;
 }
 
-/* モバイル調整 */
+/* CTAボタン（info-panel 右側） */
+.shorts-cta-btn {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 15px;
+    background: linear-gradient(135deg, var(--primary) 0%, #ff6b9d 100%);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    border-radius: 10px;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 3px 16px rgba(255, 45, 120, 0.55);
+    transition: box-shadow 0.2s, transform 0.15s;
+    line-height: 1.3;
+    text-align: center;
+}
+
+.shorts-cta-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 5px 24px rgba(255, 45, 120, 0.75);
+    color: #fff;
+}
+
+/* モバイル */
 @media (max-width: 640px) {
-    .shorts-player-wrap {
-        top: 42%;
+    .shorts-content-wrap {
         width: 100%;
+        top: 48%;
     }
-    .shorts-info-overlay {
-        padding: 60px 14px 14px;
+    .shorts-content-wrap .shorts-player-box {
+        border-radius: 0;
+    }
+    .shorts-info-panel {
+        border-radius: 0;
+        padding: 10px 12px 12px;
+        flex-wrap: wrap;
     }
     .shorts-cta-btn {
-        bottom: 10px;
-        right: 10px;
-        font-size: 0.72rem;
-        padding: 7px 12px;
+        width: 100%;
+        justify-content: center;
+        margin-top: 4px;
     }
 }
 </style>
@@ -213,12 +224,12 @@ body.shorts-page .side-ad { display: none !important; }
         </div>
     @else
 
-    {{-- カウンター（右上固定） --}}
+    {{-- カウンター --}}
     <div class="shorts-counter-bar" id="shortsCounterBar">
         <span id="shortsCounterCurrent">1</span><span class="shorts-counter-sep">/</span><span>{{ count($items) }}</span>
     </div>
 
-    {{-- ナビボタン（右中央固定） --}}
+    {{-- ナビボタン --}}
     <div class="shorts-nav-btns" id="shortsNavBtns">
         <button class="shorts-nav-up" id="shortsNavUp" aria-label="前の動画">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -232,7 +243,6 @@ body.shorts-page .side-ad { display: none !important; }
         </button>
     </div>
 
-    {{-- スクロールコンテナ --}}
     <div class="shorts-scroll" id="shortsScroll">
         @foreach($items as $index => $item)
         @php
@@ -252,30 +262,34 @@ body.shorts-page .side-ad { display: none !important; }
              data-url="{{ $url }}"
              data-title="{{ $title }}">
 
-            {{-- ぼかし背景 --}}
             @if($imgLg)
             <div class="shorts-bg" style="background-image:url('{{ $imgLg }}')"></div>
             @endif
 
-            {{-- プレイヤー --}}
-            <div class="shorts-player-wrap">
-                <div class="shorts-player-box">
-                    <iframe class="shorts-iframe"
-                            data-src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id={{ config('fanza.affiliate_id') }}/cid={{ $cid }}/size=1280_720/"
-                            frameborder="0"
-                            allow="autoplay; fullscreen"
-                            allowfullscreen
-                            scrolling="no"></iframe>
+            {{-- 動画 + 情報パネルをまとめたカード --}}
+            <div class="shorts-content-wrap">
 
-                    <div class="shorts-thumb-placeholder" data-bg="{{ $imgLg }}">
-                        <img src="{{ $imgLg }}" alt="{{ $title }}" loading="lazy">
-                        <div class="shorts-play-icon">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                {{-- プレイヤー --}}
+                <div class="shorts-player-wrap">
+                    <div class="shorts-player-box">
+                        <iframe class="shorts-iframe"
+                                data-src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id={{ config('fanza.affiliate_id') }}/cid={{ $cid }}/size=1280_720/"
+                                frameborder="0"
+                                allow="autoplay; fullscreen"
+                                allowfullscreen
+                                scrolling="no"></iframe>
+                        <div class="shorts-thumb-placeholder" data-bg="{{ $imgLg }}">
+                            <img src="{{ $imgLg }}" alt="{{ $title }}" loading="lazy">
+                            <div class="shorts-play-icon">
+                                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    {{-- 情報overlay（動画の上に乗せる） --}}
-                    <div class="shorts-info-overlay">
+                {{-- 情報パネル（動画の直下） --}}
+                <div class="shorts-info-panel">
+                    <div class="shorts-info-text">
                         <h3 class="shorts-title-text">{{ $title }}</h3>
 
                         @if(!empty($actresses))
@@ -294,12 +308,8 @@ body.shorts-page .side-ad { display: none !important; }
 
                         @if($maker || $rating)
                         <div class="shorts-meta-row">
-                            @if($maker)
-                            <span class="shorts-maker-badge">{{ Str::limit($maker, 24) }}</span>
-                            @endif
-                            @if($rating)
-                            <span class="shorts-rating-badge">★ {{ $rating }}</span>
-                            @endif
+                            @if($maker)<span class="shorts-maker-badge">{{ Str::limit($maker, 24) }}</span>@endif
+                            @if($rating)<span class="shorts-rating-badge">★ {{ $rating }}</span>@endif
                         </div>
                         @endif
 
@@ -316,14 +326,13 @@ body.shorts-page .side-ad { display: none !important; }
                         @endif
                     </div>
 
-                    {{-- CTAボタン（動画右下） --}}
                     <a href="{{ $url }}"
                        target="_blank"
                        rel="nofollow noopener"
-                       class="shorts-cta-btn">FANZAで詳細を見る &rarr;</a>
-
+                       class="shorts-cta-btn">FANZAで<br>詳細を見る &rarr;</a>
                 </div>
-            </div>
+
+            </div>{{-- /.shorts-content-wrap --}}
 
         </div>
         @endforeach
@@ -339,8 +348,7 @@ body.shorts-page .side-ad { display: none !important; }
 (function () {
     'use strict';
 
-    var wrapper    = document.getElementById('shortsWrapper');
-    var scroll     = document.getElementById('shortsScroll');
+    var scroll = document.getElementById('shortsScroll');
     if (!scroll) return;
 
     document.body.classList.add('shorts-page');
@@ -351,7 +359,6 @@ body.shorts-page .side-ad { display: none !important; }
     var counterEl  = document.getElementById('shortsCounterCurrent');
     var currentIdx = 0;
 
-    /* ---------- Lazy load ---------- */
     var observer = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
             var item   = entry.target;
@@ -376,7 +383,6 @@ body.shorts-page .side-ad { display: none !important; }
 
     items.forEach(function (item) { observer.observe(item); });
 
-    /* ---------- Navigate ---------- */
     function goTo(idx) {
         if (idx < 0 || idx >= items.length) return;
         items[idx].scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -390,13 +396,11 @@ body.shorts-page .side-ad { display: none !important; }
     if (navUp)   navUp.addEventListener('click',   function () { goTo(currentIdx - 1); });
     if (navDown) navDown.addEventListener('click', function () { goTo(currentIdx + 1); });
 
-    /* ---------- Keyboard ---------- */
     document.addEventListener('keydown', function (e) {
         if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); goTo(currentIdx + 1); }
         if (e.key === 'ArrowUp'   || e.key === 'ArrowLeft')  { e.preventDefault(); goTo(currentIdx - 1); }
     });
 
-    /* ---------- Touch swipe ---------- */
     var touchStartY = 0;
     scroll.addEventListener('touchstart', function (e) {
         touchStartY = e.changedTouches[0].clientY;
