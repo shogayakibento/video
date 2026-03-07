@@ -15,6 +15,7 @@
      data-content-id="{{ $contentId }}"
      data-title="{{ $title }}"
      data-actress="{{ $actress }}"
+     data-actress-id="{{ $actressId }}"
      data-url="{{ $url }}"
      data-price="{{ $price }}"
      role="button" tabindex="0">
