@@ -2358,25 +2358,11 @@ img {
     pointer-events: none;
 }
 
-/* circle background via pseudo-element (border-radius on SVG unreliable) */
-.shorts-play-icon::before {
-    content: '';
-    position: absolute;
-    width: 72px;
-    height: 72px;
-    background: rgba(0,0,0,0.45);
-    border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.35);
-    backdrop-filter: blur(8px);
-}
-
 .shorts-play-icon svg {
-    position: relative;
-    z-index: 1;
-    width: 36px;
-    height: 36px;
-    color: #fff;
-    filter: drop-shadow(0 1px 4px rgba(0,0,0,0.8));
+    width: 56px;
+    height: 56px;
+    color: rgba(255,255,255,0.85);
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6));
 }
 
 /* Info overlay */
