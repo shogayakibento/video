@@ -39,6 +39,9 @@ body.shorts-page > script[src*="banner_placement"] {
             $url     = $item['URL'] ?? '#';
             $imgLg   = $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? $item['imageURL']['list'] ?? '';
             $actress = $item['iteminfo']['actress'][0]['name'] ?? null;
+            $maker   = $item['iteminfo']['maker'][0]['name'] ?? null;
+            $rating  = $item['review']['average'] ?? null;
+            $genres  = array_slice($item['iteminfo']['genre'] ?? [], 0, 3);
             $cid     = $item['content_id'];
             $price   = $item['prices']['price'] ?? null;
         @endphp
@@ -73,9 +76,24 @@ body.shorts-page > script[src*="banner_placement"] {
 
             {{-- Info overlay --}}
             <div class="shorts-info-overlay">
-                <h3 class="shorts-title-text">{{ Str::limit($title, 40) }}</h3>
-                @if($actress)
-                <p class="shorts-actress-text">{{ $actress }}</p>
+                <h3 class="shorts-title-text">{{ Str::limit($title, 50) }}</h3>
+                <div class="shorts-meta">
+                    @if($actress)
+                    <span class="meta-tag actress">{{ $actress }}</span>
+                    @endif
+                    @if($maker)
+                    <span class="meta-tag maker">{{ Str::limit($maker, 20) }}</span>
+                    @endif
+                    @if($rating)
+                    <span class="meta-rating">★ {{ $rating }}</span>
+                    @endif
+                </div>
+                @if(!empty($genres))
+                <div class="shorts-genres">
+                    @foreach($genres as $genre)
+                    <span class="genre-tag">{{ $genre['name'] }}</span>
+                    @endforeach
+                </div>
                 @endif
                 @if($price)
                 <p class="shorts-price-text">{{ preg_replace('/~$/', '円〜', $price) }}{{ str_ends_with($price, '~') ? '' : '円' }}</p>
