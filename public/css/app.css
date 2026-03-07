@@ -2279,6 +2279,7 @@ img {
     align-items: center;
     justify-content: center;
     background: #000;
+    padding-bottom: 130px; /* shift player up to account for info overlay */
 }
 
 /* Blurred background */
@@ -2482,6 +2483,17 @@ img {
 
 /* Mobile adjustments */
 @media (max-width: 640px) {
+    .shorts-wrapper {
+        /* use dynamic viewport height to exclude browser chrome on iOS */
+        top: 56px;
+        bottom: env(safe-area-inset-bottom, 0);
+    }
+
+    .shorts-item {
+        height: 100dvh;
+        padding-bottom: 110px;
+    }
+
     .shorts-player-wrap {
         width: 100%;
     }
