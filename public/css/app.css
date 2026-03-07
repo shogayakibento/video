@@ -2275,11 +2275,7 @@ img {
     scroll-snap-align: start;
     scroll-snap-stop: always;
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     background: #000;
-    padding-bottom: 130px;
 }
 
 /* Edge vignette for cinematic feel */
@@ -2303,9 +2299,12 @@ img {
     pointer-events: none;
 }
 
-/* Player box — 16:9, centered, max height ~95% of container */
+/* Player box — 16:9, perfectly centered */
 .shorts-player-wrap {
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 2;
     width: min(100%, calc((100vh - 64px) * 16 / 9 * 0.95));
     max-width: 1200px;
@@ -2535,7 +2534,6 @@ img {
 
     .shorts-item {
         height: 100dvh;
-        padding-bottom: 110px;
     }
 
     .shorts-player-wrap {
