@@ -18,7 +18,7 @@ body.shorts-page .side-ad { display: none !important; }
     z-index: 2;
     /* (viewport高さ - nav64px - 情報パネル110px - 余白32px) × 16/9 で動画幅を決定 */
     width: min(100%, calc((100vh - 206px) * 16 / 9));
-    max-width: 1200px;
+    max-width: 960px;
     display: flex;
     flex-direction: column;
 }
