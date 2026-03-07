@@ -2302,7 +2302,7 @@ img {
 /* Player box — 16:9, perfectly centered */
 .shorts-player-wrap {
     position: absolute;
-    top: 28%;
+    top: 42%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 2;
