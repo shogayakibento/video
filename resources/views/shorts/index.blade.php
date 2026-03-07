@@ -13,15 +13,42 @@ body.shorts-page > script[src*="banner_placement"] {
     display: none !important;
 }
 
-/* ====== Info overlay layout ====== */
+/* ====== Info panel（動画の直下に移動） ====== */
 .shorts-info-overlay {
-    padding: 100px 160px 32px 20px;
-    background: linear-gradient(
-        to top,
-        rgba(0, 0, 0, 0.95) 0%,
-        rgba(0, 0, 0, 0.6) 50%,
-        transparent 100%
-    );
+    /* 動画中心(42%) + 動画半高(338px) = 動画の下端、そこから少し下 */
+    top: calc(42% + 342px);
+    bottom: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(100%, calc((100vh - 64px) * 16 / 9 * 0.95));
+    max-width: 1200px;
+    padding: 12px 16px 14px;
+    background: rgba(12, 12, 12, 0.92);
+    backdrop-filter: blur(16px);
+    border-radius: 0 0 14px 14px;
+    pointer-events: auto;
+}
+
+/* info overlay を flex にして CTA を右端に */
+.shorts-info-overlay {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.shorts-info-text {
+    flex: 1;
+    min-width: 0;
+}
+/* CTA をフロー内配置に */
+.shorts-cta-btn {
+    position: static !important;
+    flex-shrink: 0;
+    bottom: auto; right: auto;
+    padding: 10px 16px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    line-height: 1.4;
+    text-align: center;
 }
 
 /* Title */
@@ -224,59 +251,50 @@ body.shorts-page > script[src*="banner_placement"] {
                 </div>
             </div>
 
-            {{-- Info overlay --}}
+            {{-- Info panel（動画の直下） --}}
             <div class="shorts-info-overlay">
-                <h3 class="shorts-title-text">{{ $title }}</h3>
+                <div class="shorts-info-text">
+                    <h3 class="shorts-title-text">{{ $title }}</h3>
 
-                {{-- Actress links --}}
-                @if(!empty($actresses))
-                <div class="shorts-actress-row">
-                    @foreach($actresses as $actress)
-                        @if(!empty($actress['id']))
-                        <a href="{{ route('actress.show', $actress['id']) }}"
-                           class="shorts-actress-link"
-                           title="{{ $actress['name'] }}">{{ $actress['name'] }}</a>
-                        @else
-                        <span class="shorts-actress-badge">{{ $actress['name'] }}</span>
-                        @endif
-                    @endforeach
-                </div>
-                @endif
-
-                {{-- Maker & rating --}}
-                @if($maker || $rating)
-                <div class="shorts-meta-row">
-                    @if($maker)
-                    <span class="shorts-maker-badge">{{ Str::limit($maker, 24) }}</span>
+                    @if(!empty($actresses))
+                    <div class="shorts-actress-row">
+                        @foreach($actresses as $actress)
+                            @if(!empty($actress['id']))
+                            <a href="{{ route('actress.show', $actress['id']) }}"
+                               class="shorts-actress-link"
+                               title="{{ $actress['name'] }}">{{ $actress['name'] }}</a>
+                            @else
+                            <span class="shorts-actress-badge">{{ $actress['name'] }}</span>
+                            @endif
+                        @endforeach
+                    </div>
                     @endif
-                    @if($rating)
-                    <span class="shorts-rating-badge">★ {{ $rating }}</span>
+
+                    @if($maker || $rating)
+                    <div class="shorts-meta-row">
+                        @if($maker)<span class="shorts-maker-badge">{{ Str::limit($maker, 24) }}</span>@endif
+                        @if($rating)<span class="shorts-rating-badge">★ {{ $rating }}</span>@endif
+                    </div>
+                    @endif
+
+                    @if(!empty($genres))
+                    <div class="shorts-genres">
+                        @foreach($genres as $genre)
+                        <span class="shorts-genre-tag">{{ $genre['name'] }}</span>
+                        @endforeach
+                    </div>
+                    @endif
+
+                    @if($price)
+                    <p class="shorts-price-text">{{ preg_replace('/~$/', '円〜', $price) }}{{ str_ends_with($price, '~') ? '' : '円' }}</p>
                     @endif
                 </div>
-                @endif
 
-                {{-- Genres --}}
-                @if(!empty($genres))
-                <div class="shorts-genres">
-                    @foreach($genres as $genre)
-                    <span class="shorts-genre-tag">{{ $genre['name'] }}</span>
-                    @endforeach
-                </div>
-                @endif
-
-                {{-- Price --}}
-                @if($price)
-                <p class="shorts-price-text">{{ preg_replace('/~$/', '円〜', $price) }}{{ str_ends_with($price, '~') ? '' : '円' }}</p>
-                @endif
+                <a href="{{ $url }}"
+                   target="_blank"
+                   rel="nofollow noopener"
+                   class="shorts-cta-btn">FANZAで<br>詳細を見る →</a>
             </div>
-
-            {{-- CTA button — bottom right, easy to tap --}}
-            <a href="{{ $url }}"
-               target="_blank"
-               rel="nofollow noopener"
-               class="shorts-cta-btn">
-                FANZAで詳細を見る &rarr;
-            </a>
 
         </div>
         @endforeach
