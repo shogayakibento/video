@@ -117,21 +117,17 @@ body.shorts-page > script[src*="banner_placement"] {
     margin-bottom: 5px;
 }
 
-/* メーカー: meta-tag.maker に準拠 */
+/* メーカー: 目立たせない */
 .shorts-maker-badge {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--accent);
-    background: rgba(155, 93, 245, 0.15);
-    padding: 2px 10px;
-    border-radius: 4px;
+    font-size: 0.72rem;
+    color: var(--text-muted);
 }
 
-/* 評価: meta-rating に準拠 */
+/* 評価: 黄色 */
 .shorts-rating-badge {
     font-size: 0.82rem;
     font-weight: 700;
-    color: var(--accent);
+    color: #f59e0b;
 }
 
 /* Genres */
