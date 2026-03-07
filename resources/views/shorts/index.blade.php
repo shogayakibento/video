@@ -12,6 +12,156 @@ body.shorts-page > ins,
 body.shorts-page > script[src*="banner_placement"] {
     display: none !important;
 }
+
+/* ====== Info overlay layout ====== */
+.shorts-info-overlay {
+    padding: 100px 160px 32px 20px;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.95) 0%,
+        rgba(0, 0, 0, 0.6) 50%,
+        transparent 100%
+    );
+}
+
+/* Title */
+.shorts-title-text {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.5;
+    margin: 0 0 10px;
+    padding-left: 10px;
+    border-left: 3px solid var(--primary);
+    text-shadow: 0 1px 8px rgba(0,0,0,0.9);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Actress row */
+.shorts-actress-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+    pointer-events: auto;
+}
+
+.shorts-actress-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(255, 45, 120, 0.22);
+    border: 1px solid rgba(255, 45, 120, 0.45);
+    backdrop-filter: blur(10px);
+    padding: 3px 11px;
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: background 0.18s, border-color 0.18s, transform 0.15s;
+    pointer-events: auto;
+}
+
+.shorts-actress-link::before {
+    content: "♀";
+    font-size: 0.7rem;
+    opacity: 0.8;
+}
+
+.shorts-actress-link:hover {
+    background: rgba(255, 45, 120, 0.5);
+    border-color: rgba(255, 45, 120, 0.8);
+    transform: translateY(-1px);
+    color: #fff;
+}
+
+/* Actress link (non-linkable fallback) */
+.shorts-actress-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.88);
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.18);
+    backdrop-filter: blur(8px);
+    padding: 3px 11px;
+    border-radius: 9999px;
+}
+
+/* Maker & meta row */
+.shorts-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.shorts-maker-badge {
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 2px 9px;
+    border-radius: 4px;
+}
+
+.shorts-rating-badge {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #fbbf24;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+
+/* Genres */
+.shorts-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 8px;
+}
+
+.shorts-genre-tag {
+    font-size: 0.68rem;
+    color: rgba(255,255,255,0.55);
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 1px 8px;
+    border-radius: 4px;
+}
+
+/* Price */
+.shorts-price-text {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #f9a8d4;
+    margin: 0;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+
+/* CTA button */
+.shorts-cta-btn {
+    bottom: 32px;
+    right: 16px;
+    padding: 13px 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-radius: 14px;
+    box-shadow: 0 4px 24px rgba(255, 45, 120, 0.6);
+    letter-spacing: 0.02em;
+}
+
+.shorts-cta-btn:hover {
+    box-shadow: 0 6px 32px rgba(255, 45, 120, 0.8);
+    transform: translateY(-2px) scale(1.04);
+}
 </style>
 @endpush
 
@@ -35,15 +185,15 @@ body.shorts-page > script[src*="banner_placement"] {
     <div class="shorts-scroll" id="shortsScroll" data-affiliate-id="{{ config('fanza.affiliate_id') }}">
         @foreach($items as $index => $item)
         @php
-            $title   = $item['title'] ?? '';
-            $url     = $item['URL'] ?? '#';
-            $imgLg   = $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? $item['imageURL']['list'] ?? '';
-            $actress = $item['iteminfo']['actress'][0]['name'] ?? null;
-            $maker   = $item['iteminfo']['maker'][0]['name'] ?? null;
-            $rating  = $item['review']['average'] ?? null;
-            $genres  = array_slice($item['iteminfo']['genre'] ?? [], 0, 3);
-            $cid     = $item['content_id'];
-            $price   = $item['prices']['price'] ?? null;
+            $title    = $item['title'] ?? '';
+            $url      = $item['URL'] ?? '#';
+            $imgLg    = $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? $item['imageURL']['list'] ?? '';
+            $actresses = $item['iteminfo']['actress'] ?? [];
+            $maker    = $item['iteminfo']['maker'][0]['name'] ?? null;
+            $rating   = $item['review']['average'] ?? null;
+            $genres   = array_slice($item['iteminfo']['genre'] ?? [], 0, 3);
+            $cid      = $item['content_id'];
+            $price    = $item['prices']['price'] ?? null;
         @endphp
         <div class="shorts-item"
              data-index="{{ $index }}"
@@ -76,25 +226,45 @@ body.shorts-page > script[src*="banner_placement"] {
 
             {{-- Info overlay --}}
             <div class="shorts-info-overlay">
-                <h3 class="shorts-title-text">{{ Str::limit($title, 50) }}</h3>
-                <div class="shorts-meta">
-                    @if($actress)
-                    <span class="meta-tag actress">{{ $actress }}</span>
-                    @endif
-                    @if($maker)
-                    <span class="meta-tag maker">{{ Str::limit($maker, 20) }}</span>
-                    @endif
-                    @if($rating)
-                    <span class="meta-rating">★ {{ $rating }}</span>
-                    @endif
-                </div>
-                @if(!empty($genres))
-                <div class="shorts-genres">
-                    @foreach($genres as $genre)
-                    <span class="genre-tag">{{ $genre['name'] }}</span>
+                <h3 class="shorts-title-text">{{ $title }}</h3>
+
+                {{-- Actress links --}}
+                @if(!empty($actresses))
+                <div class="shorts-actress-row">
+                    @foreach($actresses as $actress)
+                        @if(!empty($actress['id']))
+                        <a href="{{ route('actress.show', $actress['id']) }}"
+                           class="shorts-actress-link"
+                           title="{{ $actress['name'] }}">{{ $actress['name'] }}</a>
+                        @else
+                        <span class="shorts-actress-badge">{{ $actress['name'] }}</span>
+                        @endif
                     @endforeach
                 </div>
                 @endif
+
+                {{-- Maker & rating --}}
+                @if($maker || $rating)
+                <div class="shorts-meta-row">
+                    @if($maker)
+                    <span class="shorts-maker-badge">{{ Str::limit($maker, 24) }}</span>
+                    @endif
+                    @if($rating)
+                    <span class="shorts-rating-badge">★ {{ $rating }}</span>
+                    @endif
+                </div>
+                @endif
+
+                {{-- Genres --}}
+                @if(!empty($genres))
+                <div class="shorts-genres">
+                    @foreach($genres as $genre)
+                    <span class="shorts-genre-tag">{{ $genre['name'] }}</span>
+                    @endforeach
+                </div>
+                @endif
+
+                {{-- Price --}}
                 @if($price)
                 <p class="shorts-price-text">{{ preg_replace('/~$/', '円〜', $price) }}{{ str_ends_with($price, '~') ? '' : '円' }}</p>
                 @endif
