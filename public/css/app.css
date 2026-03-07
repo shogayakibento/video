@@ -2307,7 +2307,6 @@ img {
     transform: translate(-50%, -50%);
     z-index: 2;
     width: min(100%, calc((100vh - 64px) * 16 / 9 * 0.95));
-    max-width: 1200px;
 }
 
 .shorts-player-box {
