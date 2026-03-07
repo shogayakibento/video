@@ -2358,17 +2358,25 @@ img {
     pointer-events: none;
 }
 
-.shorts-play-icon svg {
-    width: 52px;
-    height: 52px;
-    color: #fff;
-    background: rgba(0,0,0,0.4);
-    padding: 14px;
+/* circle background via pseudo-element (border-radius on SVG unreliable) */
+.shorts-play-icon::before {
+    content: '';
+    position: absolute;
+    width: 72px;
+    height: 72px;
+    background: rgba(0,0,0,0.45);
     border-radius: 50%;
-    box-sizing: content-box;
-    border: 2px solid rgba(255,255,255,0.3);
-    backdrop-filter: blur(6px);
-    filter: drop-shadow(0 2px 12px rgba(0,0,0,0.6));
+    border: 2px solid rgba(255,255,255,0.35);
+    backdrop-filter: blur(8px);
+}
+
+.shorts-play-icon svg {
+    position: relative;
+    z-index: 1;
+    width: 36px;
+    height: 36px;
+    color: #fff;
+    filter: drop-shadow(0 1px 4px rgba(0,0,0,0.8));
 }
 
 /* Info overlay */
