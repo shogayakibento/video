@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'サンプル動画ショートビュー | FanzaGate')
-@section('description', 'FANZAの人気作品サンプル動画をショート動画感覚でサクサク視聴。スワイプで次々に楽しめます。')
+@section('title', 'FANZAサンプル動画をショートで楽しむ | FanzaGate')
+@section('description', 'FANZAの人気AV・動画サンプルをショート動画感覚でサクサク視聴。スワイプ・矢印キーで次々に楽しめる無料サンプル動画まとめ。')
+@section('keywords', 'FANZA, サンプル動画, 無料サンプル, AV, ショート動画, 人気動画, 女優')
+@section('og_type', 'website')
 
 @push('styles')
 <style>
@@ -302,6 +304,49 @@ body.shorts-page > script[src*="banner_placement"] {
 @endsection
 
 @push('scripts')
+@if(!empty($items))
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org",
+    "@@type": "ItemList",
+    "name": "FANZAサンプル動画ショートビュー",
+    "description": "FANZAの人気作品サンプル動画をショート動画感覚でサクサク視聴",
+    "numberOfItems": {{ count($items) }},
+    "itemListElement": [
+        @foreach(array_slice($items, 0, 10) as $i => $item)
+        @php
+            $sTitle = addslashes($item['title'] ?? '');
+            $sCid   = $item['content_id'] ?? null;
+            $sImg   = $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? '';
+            $sActresses = $item['iteminfo']['actress'] ?? [];
+            $sDate  = $item['date'] ?? null;
+            $sActorJson = !empty($sActresses)
+                ? collect($sActresses)->map(function($a) { return ['@type' => 'Person', 'name' => $a['name']]; })->values()->toJson()
+                : null;
+        @endphp
+        {
+            "@@type": "ListItem",
+            "position": {{ $i + 1 }},
+            "item": {
+                "@@type": "VideoObject",
+                "name": "{{ $sTitle }}",
+                "thumbnailUrl": "{{ $sImg }}"
+                @if($sCid)
+                ,"embedUrl": "https://www.dmm.co.jp/litevideo/-/part/=/affi_id={{ config('fanza.affiliate_id') }}/cid={{ $sCid }}/size=1280_720/"
+                @endif
+                @if($sDate)
+                ,"uploadDate": "{{ \Carbon\Carbon::parse($sDate)->format('c') }}"
+                @endif
+                @if($sActorJson)
+                ,"actor": {!! $sActorJson !!}
+                @endif
+            }
+        }{{ !$loop->last ? ',' : '' }}
+        @endforeach
+    ]
+}
+</script>
+@endif
 <script>
 (function () {
     'use strict';
