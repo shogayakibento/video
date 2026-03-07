@@ -13,66 +13,27 @@ body.shorts-page > script[src*="banner_placement"] {
     display: none !important;
 }
 
-/* ====== 動画 + 情報パネルをまとめるラッパー ====== */
-.shorts-content-wrap {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-    /* 動画高さ = (viewport - nav64 - panel110 - margin32) × 16/9 */
-    width: min(calc(100% - 40px), calc((100vh - 206px) * 16 / 9));
-    max-width: 1100px;
-    display: flex;
-    flex-direction: column;
-}
-
-/* player-wrap はフロー内に戻す */
-.shorts-content-wrap .shorts-player-wrap {
-    position: relative;
-    top: auto; left: auto; transform: none;
-    width: 100%; max-width: none;
-}
-.shorts-content-wrap .shorts-player-box {
-    border-radius: 14px 14px 0 0;
-}
-
-/* ====== 情報パネル（動画の直下） ====== */
-.shorts-info-panel {
-    background: rgba(12, 12, 12, 0.93);
-    backdrop-filter: blur(18px);
-    border-radius: 0 0 14px 14px;
-    padding: 12px 14px 14px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-.shorts-info-left {
-    flex: 1;
-    min-width: 0;
-}
-
-/* CTA をパネル内フロー配置に */
-.shorts-content-wrap .shorts-cta-btn {
-    position: static;
-    flex-shrink: 0;
-    bottom: auto; right: auto;
-    padding: 10px 16px;
-    font-size: 0.8rem;
-    white-space: nowrap;
-    text-align: center;
-    line-height: 1.4;
+/* ====== Info overlay layout ====== */
+.shorts-info-overlay {
+    padding: 100px 160px 32px 20px;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.95) 0%,
+        rgba(0, 0, 0, 0.6) 50%,
+        transparent 100%
+    );
 }
 
 /* Title */
 .shorts-title-text {
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 700;
     color: #fff;
-    line-height: 1.4;
-    margin: 0 0 8px;
+    line-height: 1.5;
+    margin: 0 0 10px;
     padding-left: 10px;
     border-left: 3px solid var(--primary);
+    text-shadow: 0 1px 8px rgba(0,0,0,0.9);
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -138,8 +99,8 @@ body.shorts-page > script[src*="banner_placement"] {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 6px;
-    margin: 0;
+    gap: 8px;
+    margin-bottom: 8px;
 }
 
 .shorts-maker-badge {
@@ -178,9 +139,11 @@ body.shorts-page > script[src*="banner_placement"] {
 
 /* Price */
 .shorts-price-text {
-    font-size: 0.78rem;
+    font-size: 0.82rem;
     font-weight: 700;
     color: #f9a8d4;
+    margin: 0;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
 }
 
 /* CTA button */
@@ -243,61 +206,77 @@ body.shorts-page > script[src*="banner_placement"] {
             <div class="shorts-bg" style="background-image:url('{{ $imgLg }}')"></div>
             @endif
 
-            {{-- 動画 + 情報パネル カード --}}
-            <div class="shorts-content-wrap">
-
-                {{-- Video player --}}
-                <div class="shorts-player-wrap">
-                    <div class="shorts-player-box">
-                        <iframe class="shorts-iframe"
-                                data-src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id={{ config('fanza.affiliate_id') }}/cid={{ $cid }}/size=1280_720/"
-                                frameborder="0"
-                                allow="autoplay; fullscreen"
-                                allowfullscreen
-                                scrolling="no"></iframe>
-                        <div class="shorts-thumb-placeholder" data-bg="{{ $imgLg }}">
-                            <img src="{{ $imgLg }}" alt="{{ $title }}" loading="lazy">
-                            <div class="shorts-play-icon">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-                            </div>
+            {{-- Video player area --}}
+            <div class="shorts-player-wrap">
+                <div class="shorts-player-box">
+                    <iframe class="shorts-iframe"
+                            data-src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id={{ config('fanza.affiliate_id') }}/cid={{ $cid }}/size=1280_720/"
+                            frameborder="0"
+                            allow="autoplay; fullscreen"
+                            allowfullscreen
+                            scrolling="no"></iframe>
+                    <div class="shorts-thumb-placeholder" data-bg="{{ $imgLg }}">
+                        <img src="{{ $imgLg }}" alt="{{ $title }}" loading="lazy">
+                        <div class="shorts-play-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                {{-- 情報パネル（動画の直下） --}}
-                <div class="shorts-info-panel">
-                    <div class="shorts-info-left">
-                        <h3 class="shorts-title-text">{{ $title }}</h3>
+            {{-- Info overlay --}}
+            <div class="shorts-info-overlay">
+                <h3 class="shorts-title-text">{{ $title }}</h3>
 
-                        @if(!empty($actresses))
-                        <div class="shorts-actress-row">
-                            @foreach($actresses as $actress)
-                                @if(!empty($actress['id']))
-                                <a href="{{ route('actress.show', $actress['id']) }}"
-                                   class="shorts-actress-link"
-                                   title="{{ $actress['name'] }}">{{ $actress['name'] }}</a>
-                                @else
-                                <span class="shorts-actress-badge">{{ $actress['name'] }}</span>
-                                @endif
-                            @endforeach
-                        </div>
+                {{-- Actress links --}}
+                @if(!empty($actresses))
+                <div class="shorts-actress-row">
+                    @foreach($actresses as $actress)
+                        @if(!empty($actress['id']))
+                        <a href="{{ route('actress.show', $actress['id']) }}"
+                           class="shorts-actress-link"
+                           title="{{ $actress['name'] }}">{{ $actress['name'] }}</a>
+                        @else
+                        <span class="shorts-actress-badge">{{ $actress['name'] }}</span>
                         @endif
-
-                        <div class="shorts-meta-row">
-                            @if($maker)<span class="shorts-maker-badge">{{ Str::limit($maker, 24) }}</span>@endif
-                            @if($rating)<span class="shorts-rating-badge">★ {{ $rating }}</span>@endif
-                            @foreach($genres as $genre)<span class="shorts-genre-tag">{{ $genre['name'] }}</span>@endforeach
-                            @if($price)<span class="shorts-price-text">{{ preg_replace('/~$/', '円〜', $price) }}{{ str_ends_with($price, '~') ? '' : '円' }}</span>@endif
-                        </div>
-                    </div>
-
-                    <a href="{{ $url }}"
-                       target="_blank"
-                       rel="nofollow noopener"
-                       class="shorts-cta-btn">FANZAで<br>詳細を見る →</a>
+                    @endforeach
                 </div>
+                @endif
 
-            </div>{{-- /.shorts-content-wrap --}}
+                {{-- Maker & rating --}}
+                @if($maker || $rating)
+                <div class="shorts-meta-row">
+                    @if($maker)
+                    <span class="shorts-maker-badge">{{ Str::limit($maker, 24) }}</span>
+                    @endif
+                    @if($rating)
+                    <span class="shorts-rating-badge">★ {{ $rating }}</span>
+                    @endif
+                </div>
+                @endif
+
+                {{-- Genres --}}
+                @if(!empty($genres))
+                <div class="shorts-genres">
+                    @foreach($genres as $genre)
+                    <span class="shorts-genre-tag">{{ $genre['name'] }}</span>
+                    @endforeach
+                </div>
+                @endif
+
+                {{-- Price --}}
+                @if($price)
+                <p class="shorts-price-text">{{ preg_replace('/~$/', '円〜', $price) }}{{ str_ends_with($price, '~') ? '' : '円' }}</p>
+                @endif
+            </div>
+
+            {{-- CTA button — bottom right, easy to tap --}}
+            <a href="{{ $url }}"
+               target="_blank"
+               rel="nofollow noopener"
+               class="shorts-cta-btn">
+                FANZAで詳細を見る &rarr;
+            </a>
 
         </div>
         @endforeach
