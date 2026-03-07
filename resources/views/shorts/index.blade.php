@@ -238,7 +238,7 @@ body.shorts-page > script[src*="banner_placement"] {
             <div class="shorts-player-wrap">
                 <div class="shorts-player-box">
                     <iframe class="shorts-iframe"
-                            data-src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id={{ config('fanza.affiliate_id') }}/cid={{ $cid }}/size=1280_720/autoplay=1/"
+                            data-src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id={{ config('fanza.affiliate_id') }}/cid={{ $cid }}/size=1280_720/"
                             frameborder="0"
                             allow="autoplay; fullscreen"
                             allowfullscreen
