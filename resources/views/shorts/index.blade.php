@@ -307,8 +307,8 @@ body.shorts-page > script[src*="banner_placement"] {
 @if(!empty($items))
 <script type="application/ld+json">
 {
-    "@@context": "https://schema.org",
-    "@@type": "ItemList",
+    "@context": "https://schema.org",
+    "@type": "ItemList",
     "name": "FANZAサンプル動画ショートビュー",
     "description": "FANZAの人気作品サンプル動画をショート動画感覚でサクサク視聴",
     "numberOfItems": {{ count($items) }},
@@ -325,10 +325,10 @@ body.shorts-page > script[src*="banner_placement"] {
                 : null;
         @endphp
         {
-            "@@type": "ListItem",
+            "@type": "ListItem",
             "position": {{ $i + 1 }},
             "item": {
-                "@@type": "VideoObject",
+                "@type": "VideoObject",
                 "name": "{{ $sTitle }}",
                 "thumbnailUrl": "{{ $sImg }}"
                 @if($sCid)

@@ -158,8 +158,8 @@
 @push('scripts')
 <script type="application/ld+json">
 {
-    "@@context": "https://schema.org",
-    "@@type": "VideoObject",
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
     "name": "{{ addslashes($video->title) }}",
     "description": "{{ addslashes($seoDesc) }}",
     "thumbnailUrl": "{{ $video->thumbnail_url }}",
@@ -169,12 +169,12 @@
     @endif
     ,"interactionStatistic": [
         {
-            "@@type": "InteractionCounter",
+            "@type": "InteractionCounter",
             "interactionType": "https://schema.org/LikeAction",
             "userInteractionCount": {{ $video->total_likes }}
         },
         {
-            "@@type": "InteractionCounter",
+            "@type": "InteractionCounter",
             "interactionType": "https://schema.org/ShareAction",
             "userInteractionCount": {{ $video->total_retweets }}
         }
@@ -186,12 +186,12 @@
 </script>
 <script type="application/ld+json">
 {
-    "@@context": "https://schema.org",
-    "@@type": "BreadcrumbList",
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
     "itemListElement": [
-        {"@@type": "ListItem", "position": 1, "name": "ホーム", "item": "{{ route('home') }}"},
-        {"@@type": "ListItem", "position": 2, "name": "バズり動画ランキング", "item": "{{ route('tweet.ranking.index') }}"},
-        {"@@type": "ListItem", "position": 3, "name": "{{ addslashes($video->title) }}", "item": "{{ route('tweet.video.show', $video) }}"}
+        {"@type": "ListItem", "position": 1, "name": "ホーム", "item": "{{ route('home') }}"},
+        {"@type": "ListItem", "position": 2, "name": "バズり動画ランキング", "item": "{{ route('tweet.ranking.index') }}"},
+        {"@type": "ListItem", "position": 3, "name": "{{ addslashes($video->title) }}", "item": "{{ route('tweet.video.show', $video) }}"}
     ]
 }
 </script>
