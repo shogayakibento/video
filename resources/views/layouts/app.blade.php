@@ -156,14 +156,14 @@
     <script src="{{ asset('js/app.js') }}"></script>
     <script type="application/ld+json">
     {
-        "@@context": "https://schema.org",
-        "@@type": "WebSite",
+        "@context": "https://schema.org",
+        "@type": "WebSite",
         "name": "FanzaGate",
         "url": "{{ url('/') }}",
         "potentialAction": {
-            "@@type": "SearchAction",
+            "@type": "SearchAction",
             "target": {
-                "@@type": "EntryPoint",
+                "@type": "EntryPoint",
                 "urlTemplate": "{{ route('search') }}?q={search_term_string}"
             },
             "query-input": "required name=search_term_string"
