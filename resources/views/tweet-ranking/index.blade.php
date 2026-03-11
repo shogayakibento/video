@@ -2,7 +2,7 @@
 
 @section('title', 'X(Twitter)バズりFANZA動画ランキング - FanzaGate')
 @section('description', 'X(Twitter)でいいね数が多くバズったFANZA動画を毎日更新でランキング。今SNSで話題の人気AV作品をチェック！')
-@if($period !== 'all' || !empty($genre))
+@if($period !== 'all' || !empty($genre) || request()->integer('page', 1) > 1)
 @section('robots', 'noindex, follow')
 @endif
 
@@ -73,24 +73,21 @@
 
 @push('scripts')
 @if($videos->isNotEmpty())
-<script type="application/ld+json">
-{
-    "@@context": "https://schema.org",
-    "@@type": "ItemList",
-    "name": "X(Twitter)バズりFANZA動画ランキング",
-    "description": "X(Twitter)でいいね数が多くバズったFANZA動画のランキング",
-    "numberOfItems": {{ $videos->count() }},
-    "itemListElement": [
-        @foreach($videos as $video)
-        {
-            "@@type": "ListItem",
-            "position": {{ $videos->firstItem() + $loop->index }},
-            "name": "{{ addslashes($video->title) }}",
-            "url": "{{ route('tweet.video.show', $video->id) }}"
-        }{{ !$loop->last ? ',' : '' }}
-        @endforeach
-    ]
-}
-</script>
+@php
+    $schema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'ItemList',
+        'name' => 'X(Twitter)バズりFANZA動画ランキング',
+        'description' => 'X(Twitter)でいいね数が多くバズったFANZA動画のランキング',
+        'numberOfItems' => $videos->count(),
+        'itemListElement' => $videos->values()->map(fn($video, $index) => [
+            '@type' => 'ListItem',
+            'position' => $videos->firstItem() + $index,
+            'name' => addslashes($video->title),
+            'url' => route('tweet.video.show', $video->id),
+        ])->all(),
+    ];
+@endphp
+<script type="application/ld+json">{!! json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}</script>
 @endif
 @endpush

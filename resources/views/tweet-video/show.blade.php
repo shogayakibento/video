@@ -156,43 +156,46 @@
 @endsection
 
 @push('scripts')
-<script type="application/ld+json">
-{
-    "@@context": "https://schema.org",
-    "@@type": "VideoObject",
-    "name": "{{ addslashes($video->title) }}",
-    "description": "{{ addslashes($seoDesc) }}",
-    "thumbnailUrl": "{{ $video->thumbnail_url }}",
-    "uploadDate": "{{ $video->release_date ? $video->release_date->format('c') : $video->created_at->format('c') }}"
-    @if($video->dmm_content_id)
-    ,"embedUrl": "https://www.dmm.co.jp/litevideo/-/part/=/affi_id={{ config('dmm.affiliate_id') }}/cid={{ $video->dmm_content_id }}/size=1280_720/"
-    @endif
-    ,"interactionStatistic": [
-        {
-            "@@type": "InteractionCounter",
-            "interactionType": "https://schema.org/LikeAction",
-            "userInteractionCount": {{ $video->total_likes }}
-        },
-        {
-            "@@type": "InteractionCounter",
-            "interactionType": "https://schema.org/ShareAction",
-            "userInteractionCount": {{ $video->total_retweets }}
-        }
-    ]
-    @if($actorSchema)
-    ,"actor": {!! $actorSchema !!}
-    @endif
-}
-</script>
-<script type="application/ld+json">
-{
-    "@@context": "https://schema.org",
-    "@@type": "BreadcrumbList",
-    "itemListElement": [
-        {"@@type": "ListItem", "position": 1, "name": "ホーム", "item": "{{ route('home') }}"},
-        {"@@type": "ListItem", "position": 2, "name": "バズり動画ランキング", "item": "{{ route('tweet.ranking.index') }}"},
-        {"@@type": "ListItem", "position": 3, "name": "{{ addslashes($video->title) }}", "item": "{{ route('tweet.video.show', $video) }}"}
-    ]
-}
-</script>
+@php
+    $videoSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'VideoObject',
+        'name' => addslashes($video->title),
+        'description' => addslashes($seoDesc),
+        'thumbnailUrl' => $video->thumbnail_url,
+        'uploadDate' => $video->release_date ? $video->release_date->format('c') : $video->created_at->format('c'),
+        'interactionStatistic' => [
+            [
+                '@type' => 'InteractionCounter',
+                'interactionType' => 'https://schema.org/LikeAction',
+                'userInteractionCount' => $video->total_likes,
+            ],
+            [
+                '@type' => 'InteractionCounter',
+                'interactionType' => 'https://schema.org/ShareAction',
+                'userInteractionCount' => $video->total_retweets,
+            ],
+        ],
+    ];
+
+    if ($video->dmm_content_id) {
+        $videoSchema['embedUrl'] = 'https://www.dmm.co.jp/litevideo/-/part/=/affi_id=' . config('dmm.affiliate_id') . '/cid=' . $video->dmm_content_id . '/size=1280_720/';
+    }
+
+    if ($actorSchema) {
+        $videoSchema['actor'] = json_decode($actorSchema, true);
+    }
+
+    $breadcrumbSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'BreadcrumbList',
+        'itemListElement' => [
+            ['@type' => 'ListItem', 'position' => 1, 'name' => 'ホーム', 'item' => route('home')],
+            ['@type' => 'ListItem', 'position' => 2, 'name' => 'バズり動画ランキング', 'item' => route('tweet.ranking.index')],
+            ['@type' => 'ListItem', 'position' => 3, 'name' => addslashes($video->title), 'item' => route('tweet.video.show', $video)],
+        ],
+    ];
+@endphp
+<script type="application/ld+json">{!! json_encode($videoSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}</script>
+<script type="application/ld+json">{!! json_encode($breadcrumbSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}</script>
 @endpush

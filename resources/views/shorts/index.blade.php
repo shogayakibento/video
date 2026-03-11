@@ -305,47 +305,45 @@ body.shorts-page > script[src*="banner_placement"] {
 
 @push('scripts')
 @if(!empty($items))
-<script type="application/ld+json">
-{
-    "@@context": "https://schema.org",
-    "@@type": "ItemList",
-    "name": "FANZAサンプル動画ショートビュー",
-    "description": "FANZAの人気作品サンプル動画をショート動画感覚でサクサク視聴",
-    "numberOfItems": {{ count($items) }},
-    "itemListElement": [
-        @foreach(array_slice($items, 0, 10) as $i => $item)
-        @php
-            $sTitle = addslashes($item['title'] ?? '');
-            $sCid   = $item['content_id'] ?? null;
-            $sImg   = $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? '';
-            $sActresses = $item['iteminfo']['actress'] ?? [];
-            $sDate  = $item['date'] ?? null;
-            $sActorJson = !empty($sActresses)
-                ? collect($sActresses)->map(function($a) { return ['@type' => 'Person', 'name' => $a['name']]; })->values()->toJson()
-                : null;
-        @endphp
-        {
-            "@@type": "ListItem",
-            "position": {{ $i + 1 }},
-            "item": {
-                "@@type": "VideoObject",
-                "name": "{{ $sTitle }}",
-                "thumbnailUrl": "{{ $sImg }}"
-                @if($sCid)
-                ,"embedUrl": "https://www.dmm.co.jp/litevideo/-/part/=/affi_id={{ config('fanza.affiliate_id') }}/cid={{ $sCid }}/size=1280_720/"
-                @endif
-                @if($sDate)
-                ,"uploadDate": "{{ \Carbon\Carbon::parse($sDate)->format('c') }}"
-                @endif
-                @if($sActorJson)
-                ,"actor": {!! $sActorJson !!}
-                @endif
+@php
+    $schema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'ItemList',
+        'name' => 'FANZAサンプル動画ショートビュー',
+        'description' => 'FANZAの人気作品サンプル動画をショート動画感覚でサクサク視聴',
+        'numberOfItems' => count($items),
+        'itemListElement' => collect(array_slice($items, 0, 10))->values()->map(function ($item, $i) {
+            $entry = [
+                '@type' => 'ListItem',
+                'position' => $i + 1,
+                'item' => [
+                    '@type' => 'VideoObject',
+                    'name' => addslashes($item['title'] ?? ''),
+                    'thumbnailUrl' => $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? '',
+                ],
+            ];
+
+            if (!empty($item['content_id'])) {
+                $entry['item']['embedUrl'] = 'https://www.dmm.co.jp/litevideo/-/part/=/affi_id=' . config('fanza.affiliate_id') . '/cid=' . $item['content_id'] . '/size=1280_720/';
             }
-        }{{ !$loop->last ? ',' : '' }}
-        @endforeach
-    ]
-}
-</script>
+
+            if (!empty($item['date'])) {
+                $entry['item']['uploadDate'] = \Carbon\Carbon::parse($item['date'])->format('c');
+            }
+
+            $actresses = $item['iteminfo']['actress'] ?? [];
+            if (!empty($actresses)) {
+                $entry['item']['actor'] = collect($actresses)->map(fn($a) => [
+                    '@type' => 'Person',
+                    'name' => $a['name'] ?? '',
+                ])->values()->all();
+            }
+
+            return $entry;
+        })->all(),
+    ];
+@endphp
+<script type="application/ld+json">{!! json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}</script>
 @endif
 <script>
 (function () {
