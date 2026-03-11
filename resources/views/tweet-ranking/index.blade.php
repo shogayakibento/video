@@ -2,7 +2,7 @@
 
 @section('title', 'X(Twitter)バズりFANZA動画ランキング - FanzaGate')
 @section('description', 'X(Twitter)でいいね数が多くバズったFANZA動画を毎日更新でランキング。今SNSで話題の人気AV作品をチェック！')
-@if($period !== 'all' || !empty($genre))
+@if($period !== 'all' || !empty($genre) || request()->integer('page', 1) > 1)
 @section('robots', 'noindex, follow')
 @endif
 
