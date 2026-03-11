@@ -13,6 +13,18 @@ use App\Http\Controllers\TweetVideoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
+Route::get('/robots.txt', function () {
+    $content = implode("\n", [
+        'User-agent: *',
+        'Allow: /',
+        'Disallow: /admin',
+        '',
+        'Sitemap: ' . route('sitemap'),
+        '',
+    ]);
+
+    return response($content, 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
+});
 Route::get('/shorts', ShortsController::class)->name('shorts');
 Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 Route::get('/genre', [GenreController::class, 'index'])->name('genre.index');

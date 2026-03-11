@@ -15,7 +15,7 @@
 
 @section('title', $name . 'の動画一覧 - FanzaGate')
 @section('description', $name . ($ruby ? '（' . $ruby . '）' : '') . 'の出演FANZA動画一覧。' . ($cup ? $cup . 'カップ' : '') . ($height ? '身長' . $height . 'cm ' : '') . '人気順・新着順で作品をチェック。')
-@if($sort !== 'rank')
+@if($sort !== 'rank' || $currentPage > 1)
 @section('robots', 'noindex, follow')
 @endif
 
