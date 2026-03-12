@@ -49,7 +49,7 @@
         <h3 class="item-title">{{ $title }}</h3>
         @if($actress)
             <p class="item-actress">
-                @if($actressId)
+                @if($contentId && $actressId)
                     <a href="{{ route('actress.show', $actressId) }}" class="item-actress-link" onclick="event.stopPropagation()">{{ $actress }}</a>
                 @else
                     {{ $actress }}
