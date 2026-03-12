@@ -1,7 +1,8 @@
 @php
     $title = $item['title'] ?? 'タイトル未設定';
     $url = $item['URL'] ?? '#';
-    $imageUrl = $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? $item['imageURL']['list'] ?? '';
+    $imageUrl = str_replace('http://', 'https://',
+        $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? $item['imageURL']['list'] ?? '');
     $review = $item['review']['average'] ?? null;
     $actress = $item['iteminfo']['actress'][0]['name'] ?? null;
     $actressId = $item['iteminfo']['actress'][0]['id'] ?? null;

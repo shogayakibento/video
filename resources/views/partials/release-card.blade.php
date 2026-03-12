@@ -1,7 +1,8 @@
 @php
     $title = $item['title'] ?? 'タイトル未設定';
     $url = $item['URL'] ?? '#';
-    $imageUrl = $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? $item['imageURL']['list'] ?? '';
+    $imageUrl = str_replace('http://', 'https://',
+        $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? $item['imageURL']['list'] ?? '');
     $actress = $item['iteminfo']['actress'][0]['name'] ?? null;
     $actressId = $item['iteminfo']['actress'][0]['id'] ?? null;
     $date = isset($item['date']) ? \Carbon\Carbon::parse($item['date'])->format('m/d') : null;
@@ -42,7 +43,7 @@
         <h3>{{ $title }}</h3>
         @if($actress)
             <p class="release-actress">
-                @if($contentId && $actressId)
+                @if($actressId)
                     <a href="{{ route('actress.show', $actressId) }}" class="item-actress-link" onclick="event.stopPropagation()">{{ $actress }}</a>
                 @else
                     {{ $actress }}
