@@ -104,8 +104,9 @@ class SitemapController extends Controller
         $content .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
 
         foreach ($urls as $url) {
+            $loc = htmlspecialchars($url['loc'], ENT_XML1 | ENT_QUOTES, 'UTF-8');
             $content .= "  <url>\n";
-            $content .= "    <loc>{$url['loc']}</loc>\n";
+            $content .= "    <loc>{$loc}</loc>\n";
             if (!empty($url['lastmod'])) {
                 $content .= "    <lastmod>{$url['lastmod']}</lastmod>\n";
             }

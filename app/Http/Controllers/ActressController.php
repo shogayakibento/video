@@ -192,30 +192,50 @@ public function index(Request $request, FanzaApiService $api)
 
         $page = max(1, (int) $request->input('page', 1));
         $sort = $request->input('sort', 'rank');
+        $cast = $request->input('cast', 'all'); // all / solo / multi
         $hits = 20;
-        $offset = (($page - 1) * $hits) + 1;
 
-        $itemResult = $api->getItems([
-            'service' => 'digital',
-            'floor' => 'videoa',
-            'hits' => $hits,
-            'offset' => $offset,
-            'sort' => $sort,
-            'article' => 'actress',
+        $baseParams = [
+            'service'    => 'digital',
+            'floor'      => 'videoa',
+            'sort'       => $sort,
+            'article'    => 'actress',
             'article_id' => $id,
-        ]);
+        ];
 
-        $items = $itemResult['result']['items'] ?? [];
-        $totalCount = $itemResult['result']['total_count'] ?? 0;
-        $totalPages = (int) ceil($totalCount / $hits);
+        if ($cast === 'all') {
+            $offset     = (($page - 1) * $hits) + 1;
+            $itemResult = $api->getItems(array_merge($baseParams, [
+                'hits'   => $hits,
+                'offset' => $offset,
+            ]));
+            $items      = $itemResult['result']['items'] ?? [];
+            $totalCount = (int) ($itemResult['result']['total_count'] ?? 0);
+            $totalPages = min((int) ceil($totalCount / $hits), 50);
+        } else {
+            // 最大100件取得してPHP側で絞り込み・ページネーション
+            $itemResult = $api->getItems(array_merge($baseParams, [
+                'hits'   => 100,
+                'offset' => 1,
+            ]));
+            $allItems = $itemResult['result']['items'] ?? [];
+            $filtered = array_values(array_filter($allItems, function ($item) use ($cast) {
+                $count = count($item['iteminfo']['actress'] ?? []);
+                return $cast === 'solo' ? $count <= 1 : $count > 1;
+            }));
+            $totalCount = count($filtered);
+            $items      = array_slice($filtered, ($page - 1) * $hits, $hits);
+            $totalPages = max(1, (int) ceil($totalCount / $hits));
+        }
 
         return view('actress.show', [
-            'actress' => $actress,
-            'items' => $items,
+            'actress'     => $actress,
+            'items'       => $items,
             'currentPage' => $page,
-            'totalPages' => min($totalPages, 50),
-            'totalCount' => $totalCount,
-            'sort' => $sort,
+            'totalPages'  => $totalPages,
+            'totalCount'  => $totalCount,
+            'sort'        => $sort,
+            'cast'        => $cast,
         ]);
     }
 }
