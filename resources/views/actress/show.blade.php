@@ -115,18 +115,18 @@
 @php
     $schema = [
         '@context' => 'https://schema.org',
-        '@type' => 'Person',
-        'name' => addslashes($name),
+        '@type'    => 'Person',
+        'name'     => $name,
+        'url'      => route('actress.show', $actressId),
     ];
-    if ($ruby) $schema['alternateName'] = addslashes($ruby);
-    if ($imageUrl) $schema['image'] = $imageUrl;
-    if ($birthday) $schema['birthDate'] = $birthday;
-    if ($height) $schema['height'] = [
-        '@type' => 'QuantitativeValue',
-        'value' => (int) $height,
+    if ($ruby)     $schema['alternateName'] = $ruby;
+    if ($imageUrl) $schema['image']         = $imageUrl;
+    if ($birthday) $schema['birthDate']     = $birthday;
+    if ($height)   $schema['height'] = [
+        '@type'    => 'QuantitativeValue',
+        'value'    => (int) $height,
         'unitCode' => 'CMT',
     ];
-    $schema['url'] = route('actress.show', $actressId);
 @endphp
 <script type="application/ld+json">
 {!! json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) !!}

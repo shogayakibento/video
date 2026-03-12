@@ -11,14 +11,14 @@
 @endphp
 
 @if($contentId)
-<div class="item-card item-card-clickable"
-     data-content-id="{{ $contentId }}"
-     data-title="{{ $title }}"
-     data-actress="{{ $actress }}"
-     data-actress-id="{{ $actressId }}"
-     data-url="{{ $url }}"
-     data-price="{{ $price }}"
-     role="button" tabindex="0">
+<a href="{{ $url }}" class="item-card item-card-clickable"
+   data-content-id="{{ $contentId }}"
+   data-title="{{ $title }}"
+   data-actress="{{ $actress }}"
+   data-actress-id="{{ $actressId }}"
+   data-url="{{ $url }}"
+   data-price="{{ $price }}"
+   target="_blank" rel="nofollow noopener noreferrer">
 @else
 <a href="{{ $url }}" class="item-card" target="_blank" rel="noopener noreferrer">
 @endif
@@ -64,8 +64,4 @@
             @endif
         </div>
     </div>
-@if($contentId)
-</div>
-@else
 </a>
-@endif

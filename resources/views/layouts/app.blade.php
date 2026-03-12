@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'FANZA人気作品ランキング・新着動画まとめ | FanzaGate')</title>
     <meta name="description" content="@yield('description', 'FANZAの人気ランキング・新着動画・VR・DVDを毎日更新。X(Twitter)でバズった話題作もチェックできるFANZA専門ガイドサイト。')">
-    <meta name="keywords" content="@yield('keywords', 'FANZA, 動画, VR, DVD, コミック, ランキング, 新着, おすすめ, バズり')">
     <meta name="robots" content="@yield('robots', 'index, follow')">
     @php
         $ogTitle = $__env->hasSection('og_title')
@@ -14,12 +13,33 @@
         $ogDesc = $__env->hasSection('og_description')
             ? $__env->yieldContent('og_description')
             : $__env->yieldContent('description', 'FANZAの人気ランキング・新着動画・VR・DVDを毎日更新。X(Twitter)でバズった話題作もチェック！');
+
+        // canonical: sort は除去し、page（>1）と category のみ保持して重複コンテンツを防ぐ
+        $canonicalBase = request()->url();
+        $canonicalParams = [];
+        if (request()->has('page') && (int) request()->get('page') > 1) {
+            $canonicalParams['page'] = (int) request()->get('page');
+        }
+        if (request()->has('category')) {
+            $canonicalParams['category'] = request()->get('category');
+        }
+        $canonicalUrl = $canonicalParams
+            ? $canonicalBase . '?' . http_build_query($canonicalParams)
+            : $canonicalBase;
+
+        // og:image を絶対URLに正規化
+        $ogImage = $__env->hasSection('og_image')
+            ? $__env->yieldContent('og_image')
+            : asset('images/og-default.jpg');
+        if ($ogImage && !preg_match('/^https?:\/\//', $ogImage)) {
+            $ogImage = url($ogImage);
+        }
     @endphp
     <meta property="og:title" content="{{ $ogTitle }}">
     <meta property="og:description" content="{{ $ogDesc }}">
     <meta property="og:type" content="@yield('og_type', 'website')">
-    <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:image" content="@yield('og_image', asset('images/og-default.jpg'))">
+    <meta property="og:url" content="{{ $canonicalUrl }}">
+    <meta property="og:image" content="{{ $ogImage }}">
     <meta property="og:image:width" content="@yield('og_image_width', '1200')">
     <meta property="og:image:height" content="@yield('og_image_height', '630')">
     <meta property="og:locale" content="ja_JP">
@@ -28,8 +48,8 @@
     <meta name="twitter:site" content="@FanzaGate">
     <meta name="twitter:title" content="{{ $ogTitle }}">
     <meta name="twitter:description" content="{{ $ogDesc }}">
-    <meta name="twitter:image" content="@yield('og_image', asset('images/og-default.jpg'))">
-    <link rel="canonical" href="{{ url()->current() }}">
+    <meta name="twitter:image" content="{{ $ogImage }}">
+    <link rel="canonical" href="{{ $canonicalUrl }}">
     <link rel="icon" href="{{ asset('favicon.ico') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

@@ -70,24 +70,23 @@
 
 @push('scripts')
 @if(!empty($items) && count($items) > 0)
+@php
+    $genreSchema = [
+        '@context'     => 'https://schema.org',
+        '@type'        => 'ItemList',
+        'name'         => $genre['label'] . ' 動画一覧',
+        'description'  => 'FANZAの' . $genre['label'] . 'ジャンル人気作品一覧',
+        'numberOfItems'=> count($items),
+        'itemListElement' => array_map(fn($item, $index) => [
+            '@type'   => 'ListItem',
+            'position'=> ($currentPage - 1) * 20 + $index + 1,
+            'name'    => $item['title'] ?? '',
+            'url'     => $item['URL'] ?? '',
+        ], $items, array_keys($items)),
+    ];
+@endphp
 <script type="application/ld+json">
-{
-    "@@context": "https://schema.org",
-    "@@type": "ItemList",
-    "name": "{{ addslashes($genre['label']) }} 動画一覧",
-    "description": "FANZAの{{ addslashes($genre['label']) }}ジャンル人気作品一覧",
-    "numberOfItems": {{ count($items) }},
-    "itemListElement": [
-        @foreach($items as $index => $item)
-        {
-            "@@type": "ListItem",
-            "position": {{ ($currentPage - 1) * 20 + $index + 1 }},
-            "name": "{{ addslashes($item['title'] ?? '') }}",
-            "url": "{{ $item['URL'] ?? '' }}"
-        }{{ !$loop->last ? ',' : '' }}
-        @endforeach
-    ]
-}
+{!! json_encode($genreSchema, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) !!}
 </script>
 @endif
 @endpush

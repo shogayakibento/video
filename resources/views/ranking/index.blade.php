@@ -6,7 +6,7 @@
 @section('content')
     <div class="page-header">
         <div class="container">
-            <h1>人気ランキング</h1>
+            <h1>{{ $categories[$activeCategory]['label'] ?? '人気作品' }}ランキング</h1>
             <p>FANZAの人気作品をランキング形式でお届け</p>
         </div>
     </div>
