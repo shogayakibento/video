@@ -2324,8 +2324,7 @@ img {
 
 .shorts-player-box {
     position: relative;
-    /* 56.25%(16:9) + iframe の 40px シフト分 ≈ 3.3% 追加 → 約60% */
-    padding-bottom: 60%;
+    padding-bottom: 56.25%; /* 16:9 */
     height: 0;
     border-radius: 14px;
     overflow: hidden;
