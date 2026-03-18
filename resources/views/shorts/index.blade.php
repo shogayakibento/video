@@ -15,43 +15,49 @@ body.shorts-page > script[src*="banner_placement"] {
     display: none !important;
 }
 
-/* ====== Info panel（動画の直下に移動） ====== */
-.shorts-info-overlay {
-    /* 動画中心(42%) + 動画半高(338px) = 動画の下端、そこから少し下 */
-    top: calc(42% + 342px);
-    bottom: auto;
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(100%, calc((100vh - 64px) * 16 / 9 * 0.95));
-    max-width: 1200px;
-    padding: 10px 14px 12px;
-    background: rgba(12, 12, 12, 0.92);
-    backdrop-filter: blur(16px);
-    border-radius: 0 0 14px 14px;
-    pointer-events: auto;
+/* ====== デスクトップ: Info panel を動画の直下に配置 ====== */
+@media (min-width: 641px) {
+    .shorts-info-overlay {
+        /*
+         * top = video_center + half_video_height
+         * video_center = 44% (player-wrap top)
+         * half_height  = min(41%, 337.5px)
+         *   41%   = 16/9 * 0.82 * 0.28125  (小画面: 幅が係数でスケール)
+         *   337.5 = 1200px * 0.5625 / 2     (大画面: max-width:1200px で確定)
+         */
+        top: calc(44% + min(41%, 337.5px));
+        bottom: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(100%, calc((100vh - 64px) * 16 / 9 * 0.82));
+        max-width: 1200px;
+        padding: 10px 14px 12px;
+        background: rgba(12, 12, 12, 0.92);
+        backdrop-filter: blur(16px);
+        border-radius: 0 0 14px 14px;
+        pointer-events: auto;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .shorts-cta-btn {
+        position: static !important;
+        flex-shrink: 0;
+        bottom: auto;
+        right: auto;
+        padding: 8px 12px;
+        font-size: 0.72rem;
+        white-space: nowrap;
+        line-height: 1.3;
+        text-align: center;
+        box-shadow: 0 2px 12px rgba(255, 45, 120, 0.5);
+    }
 }
 
-/* info overlay を flex にして CTA を右端に */
-.shorts-info-overlay {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
 .shorts-info-text {
     flex: 1;
     min-width: 0;
-}
-/* CTA をフロー内配置に（小さめ） */
-.shorts-cta-btn {
-    position: static !important;
-    flex-shrink: 0;
-    bottom: auto; right: auto;
-    padding: 8px 12px;
-    font-size: 0.72rem;
-    white-space: nowrap;
-    line-height: 1.3;
-    text-align: center;
-    box-shadow: 0 2px 12px rgba(255, 45, 120, 0.5);
 }
 
 /* Title */
@@ -172,6 +178,68 @@ body.shorts-page > script[src*="banner_placement"] {
 .shorts-cta-btn:hover {
     box-shadow: 0 6px 32px rgba(255, 45, 120, 0.8);
     transform: translateY(-2px) scale(1.04);
+}
+
+/* ====== モバイル: 情報パネルを画面下部オーバーレイに ====== */
+@media (max-width: 640px) {
+    .shorts-info-overlay {
+        /* 動画下固定ではなく画面下部へ */
+        top: auto !important;
+        bottom: env(safe-area-inset-bottom, 0) !important;
+        left: 0 !important;
+        right: 0 !important;
+        transform: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        border-radius: 0 !important;
+        padding: 60px 14px 14px !important;
+        background: linear-gradient(
+            to top,
+            rgba(0,0,0,0.93) 0%,
+            rgba(0,0,0,0.6) 65%,
+            transparent 100%
+        ) !important;
+        backdrop-filter: none !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+    }
+
+    .shorts-info-text {
+        width: 100%;
+    }
+
+    .shorts-title-text {
+        font-size: 0.88rem !important;
+        -webkit-line-clamp: 2 !important;
+        display: -webkit-box !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+    }
+
+    .shorts-cta-btn {
+        position: static !important;
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 10px 16px !important;
+        font-size: 0.82rem !important;
+        border-radius: 10px !important;
+    }
+
+    .shorts-actress-link,
+    .shorts-actress-badge {
+        font-size: 0.7rem !important;
+    }
+
+    .shorts-genres,
+    .shorts-meta-row {
+        gap: 4px !important;
+    }
+
+    .shorts-genre-tag {
+        font-size: 0.65rem !important;
+        padding: 1px 6px !important;
+    }
 }
 </style>
 @endpush
