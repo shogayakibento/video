@@ -18,11 +18,18 @@ body.shorts-page > script[src*="banner_placement"] {
 /* ====== デスクトップ: Info panel を動画の直下に配置 ====== */
 @media (min-width: 641px) {
     .shorts-info-overlay {
-        top: calc(42% + 342px);
+        /*
+         * top = video_center + half_video_height
+         * video_center = 44% (player-wrap top)
+         * half_height  = min(41%, 337.5px)
+         *   41%   = 16/9 * 0.82 * 0.28125  (小画面: 幅が係数でスケール)
+         *   337.5 = 1200px * 0.5625 / 2     (大画面: max-width:1200px で確定)
+         */
+        top: calc(44% + min(41%, 337.5px));
         bottom: auto;
         left: 50%;
         transform: translateX(-50%);
-        width: min(100%, calc((100vh - 64px) * 16 / 9 * 0.95));
+        width: min(100%, calc((100vh - 64px) * 16 / 9 * 0.82));
         max-width: 1200px;
         padding: 10px 14px 12px;
         background: rgba(12, 12, 12, 0.92);
