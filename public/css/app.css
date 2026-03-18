@@ -2317,8 +2317,8 @@ img {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 2;
-    /* 0.82 係数: ノートPC(768px)でも上にはみ出さないサイズ */
-    width: min(100%, calc((100vh - 64px) * 16 / 9 * 0.82));
+    /* 0.75 係数: 下部に余裕を持たせたサイズ */
+    width: min(100%, calc((100vh - 64px) * 16 / 9 * 0.75));
     max-width: 1200px;
 }
 
