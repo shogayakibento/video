@@ -2549,14 +2549,13 @@ img {
 
     .shorts-player-wrap {
         width: 100%;
-        /* 動画を上寄りに配置して情報パネルのスペースを確保 */
-        top: 36%;
+        /* 動画の中心を下げて下部を大きく見せる */
+        top: 42%;
     }
 
     .shorts-nav-btns {
         right: 8px;
-        /* 動画中央付近に配置 */
-        top: 36%;
+        top: 42%;
     }
 
     .shorts-counter-bar {
