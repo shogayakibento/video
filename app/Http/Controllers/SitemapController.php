@@ -26,15 +26,16 @@ class SitemapController extends Controller
         $genres = config('fanza.genres');
 
         $today = now()->toAtomString();
+        // コンテンツが変わらない静的ページは固定日付
+        $staticLastmod = '2025-01-01T00:00:00+09:00';
 
         $urls = [
-            ['loc' => route('home'),                 'priority' => '1.0', 'changefreq' => 'daily',  'lastmod' => $today],
-            ['loc' => route('ranking'),              'priority' => '0.9', 'changefreq' => 'daily',  'lastmod' => $today],
-            ['loc' => route('tweet.ranking.index'),  'priority' => '0.9', 'changefreq' => 'daily',  'lastmod' => $today],
-            ['loc' => route('shorts'),               'priority' => '0.8', 'changefreq' => 'daily',  'lastmod' => $today],
-            ['loc' => route('actress.index'),        'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => $today],
-            ['loc' => route('genre.index'),          'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => $today],
-            ['loc' => route('search'),               'priority' => '0.7', 'changefreq' => 'weekly', 'lastmod' => $today],
+            ['loc' => route('home'),                'priority' => '1.0', 'changefreq' => 'daily',  'lastmod' => $today],
+            ['loc' => route('ranking'),             'priority' => '0.9', 'changefreq' => 'daily',  'lastmod' => $today],
+            ['loc' => route('tweet.ranking.index'), 'priority' => '0.9', 'changefreq' => 'daily',  'lastmod' => $today],
+            ['loc' => route('shorts'),              'priority' => '0.8', 'changefreq' => 'daily',  'lastmod' => $today],
+            ['loc' => route('actress.index'),       'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => $staticLastmod],
+            ['loc' => route('genre.index'),         'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => $staticLastmod],
         ];
 
         // カテゴリページ
@@ -53,7 +54,7 @@ class SitemapController extends Controller
                 'loc'        => route('genre.show', $slug),
                 'priority'   => '0.7',
                 'changefreq' => 'weekly',
-                'lastmod'    => $today,
+                'lastmod'    => $staticLastmod,
             ];
         }
 
@@ -85,7 +86,7 @@ class SitemapController extends Controller
                 'loc'        => route('actress.show', $id),
                 'priority'   => '0.6',
                 'changefreq' => 'weekly',
-                'lastmod'    => $today,
+                'lastmod'    => $staticLastmod,
             ];
         }
 
