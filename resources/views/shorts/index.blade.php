@@ -21,11 +21,11 @@ body.shorts-page > script[src*="banner_placement"] {
         /*
          * top = video_center + half_video_height
          * video_center = 44% (player-wrap top)
-         * half_height  = min(41%, 337.5px)
-         *   41%   = 16/9 * 0.82 * 0.28125  (小画面: 幅が係数でスケール)
-         *   337.5 = 1200px * 0.5625 / 2     (大画面: max-width:1200px で確定)
+         * half_height  = min(43.7%, 360px)
+         *   43.7% = 16/9 * 0.82 * 0.60 / 2  (小画面: padding-bottom:60% ベース)
+         *   360px = 1200px * 0.60 / 2         (大画面: max-width:1200px で確定)
          */
-        top: calc(44% + min(41%, 337.5px));
+        top: calc(44% + min(43.7%, 360px));
         bottom: auto;
         left: 50%;
         transform: translateX(-50%);
