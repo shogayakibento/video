@@ -30,7 +30,7 @@
         // og:image を絶対URLに正規化
         $ogImage = $__env->hasSection('og_image')
             ? $__env->yieldContent('og_image')
-            : asset('images/og-default.jpg');
+            : asset('images/og-default.webp');
         if ($ogImage && !preg_match('/^https?:\/\//', $ogImage)) {
             $ogImage = url($ogImage);
         }
@@ -53,6 +53,9 @@
     <link rel="icon" href="{{ asset('favicon.ico') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://widget-view.dmm.co.jp">
+    <link rel="dns-prefetch" href="https://pics.dmm.co.jp">
+    <link rel="dns-prefetch" href="https://www.dmm.co.jp">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="preload" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}" as="style">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">

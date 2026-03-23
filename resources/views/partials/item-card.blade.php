@@ -9,6 +9,7 @@
     $maker = $item['iteminfo']['maker'][0]['name'] ?? null;
     $price = $item['prices']['price'] ?? null;
     $contentId = !empty($item['sampleMovieURL']) ? ($item['content_id'] ?? null) : null;
+    $eager = $eager ?? false;
 @endphp
 
 @if($contentId)
@@ -25,7 +26,7 @@
 @endif
     <div class="item-thumb">
         @if($imageUrl)
-            <img src="{{ $imageUrl }}" alt="{{ $title }}" loading="lazy">
+            <img src="{{ $imageUrl }}" alt="{{ $title }}" loading="{{ $eager ? 'eager' : 'lazy' }}"@if($eager) fetchpriority="high"@endif>
         @else
             <div class="thumb-placeholder-card">
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">

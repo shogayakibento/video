@@ -31,7 +31,7 @@
         @if(count($items) > 0)
             <div class="items-grid">
                 @foreach($items as $index => $item)
-                    @include('partials.item-card', ['item' => $item, 'rank' => $index + 1])
+                    @include('partials.item-card', ['item' => $item, 'rank' => $index + 1, 'eager' => $index === 0])
                 @endforeach
             </div>
         @else
