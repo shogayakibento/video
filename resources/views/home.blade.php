@@ -32,7 +32,7 @@
             </div>
             <div class="items-grid">
                 @foreach(array_slice($rankingItems, 0, 8) as $index => $item)
-                    @include('partials.item-card', ['item' => $item, 'rank' => $index + 1])
+                    @include('partials.item-card', ['item' => $item, 'rank' => $index + 1, 'eager' => $index === 0])
                 @endforeach
             </div>
         </div>

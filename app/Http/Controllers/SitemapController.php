@@ -9,115 +9,157 @@ use Illuminate\Support\Facades\Cache;
 
 class SitemapController extends Controller
 {
-    public function index(FanzaApiService $api): Response
+    public function index(): Response
     {
-        $content = Cache::remember('sitemap_xml', 3600, function () use ($api) {
-            return $this->buildSitemap($api);
+        $content = Cache::remember('sitemap_index_xml', 3600, function () {
+            $today = now()->toAtomString();
+
+            $sitemaps = [
+                ['loc' => route('sitemap.pages'),    'lastmod' => $today],
+                ['loc' => route('sitemap.actresses'), 'lastmod' => $today],
+                ['loc' => route('sitemap.videos'),   'lastmod' => $today],
+            ];
+
+            $xml  = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+            $xml .= '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+            foreach ($sitemaps as $s) {
+                $loc = htmlspecialchars($s['loc'], ENT_XML1 | ENT_QUOTES, 'UTF-8');
+                $xml .= "  <sitemap>\n";
+                $xml .= "    <loc>{$loc}</loc>\n";
+                $xml .= "    <lastmod>{$s['lastmod']}</lastmod>\n";
+                $xml .= "  </sitemap>\n";
+            }
+            $xml .= '</sitemapindex>';
+
+            return $xml;
         });
 
-        return response($content, 200, [
-            'Content-Type' => 'application/xml',
-        ]);
+        return response($content, 200, ['Content-Type' => 'application/xml']);
     }
 
-    private function buildSitemap(FanzaApiService $api): string
+    public function pages(): Response
     {
-        $categories = config('fanza.categories');
-        $genres = config('fanza.genres');
+        $content = Cache::remember('sitemap_pages_xml', 3600, function () {
+            $categories     = config('fanza.categories');
+            $genres         = config('fanza.genres');
+            $today          = now()->toAtomString();
+            $staticLastmod  = '2025-01-01T00:00:00+09:00';
 
-        $today = now()->toAtomString();
-        // コンテンツが変わらない静的ページは固定日付
-        $staticLastmod = '2025-01-01T00:00:00+09:00';
-
-        $urls = [
-            ['loc' => route('home'),                'priority' => '1.0', 'changefreq' => 'daily',  'lastmod' => $today],
-            ['loc' => route('ranking'),             'priority' => '0.9', 'changefreq' => 'daily',  'lastmod' => $today],
-            ['loc' => route('tweet.ranking.index'), 'priority' => '0.9', 'changefreq' => 'daily',  'lastmod' => $today],
-            ['loc' => route('shorts'),              'priority' => '0.8', 'changefreq' => 'daily',  'lastmod' => $today],
-            ['loc' => route('actress.index'),       'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => $staticLastmod],
-            ['loc' => route('genre.index'),         'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => $staticLastmod],
-        ];
-
-        // カテゴリページ
-        foreach ($categories as $slug => $cat) {
-            $urls[] = [
-                'loc'        => route('category.show', $slug),
-                'priority'   => '0.8',
-                'changefreq' => 'daily',
-                'lastmod'    => $today,
+            $urls = [
+                ['loc' => route('home'),                'priority' => '1.0', 'changefreq' => 'daily',  'lastmod' => $today],
+                ['loc' => route('ranking'),             'priority' => '0.9', 'changefreq' => 'daily',  'lastmod' => $today],
+                ['loc' => route('tweet.ranking.index'), 'priority' => '0.9', 'changefreq' => 'daily',  'lastmod' => $today],
+                ['loc' => route('shorts'),              'priority' => '0.8', 'changefreq' => 'daily',  'lastmod' => $today],
+                ['loc' => route('actress.index'),       'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => $staticLastmod],
+                ['loc' => route('genre.index'),         'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => $staticLastmod],
             ];
-        }
 
-        // ジャンル詳細ページ（config から静的に取得）
-        foreach ($genres as $slug => $genre) {
-            $urls[] = [
-                'loc'        => route('genre.show', $slug),
-                'priority'   => '0.7',
-                'changefreq' => 'weekly',
-                'lastmod'    => $staticLastmod,
-            ];
-        }
-
-        // 人気女優ページ（ランキング上位100作品の出演者、24時間キャッシュ）
-        $actressIds = Cache::remember('sitemap_actress_ids', 86400, function () use ($api) {
-            $result = $api->getItems([
-                'service' => 'digital',
-                'floor'   => 'videoa',
-                'hits'    => 100,
-                'offset'  => 1,
-                'sort'    => 'rank',
-            ]);
-
-            $seen = [];
-            foreach ($result['result']['items'] ?? [] as $item) {
-                foreach ($item['iteminfo']['actress'] ?? [] as $a) {
-                    $id = $a['id'] ?? null;
-                    if ($id && !isset($seen[$id])) {
-                        $seen[$id] = $id;
-                    }
-                }
+            foreach ($categories as $slug => $cat) {
+                $urls[] = [
+                    'loc'        => route('category.show', $slug),
+                    'priority'   => '0.8',
+                    'changefreq' => 'daily',
+                    'lastmod'    => $today,
+                ];
             }
 
-            return array_values($seen);
-        });
-
-        foreach ($actressIds as $id) {
-            $urls[] = [
-                'loc'        => route('actress.show', $id),
-                'priority'   => '0.6',
-                'changefreq' => 'weekly',
-                'lastmod'    => $staticLastmod,
-            ];
-        }
-
-        // Xバズり動画詳細ページ
-        Video::orderByDesc('total_likes')->limit(200)->get(['id', 'updated_at'])
-            ->each(function ($video) use (&$urls) {
+            foreach ($genres as $slug => $genre) {
                 $urls[] = [
-                    'loc'        => route('tweet.video.show', $video->id),
+                    'loc'        => route('genre.show', $slug),
                     'priority'   => '0.7',
                     'changefreq' => 'weekly',
-                    'lastmod'    => $video->updated_at->toAtomString(),
+                    'lastmod'    => $staticLastmod,
                 ];
+            }
+
+            return $this->buildUrlset($urls);
+        });
+
+        return response($content, 200, ['Content-Type' => 'application/xml']);
+    }
+
+    public function actresses(FanzaApiService $api): Response
+    {
+        $content = Cache::remember('sitemap_actresses_xml', 86400, function () use ($api) {
+            $staticLastmod = '2025-01-01T00:00:00+09:00';
+
+            $actressIds = Cache::remember('sitemap_actress_ids', 86400, function () use ($api) {
+                $result = $api->getItems([
+                    'service' => 'digital',
+                    'floor'   => 'videoa',
+                    'hits'    => 100,
+                    'offset'  => 1,
+                    'sort'    => 'rank',
+                ]);
+
+                $seen = [];
+                foreach ($result['result']['items'] ?? [] as $item) {
+                    foreach ($item['iteminfo']['actress'] ?? [] as $a) {
+                        $id = $a['id'] ?? null;
+                        if ($id && !isset($seen[$id])) {
+                            $seen[$id] = $id;
+                        }
+                    }
+                }
+
+                return array_values($seen);
             });
 
-        $content  = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-        $content .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+            $urls = [];
+            foreach ($actressIds as $id) {
+                $urls[] = [
+                    'loc'        => route('actress.show', $id),
+                    'priority'   => '0.6',
+                    'changefreq' => 'weekly',
+                    'lastmod'    => $staticLastmod,
+                ];
+            }
+
+            return $this->buildUrlset($urls);
+        });
+
+        return response($content, 200, ['Content-Type' => 'application/xml']);
+    }
+
+    public function videos(): Response
+    {
+        $content = Cache::remember('sitemap_videos_xml', 3600, function () {
+            $urls = [];
+            Video::orderByDesc('total_likes')->limit(200)->get(['id', 'updated_at'])
+                ->each(function ($video) use (&$urls) {
+                    $urls[] = [
+                        'loc'        => route('tweet.video.show', $video->id),
+                        'priority'   => '0.7',
+                        'changefreq' => 'weekly',
+                        'lastmod'    => $video->updated_at->toAtomString(),
+                    ];
+                });
+
+            return $this->buildUrlset($urls);
+        });
+
+        return response($content, 200, ['Content-Type' => 'application/xml']);
+    }
+
+    private function buildUrlset(array $urls): string
+    {
+        $xml  = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
 
         foreach ($urls as $url) {
             $loc = htmlspecialchars($url['loc'], ENT_XML1 | ENT_QUOTES, 'UTF-8');
-            $content .= "  <url>\n";
-            $content .= "    <loc>{$loc}</loc>\n";
+            $xml .= "  <url>\n";
+            $xml .= "    <loc>{$loc}</loc>\n";
             if (!empty($url['lastmod'])) {
-                $content .= "    <lastmod>{$url['lastmod']}</lastmod>\n";
+                $xml .= "    <lastmod>{$url['lastmod']}</lastmod>\n";
             }
-            $content .= "    <changefreq>{$url['changefreq']}</changefreq>\n";
-            $content .= "    <priority>{$url['priority']}</priority>\n";
-            $content .= "  </url>\n";
+            $xml .= "    <changefreq>{$url['changefreq']}</changefreq>\n";
+            $xml .= "    <priority>{$url['priority']}</priority>\n";
+            $xml .= "  </url>\n";
         }
 
-        $content .= '</urlset>';
+        $xml .= '</urlset>';
 
-        return $content;
+        return $xml;
     }
 }

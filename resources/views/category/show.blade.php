@@ -36,7 +36,7 @@
         {{-- Items Grid --}}
         <div class="items-grid content-grid {{ $slug === 'vr' ? 'category-vr' : (in_array($slug, ['comic']) ? 'category-portrait' : ($slug === 'dvd' ? 'category-dvd' : '')) }}">
             @forelse($items as $index => $item)
-                @include('partials.item-card', ['item' => $item, 'rank' => $sort === 'rank' ? (($currentPage - 1) * 20) + $index + 1 : null])
+                @include('partials.item-card', ['item' => $item, 'rank' => $sort === 'rank' ? (($currentPage - 1) * 20) + $index + 1 : null, 'eager' => $index === 0 && $currentPage === 1])
             @empty
                 <div class="empty-state">
                     <p>作品が見つかりませんでした。</p>

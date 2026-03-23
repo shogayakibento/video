@@ -22,6 +22,9 @@ Route::get('/actress/{id}', [ActressController::class, 'show'])->name('actress.s
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/ranking', [RankingController::class, 'index'])->name('ranking');
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+Route::get('/sitemap-pages.xml', [SitemapController::class, 'pages'])->name('sitemap.pages');
+Route::get('/sitemap-actresses.xml', [SitemapController::class, 'actresses'])->name('sitemap.actresses');
+Route::get('/sitemap-videos.xml', [SitemapController::class, 'videos'])->name('sitemap.videos');
 Route::view('/privacy', 'privacy')->name('privacy');
 Route::view('/contact', 'contact')->name('contact');
 
