@@ -73,9 +73,10 @@ TWITTER_PASSWORD   = os.environ.get('TWITTER_PASSWORD', '')
 TWITTER_AUTH_TOKEN = os.environ.get('TWITTER_AUTH_TOKEN', '')
 TWITTER_CT0        = os.environ.get('TWITTER_CT0', '')
 
-# dmm.co.jp の cid= を抽出
+# dmm.co.jp の cid= または id= を抽出
+# video.dmm.co.jp は ?id= 形式、その他は cid= 形式を使用
 FANZA_CID_RE = re.compile(
-    r'dmm\.co\.jp[^\s]*[?&/]cid[=/]([a-zA-Z0-9_-]+)',
+    r'dmm\.co\.jp[^\s]*[?&/]c?id[=/]([a-zA-Z0-9_-]+)',
     re.IGNORECASE
 )
 
@@ -177,9 +178,12 @@ async def main():
         # DEBUGモード: 最初の5件のURL一覧を出力
         if os.environ.get('TWSCRAPE_DEBUG'):
             for i, (_, t) in enumerate(list(tweet_map.items())[:5]):
-                urls = get_tweet_urls(t)
-                text_preview = (getattr(t, 'rawContent', '') or '')[:80].replace('\n', ' ')
-                sys.stderr.write(f'  [DEBUG] tweet={t.id} urls={urls} text={text_preview!r}\n')
+                text_preview = (getattr(t, 'rawContent', '') or '')[:100].replace('\n', ' ')
+                sys.stderr.write(f'  [DEBUG] tweet={t.id}\n')
+                sys.stderr.write(f'    text: {text_preview!r}\n')
+                raw_links = getattr(t, 'links', None) or []
+                for lnk in raw_links:
+                    sys.stderr.write(f'    link: url={getattr(lnk,"url",None)!r} expanded={getattr(lnk,"expanded",None)!r} attrs={[a for a in dir(lnk) if not a.startswith("_")]}\n')
 
         n_fanza = 0
         n_likes_ok = 0
