@@ -171,6 +171,8 @@ async def main():
             sys.stderr.write(f'エラー @{username}: {e}\n')
             continue
 
+        sys.stderr.write(f'  取得件数: {len(tweet_map)}ツイート\n')
+
         for tweet_id, tweet in tweet_map.items():
             # 返信ツイートのみ対象
             if not getattr(tweet, 'inReplyToTweetId', None):
