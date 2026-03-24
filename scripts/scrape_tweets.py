@@ -68,16 +68,17 @@ async def main():
 
     api = twscrape.API(DB_PATH)
 
-    # アカウントが未登録なら追加
+    # アクティブなアカウントがなければ追加/再ログイン
     accounts_in_pool = await api.pool.get_all()
-    if not accounts_in_pool:
+    has_active = any(getattr(a, 'active', False) for a in accounts_in_pool)
+
+    if not has_active:
         if not TWITTER_USERNAME:
             print(json.dumps({'error': 'TWITTER_USERNAME が設定されていません'}))
             sys.exit(1)
 
         cookies = None
         if TWITTER_AUTH_TOKEN and TWITTER_CT0:
-            # クッキー認証（推奨）
             cookies = {'auth_token': TWITTER_AUTH_TOKEN, 'ct0': TWITTER_CT0}
 
         await api.pool.add_account(
