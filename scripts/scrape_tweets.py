@@ -68,29 +68,34 @@ async def main():
 
     api = twscrape.API(DB_PATH)
 
-    # アクティブなアカウントがなければ追加/再ログイン
+    if not TWITTER_USERNAME:
+        print(json.dumps({'error': 'TWITTER_USERNAME が設定されていません'}))
+        sys.exit(1)
+
+    if not (TWITTER_AUTH_TOKEN and TWITTER_CT0):
+        print(json.dumps({'error': 'TWITTER_AUTH_TOKEN と TWITTER_CT0 が設定されていません'}))
+        sys.exit(1)
+
+    # 毎回クッキーを更新して追加（古いセッションを上書き）
+    cookies = f"auth_token={TWITTER_AUTH_TOKEN}; ct0={TWITTER_CT0}"
+    await api.pool.add_account(
+        username=TWITTER_USERNAME,
+        password=TWITTER_PASSWORD or 'dummy',
+        email=TWITTER_EMAIL or 'dummy@example.com',
+        email_password='',
+        cookies=cookies,
+    )
+
+    # アカウントが有効か確認
     accounts_in_pool = await api.pool.get_all()
-    has_active = any(getattr(a, 'active', False) for a in accounts_in_pool)
+    active_accounts = [a for a in accounts_in_pool if getattr(a, 'active', False)]
+    if not active_accounts:
+        print(json.dumps({
+            'error': 'Twitterアカウントが無効です。auth_token と ct0 が最新のものか確認してください。'
+        }))
+        sys.exit(1)
 
-    if not has_active:
-        if not TWITTER_USERNAME:
-            print(json.dumps({'error': 'TWITTER_USERNAME が設定されていません'}))
-            sys.exit(1)
-
-        cookies = None
-        if TWITTER_AUTH_TOKEN and TWITTER_CT0:
-            cookies = f"auth_token={TWITTER_AUTH_TOKEN}; ct0={TWITTER_CT0}"
-
-        await api.pool.add_account(
-            username=TWITTER_USERNAME,
-            password=TWITTER_PASSWORD or 'dummy',
-            email=TWITTER_EMAIL or 'dummy@example.com',
-            email_password='',
-            cookies=cookies,
-        )
-
-        if not cookies:
-            await api.pool.login_all()
+    sys.stderr.write(f'アクティブアカウント: {len(active_accounts)}件\n')
 
     results = []
 
