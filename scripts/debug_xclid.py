@@ -18,49 +18,65 @@ async def main():
         text = rep.text
         print(f"Length : {len(text)} chars\n")
 
-        # 元のパターン
-        print(f"[1] 'e=>e+\".\"+' present : {'e=>e+\".\"+'  in text}")
-        print(f"[2] '+'a.js\"'   present : {'+\"a.js\"'     in text}")
-        print(f"[3] '+\".js\"'    present : {'+\".js\"'      in text}")
-        print(f"[4] 'ondemand.s' present : {'ondemand.s'   in text}")
-        print(f"[5] 'abs.twimg' present  : {'abs.twimg'    in text}")
-        print(f"[6] 'twimg.com' present  : {'twimg.com'    in text}")
-        print(f"[7] 'twitter-site-verification' present : {'twitter-site-verification' in text}\n")
+        checks = {
+            'e=>e+"."+':          'e=>e+"."+',
+            '+"a.js"':            '+"a.js"',
+            '[e]+"a.js"':         '[e]+"a.js"',
+            '+e+"."+':            '+e+"."+ ',
+            'e+"."+{':            'e+"."+{',
+            '}[e]+':              '}[e]+',
+            'ondemand.s':         'ondemand.s',
+        }
+        for label, pat in checks.items():
+            print(f"  {label!r:25s} present: {pat in text}")
+
+        # +"a.js" 前後50文字を表示
+        idx = text.find('+"a.js"')
+        if idx >= 0:
+            print(f"\n[A] Context around +'a.js\"' (pos {idx}):")
+            print(f"    ...{text[max(0,idx-80):idx+20]}...")
+
+        # [e]+ 前後を確認
+        idx2 = text.find('[e]+')
+        if idx2 >= 0:
+            print(f"\n[B] Context around '[e]+' (pos {idx2}):")
+            print(f"    ...{text[max(0,idx2-80):idx2+30]}...")
+
+        # }[e] 前後を確認
+        idx3 = text.find('}[e]')
+        if idx3 >= 0:
+            print(f"\n[C] Context around '}}[e]' (pos {idx3}):")
+            print(f"    ...{text[max(0,idx3-200):idx3+30]}...")
 
         # abs.twimg.com 完全URL
         full = re.findall(
             r'https://abs\.twimg\.com/responsive-web/client-web/[^\s"\'<>]+\.js',
             text,
         )
-        print(f"[8] Full abs.twimg.com URLs ({len(full)}):")
-        for u in full[:8]:
+        print(f"\n[D] Full abs.twimg.com URLs ({len(full)}):")
+        for u in set(full):
             print(f"    {u}")
 
-        # 相対URL
-        rel = re.findall(r'/responsive-web/client-web/[^\s"\'<>]+\.js', text)
-        print(f"\n[9] Relative /responsive-web URLs ({len(rel)}):")
-        for u in rel[:8]:
-            print(f"    {u}")
+        # twscrape xclid の get_tw_page_text を直接使って取得するページも確認
+        # (main.jsなど外部JSの中にチャンクマップがある可能性)
+        main_urls = [u for u in set(full) if '/main.' in u]
+        if main_urls:
+            print(f"\n[E] Fetching {main_urls[0]} for chunk map...")
+            r2 = await clt.get(main_urls[0])
+            js = r2.text
+            print(f"    Length: {len(js)} chars")
+            for pat in ['e=>e+"."+', '[e]+"a.js"', '+"a.js"', 'ondemand.s']:
+                print(f"    {pat!r:25s} present in main.js: {pat in js}")
 
-        # ondemand.s 絞り込み
-        od = [u for u in full + rel if "ondemand.s" in u]
-        print(f"\n[10] ondemand.s URLs ({len(od)}):")
-        for u in od:
-            print(f"    {u}")
+            idx4 = js.find('[e]+"a.js"')
+            if idx4 >= 0:
+                print(f"\n    Context around '[e]+\"a.js\"' in main.js (pos {idx4}):")
+                print(f"    ...{js[max(0,idx4-120):idx4+30]}...")
 
-        # チャンクマップ候補（JSON辞書のある周辺を検索）
-        for pattern in [
-            r'e\+["\']\.["\'](\{[^}]{20,}\})\[e\]',
-            r'chunkhash[^{]{0,50}(\{[^}]{20,}\})',
-        ]:
-            m = re.search(pattern, text)
+            # チャンクマップ候補
+            m = re.search(r'(\{[^{}]{50,}\})\[e\]\+"a\.js"', js)
             if m:
-                print(f"\n[11] Chunk-map candidate pattern '{pattern}':")
-                print(f"     {m.group(1)[:200]}")
-
-        # レスポンスの先頭を出力
-        print("\n--- Response (first 3000 chars) ---")
-        print(text[:3000])
+                print(f"\n    Chunk map found in main.js: {m.group(1)[:300]}")
 
 
 if __name__ == "__main__":
