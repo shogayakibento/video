@@ -180,9 +180,6 @@
             ],
         ],
     ];
-    if ($video->affiliate_url) {
-        $videoSchema['contentUrl'] = $video->affiliate_url;
-    }
     if ($video->dmm_content_id) {
         $videoSchema['embedUrl'] = 'https://www.dmm.co.jp/litevideo/-/part/=/affi_id=' . config('dmm.affiliate_id') . '/cid=' . $video->dmm_content_id . '/size=1280_720/';
     }
