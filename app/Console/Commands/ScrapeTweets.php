@@ -44,7 +44,7 @@ class ScrapeTweets extends Command
             'ACCOUNTS_FILE'      => $accountsFile,
             'TWSCRAPE_DB'        => storage_path('app/private/twscrape.db'),
             'MIN_LIKES'          => $this->option('min-likes'),
-        ])->timeout(300)->run("{$python} {$scriptPath}");
+        ])->timeout(600)->run("{$python} {$scriptPath}");
 
         // stderrの進捗ログを表示
         if ($result->errorOutput()) {

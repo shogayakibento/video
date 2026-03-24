@@ -94,63 +94,74 @@ async def main():
 
     results = []
 
+    USER_TIMEOUT  = int(os.environ.get('USER_TIMEOUT', '120'))   # ユーザーごとの上限秒数
+    TWEET_TIMEOUT = int(os.environ.get('TWEET_TIMEOUT', '30'))    # 親ツイート取得の上限秒数
+
     for username in account_names:
         sys.stderr.write(f'処理中: @{username}\n')
         try:
-            user = await api.user_by_login(username)
-            if not user:
-                sys.stderr.write(f'  ユーザーが見つかりません: @{username}\n')
-                continue
-
-            # ツイート＋返信を取得してIDでマップ
-            tweet_map: dict[int, object] = {}
-            async for tweet in api.user_tweets_and_replies(user.id, limit=TWEETS_PER_USER):
-                tweet_map[tweet.id] = tweet
-
-            for tweet_id, tweet in tweet_map.items():
-                # 返信ツイートのみ対象
-                if not getattr(tweet, 'inReplyToTweetId', None):
+            async with asyncio.timeout(USER_TIMEOUT):
+                user = await api.user_by_login(username)
+                if not user:
+                    sys.stderr.write(f'  ユーザーが見つかりません: @{username}\n')
                     continue
 
-                # FANZA URLを探す
-                all_text = (getattr(tweet, 'rawContent', '') or '') + ' ' + ' '.join(get_tweet_urls(tweet))
-                cid = extract_fanza_cid(all_text)
-                if not cid:
-                    continue
+                # ツイート＋返信を取得してIDでマップ
+                tweet_map: dict[int, object] = {}
+                async for tweet in api.user_tweets_and_replies(user.id, limit=TWEETS_PER_USER):
+                    tweet_map[tweet.id] = tweet
 
-                # 親ツイートを取得（マップにあればそれを使う）
-                parent_id = tweet.inReplyToTweetId
-                parent = tweet_map.get(parent_id)
-                if not parent:
-                    try:
-                        parent = await api.tweet_details(parent_id)
-                    except Exception as e:
-                        sys.stderr.write(f'  親ツイート取得失敗 {parent_id}: {e}\n')
-                        continue
-
-                if not parent:
-                    continue
-
-                like_count = getattr(parent, 'likeCount', 0) or 0
-                if like_count < MIN_LIKES:
-                    continue
-
-                author = parent.user
-                results.append({
-                    'dmm_content_id': cid,
-                    'tweet_id':       str(parent.id),
-                    'tweet_url':      f'https://x.com/{author.username}/status/{parent.id}',
-                    'tweet_text':     getattr(parent, 'rawContent', ''),
-                    'author_username': author.username,
-                    'like_count':     like_count,
-                    'retweet_count':  getattr(parent, 'retweetCount', 0) or 0,
-                    'tweeted_at':     parent.date.isoformat() if parent.date else None,
-                })
-                sys.stderr.write(f'  ヒット: {cid} ({like_count}いいね)\n')
-
+        except TimeoutError:
+            sys.stderr.write(f'  タイムアウト（{USER_TIMEOUT}s）: @{username}\n')
+            continue
         except Exception as e:
             sys.stderr.write(f'エラー @{username}: {e}\n')
             continue
+
+        for tweet_id, tweet in tweet_map.items():
+            # 返信ツイートのみ対象
+            if not getattr(tweet, 'inReplyToTweetId', None):
+                continue
+
+            # FANZA URLを探す
+            all_text = (getattr(tweet, 'rawContent', '') or '') + ' ' + ' '.join(get_tweet_urls(tweet))
+            cid = extract_fanza_cid(all_text)
+            if not cid:
+                continue
+
+            # 親ツイートを取得（マップにあればそれを使う）
+            parent_id = tweet.inReplyToTweetId
+            parent = tweet_map.get(parent_id)
+            if not parent:
+                try:
+                    async with asyncio.timeout(TWEET_TIMEOUT):
+                        parent = await api.tweet_details(parent_id)
+                except TimeoutError:
+                    sys.stderr.write(f'  親ツイート取得タイムアウト {parent_id}\n')
+                    continue
+                except Exception as e:
+                    sys.stderr.write(f'  親ツイート取得失敗 {parent_id}: {e}\n')
+                    continue
+
+            if not parent:
+                continue
+
+            like_count = getattr(parent, 'likeCount', 0) or 0
+            if like_count < MIN_LIKES:
+                continue
+
+            author = parent.user
+            results.append({
+                'dmm_content_id': cid,
+                'tweet_id':       str(parent.id),
+                'tweet_url':      f'https://x.com/{author.username}/status/{parent.id}',
+                'tweet_text':     getattr(parent, 'rawContent', ''),
+                'author_username': author.username,
+                'like_count':     like_count,
+                'retweet_count':  getattr(parent, 'retweetCount', 0) or 0,
+                'tweeted_at':     parent.date.isoformat() if parent.date else None,
+            })
+            sys.stderr.write(f'  ヒット: {cid} ({like_count}いいね)\n')
 
     print(json.dumps(results, ensure_ascii=False, indent=2))
 
