@@ -171,7 +171,11 @@ async def main():
             sys.stderr.write(f'エラー @{username}: {e}\n')
             continue
 
-        sys.stderr.write(f'  取得件数: {len(tweet_map)}ツイート\n')
+        n_replies = sum(1 for t in tweet_map.values() if getattr(t, 'inReplyToTweetId', None))
+        sys.stderr.write(f'  取得件数: {len(tweet_map)}ツイート（うち返信: {n_replies}件）\n')
+
+        n_fanza = 0
+        n_likes_ok = 0
 
         for tweet_id, tweet in tweet_map.items():
             # 返信ツイートのみ対象
@@ -183,6 +187,7 @@ async def main():
             cid = extract_fanza_cid(all_text)
             if not cid:
                 continue
+            n_fanza += 1
 
             # 親ツイートを取得（マップにあればそれを使う）
             parent_id = tweet.inReplyToTweetId
@@ -203,7 +208,9 @@ async def main():
 
             like_count = getattr(parent, 'likeCount', 0) or 0
             if like_count < MIN_LIKES:
+                sys.stderr.write(f'  いいね不足: {cid} ({like_count}いいね < {MIN_LIKES})\n')
                 continue
+            n_likes_ok += 1
 
             author = parent.user
             results.append({
@@ -217,6 +224,8 @@ async def main():
                 'tweeted_at':     parent.date.isoformat() if parent.date else None,
             })
             sys.stderr.write(f'  ヒット: {cid} ({like_count}いいね)\n')
+
+        sys.stderr.write(f'  フィルタ結果: FANZA含む返信={n_fanza}件、いいね{MIN_LIKES}以上={n_likes_ok}件\n')
 
     print(json.dumps(results, ensure_ascii=False, indent=2))
 
