@@ -249,3 +249,21 @@
     </script>
     @endif
 @endsection
+
+@push('head_links')
+{{-- tab=ranking（インデックス対象）のみ、canonical URLと一致する形式でprev/nextを出力 --}}
+@if($tab === 'ranking' && $totalPages > 1)
+@php
+    $buildActressIndexUrl = function(int $page): string {
+        $base = route('actress.index');
+        return $page > 1 ? $base . '?page=' . $page : $base;
+    };
+@endphp
+@if($currentPage > 1)
+<link rel="prev" href="{{ $buildActressIndexUrl($currentPage - 1) }}">
+@endif
+@if($currentPage < $totalPages)
+<link rel="next" href="{{ $buildActressIndexUrl($currentPage + 1) }}">
+@endif
+@endif
+@endpush

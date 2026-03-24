@@ -6,6 +6,24 @@
 @section('robots', 'noindex, follow')
 @endif
 
+@push('head_links')
+{{-- period=all かつジャンル未指定（インデックス対象）のみ、canonical URLと一致する形式でprev/nextを出力 --}}
+@if($period === 'all' && empty($genre) && $videos->lastPage() > 1)
+@php
+    $buildTweetRankingUrl = function(int $page): string {
+        $base = route('tweet.ranking.index');
+        return $page > 1 ? $base . '?page=' . $page : $base;
+    };
+@endphp
+@if($videos->currentPage() > 1)
+<link rel="prev" href="{{ $buildTweetRankingUrl($videos->currentPage() - 1) }}">
+@endif
+@if($videos->currentPage() < $videos->lastPage())
+<link rel="next" href="{{ $buildTweetRankingUrl($videos->currentPage() + 1) }}">
+@endif
+@endif
+@endpush
+
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/tweet.css') }}?v={{ filemtime(public_path('css/tweet.css')) }}">
 @endpush
