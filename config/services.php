@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'twitter' => [
+        'username'   => env('TWITTER_USERNAME'),
+        'email'      => env('TWITTER_EMAIL'),
+        'password'   => env('TWITTER_PASSWORD'),
+        'auth_token' => env('TWITTER_AUTH_TOKEN'),
+        'ct0'        => env('TWITTER_CT0'),
+    ],
+
 ];

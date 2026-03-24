@@ -1,0 +1,4 @@
+# スクレイピング対象のTwitterアカウント（1行1アカウント、@不要）
+av_damashii
+nukidokorodouga
+penne27436851
