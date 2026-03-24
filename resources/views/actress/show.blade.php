@@ -13,7 +13,7 @@
     $actressId = $actress['id'] ?? '';
 @endphp
 
-@section('title', $name . 'の動画一覧 - FanzaGate')
+@section('title', $name . 'の動画一覧' . ($currentPage > 1 ? ' - ' . $currentPage . 'ページ目' : '') . ' - FanzaGate')
 @section('description', $name . ($ruby ? '（' . $ruby . '）' : '') . 'の出演FANZA動画一覧。' . ($cup ? $cup . 'カップ' : '') . ($height ? '身長' . $height . 'cm ' : '') . '人気順・新着順で作品をチェック。')
 @section('og_type', 'profile')
 @if($imageUrl)
@@ -121,6 +121,15 @@
         </div>
     </div>
 @endsection
+
+@push('head_links')
+@if($currentPage > 1)
+<link rel="prev" href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast={{ $cast }}&page={{ $currentPage - 1 }}">
+@endif
+@if($currentPage < $totalPages)
+<link rel="next" href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast={{ $cast }}&page={{ $currentPage + 1 }}">
+@endif
+@endpush
 
 @push('scripts')
 @php
