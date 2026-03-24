@@ -69,11 +69,21 @@
 @endsection
 
 @push('head_links')
+@php
+    // canonical URLと一致させる: sort=rank はパラメータなし、page=1 もパラメータなし
+    $buildGenrePaginationUrl = function(int $page) use ($slug, $sort): string {
+        $base   = route('genre.show', $slug);
+        $params = [];
+        if ($sort !== 'rank') $params['sort'] = $sort;
+        if ($page > 1)        $params['page'] = $page;
+        return $params ? $base . '?' . http_build_query($params) : $base;
+    };
+@endphp
 @if($currentPage > 1)
-<link rel="prev" href="{{ route('genre.show', $slug) }}?sort={{ $sort }}&page={{ $currentPage - 1 }}">
+<link rel="prev" href="{{ $buildGenrePaginationUrl($currentPage - 1) }}">
 @endif
 @if($currentPage < $totalPages)
-<link rel="next" href="{{ route('genre.show', $slug) }}?sort={{ $sort }}&page={{ $currentPage + 1 }}">
+<link rel="next" href="{{ $buildGenrePaginationUrl($currentPage + 1) }}">
 @endif
 @endpush
 

@@ -166,6 +166,7 @@
         'uploadDate'  => $video->release_date
             ? $video->release_date->format('c')
             : $video->created_at->format('c'),
+        'url'         => route('tweet.video.show', $video->id),
         'interactionStatistic' => [
             [
                 '@type'               => 'InteractionCounter',
@@ -179,6 +180,9 @@
             ],
         ],
     ];
+    if ($video->affiliate_url) {
+        $videoSchema['contentUrl'] = $video->affiliate_url;
+    }
     if ($video->dmm_content_id) {
         $videoSchema['embedUrl'] = 'https://www.dmm.co.jp/litevideo/-/part/=/affi_id=' . config('dmm.affiliate_id') . '/cid=' . $video->dmm_content_id . '/size=1280_720/';
     }

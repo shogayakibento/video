@@ -40,18 +40,18 @@ class SitemapController extends Controller
     public function pages(): Response
     {
         $content = Cache::remember('sitemap_pages_xml', 3600, function () {
-            $categories     = config('fanza.categories');
-            $genres         = config('fanza.genres');
-            $today          = now()->toAtomString();
-            $staticLastmod  = '2025-01-01T00:00:00+09:00';
+            $categories    = config('fanza.categories');
+            $genres        = config('fanza.genres');
+            $today         = now()->toAtomString();
+            $weeklyLastmod = now()->startOfWeek()->toAtomString();
 
             $urls = [
                 ['loc' => route('home'),                'priority' => '1.0', 'changefreq' => 'daily',  'lastmod' => $today],
                 ['loc' => route('ranking'),             'priority' => '0.9', 'changefreq' => 'daily',  'lastmod' => $today],
                 ['loc' => route('tweet.ranking.index'), 'priority' => '0.9', 'changefreq' => 'daily',  'lastmod' => $today],
                 ['loc' => route('shorts'),              'priority' => '0.8', 'changefreq' => 'daily',  'lastmod' => $today],
-                ['loc' => route('actress.index'),       'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => $staticLastmod],
-                ['loc' => route('genre.index'),         'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => $staticLastmod],
+                ['loc' => route('actress.index'),       'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => $weeklyLastmod],
+                ['loc' => route('genre.index'),         'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => $weeklyLastmod],
             ];
 
             foreach ($categories as $slug => $cat) {
@@ -68,7 +68,7 @@ class SitemapController extends Controller
                     'loc'        => route('genre.show', $slug),
                     'priority'   => '0.7',
                     'changefreq' => 'weekly',
-                    'lastmod'    => $staticLastmod,
+                    'lastmod'    => $weeklyLastmod,
                 ];
             }
 
@@ -81,7 +81,7 @@ class SitemapController extends Controller
     public function actresses(FanzaApiService $api): Response
     {
         $content = Cache::remember('sitemap_actresses_xml', 86400, function () use ($api) {
-            $staticLastmod = '2025-01-01T00:00:00+09:00';
+            $weeklyLastmod = now()->startOfWeek()->toAtomString();
 
             $actressIds = Cache::remember('sitemap_actress_ids', 86400, function () use ($api) {
                 $result = $api->getItems([
@@ -111,7 +111,7 @@ class SitemapController extends Controller
                     'loc'        => route('actress.show', $id),
                     'priority'   => '0.6',
                     'changefreq' => 'weekly',
-                    'lastmod'    => $staticLastmod,
+                    'lastmod'    => $weeklyLastmod,
                 ];
             }
 

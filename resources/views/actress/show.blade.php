@@ -123,11 +123,22 @@
 @endsection
 
 @push('head_links')
+@php
+    // canonical URLと一致させる: sort=rank&cast=all はパラメータなし、page=1 もパラメータなし
+    $buildActressPaginationUrl = function(int $page) use ($actressId, $sort, $cast): string {
+        $base   = route('actress.show', $actressId);
+        $params = [];
+        if ($sort !== 'rank') $params['sort'] = $sort;
+        if ($cast !== 'all')  $params['cast'] = $cast;
+        if ($page > 1)        $params['page'] = $page;
+        return $params ? $base . '?' . http_build_query($params) : $base;
+    };
+@endphp
 @if($currentPage > 1)
-<link rel="prev" href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast={{ $cast }}&page={{ $currentPage - 1 }}">
+<link rel="prev" href="{{ $buildActressPaginationUrl($currentPage - 1) }}">
 @endif
 @if($currentPage < $totalPages)
-<link rel="next" href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast={{ $cast }}&page={{ $currentPage + 1 }}">
+<link rel="next" href="{{ $buildActressPaginationUrl($currentPage + 1) }}">
 @endif
 @endpush
 

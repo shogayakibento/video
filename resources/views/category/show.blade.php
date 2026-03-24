@@ -87,11 +87,21 @@
 @endsection
 
 @push('head_links')
+@php
+    // canonical URLと一致させる: sort=rank はパラメータなし、page=1 もパラメータなし
+    $buildCategoryPaginationUrl = function(int $page) use ($slug, $sort): string {
+        $base   = route('category.show', $slug);
+        $params = [];
+        if ($sort !== 'rank') $params['sort'] = $sort;
+        if ($page > 1)        $params['page'] = $page;
+        return $params ? $base . '?' . http_build_query($params) : $base;
+    };
+@endphp
 @if($currentPage > 1)
-<link rel="prev" href="{{ route('category.show', $slug) }}?sort={{ $sort }}&page={{ $currentPage - 1 }}">
+<link rel="prev" href="{{ $buildCategoryPaginationUrl($currentPage - 1) }}">
 @endif
 @if($currentPage < $totalPages)
-<link rel="next" href="{{ route('category.show', $slug) }}?sort={{ $sort }}&page={{ $currentPage + 1 }}">
+<link rel="next" href="{{ $buildCategoryPaginationUrl($currentPage + 1) }}">
 @endif
 @endpush
 
