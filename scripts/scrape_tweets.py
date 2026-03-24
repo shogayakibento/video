@@ -14,6 +14,41 @@ from pathlib import Path
 
 import twscrape
 
+# --- twscrape xclid.py patch ---
+# Twitter changed page format; original get_scripts_list raises IndexError.
+# Fallback: scan HTML for abs.twimg.com script URLs directly.
+try:
+    import json as _json
+    import re as _re
+    import twscrape.xclid as _xclid
+
+    def _fixed_get_scripts_list(text: str):
+        # Try original webpack chunk-map pattern first
+        try:
+            parts = text.split('e=>e+"."+')
+            if len(parts) > 1:
+                scripts_json = parts[1].split('[e]+"a.js"')[0]
+                for k, v in _json.loads(scripts_json).items():
+                    yield _xclid.script_url(k, f"{v}a")
+                return
+        except Exception:
+            pass
+        # Fallback: extract script src URLs from HTML
+        found: set = set()
+        for m in _re.finditer(
+            r'https://abs\.twimg\.com/responsive-web/client-web/[^\s"\'<>]+\.js',
+            text,
+        ):
+            url = m.group(0).rstrip('",\'>;')
+            if url not in found:
+                found.add(url)
+                yield url
+
+    _xclid.get_scripts_list = _fixed_get_scripts_list
+except Exception:
+    pass
+# --- end patch ---
+
 ACCOUNTS_FILE = os.environ.get('ACCOUNTS_FILE', 'storage/app/private/twitter_accounts.txt')
 DB_PATH       = os.environ.get('TWSCRAPE_DB',   'storage/app/private/twscrape.db')
 MIN_LIKES     = int(os.environ.get('MIN_LIKES', '1000'))
