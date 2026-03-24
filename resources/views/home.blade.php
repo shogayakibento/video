@@ -15,10 +15,10 @@
                 <button type="submit" class="search-btn">検索</button>
             </form>
             <div class="hero-tags">
-                <a href="{{ route('search', ['q' => '人気']) }}" class="tag">人気作品</a>
-                <a href="{{ route('search', ['q' => '新作']) }}" class="tag">新作</a>
+                <a href="{{ route('ranking') }}" class="tag">人気作品</a>
+                <a href="{{ route('category.show', 'douga') }}?sort=date" class="tag">新着作品</a>
                 <a href="{{ route('category.show', 'vr') }}" class="tag">VR動画</a>
-                <a href="{{ route('ranking') }}" class="tag">ランキング</a>
+                <a href="{{ route('genre.index') }}" class="tag">ジャンル一覧</a>
             </div>
         </div>
     </section>

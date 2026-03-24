@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $genre['label'] . 'の動画一覧 - FanzaGate')
+@section('title', $genre['label'] . 'の動画一覧' . ($currentPage > 1 ? ' - ' . $currentPage . 'ページ目' : '') . ' - FanzaGate')
 @section('description', $genre['label'] . 'の人気FANZA動画一覧。最新作・ランキング・レビュー高評価作品を随時更新。お気に入りの作品を人気順・新着順・レビュー順で探せます。')
 @if($sort !== 'rank')
 @section('robots', 'noindex, follow')
@@ -67,6 +67,15 @@
         </div>
     </div>
 @endsection
+
+@push('head_links')
+@if($currentPage > 1)
+<link rel="prev" href="{{ route('genre.show', $slug) }}?sort={{ $sort }}&page={{ $currentPage - 1 }}">
+@endif
+@if($currentPage < $totalPages)
+<link rel="next" href="{{ route('genre.show', $slug) }}?sort={{ $sort }}&page={{ $currentPage + 1 }}">
+@endif
+@endpush
 
 @push('scripts')
 @if(!empty($items) && count($items) > 0)

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $category['label'] . ' 人気ランキング・おすすめ作品一覧 - FanzaGate')
+@section('title', $category['label'] . ' 人気ランキング・おすすめ作品一覧' . ($currentPage > 1 ? ' - ' . $currentPage . 'ページ目' : '') . ' - FanzaGate')
 @section('description', $category['label'] . 'の人気FANZA作品一覧。' . $category['label'] . 'の人気ランキング・新着・レビュー高評価作品をまとめてチェック。毎日更新される最新' . $category['label'] . '情報をお届けします。FANZA公式の豊富な作品ラインナップから厳選。')
 @if($sort !== 'rank')
 @section('robots', 'noindex, follow')
@@ -85,6 +85,15 @@
         </div>
     </section>
 @endsection
+
+@push('head_links')
+@if($currentPage > 1)
+<link rel="prev" href="{{ route('category.show', $slug) }}?sort={{ $sort }}&page={{ $currentPage - 1 }}">
+@endif
+@if($currentPage < $totalPages)
+<link rel="next" href="{{ route('category.show', $slug) }}?sort={{ $sort }}&page={{ $currentPage + 1 }}">
+@endif
+@endpush
 
 @push('scripts')
 @if(!empty($items))
