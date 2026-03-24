@@ -22,31 +22,38 @@ try:
     import re as _re
     import twscrape.xclid as _xclid
 
+    def _fix_js_obj(s: str) -> str:
+        """Quote unquoted JS object keys so json.loads can parse them."""
+        return _re.sub(r'([{,])\s*(\w+)\s*:', r'\1"\2":', s)
+
     def _fixed_get_scripts_list(text: str):
-        # Strategy 1: Original pattern  e=>e+"."+{dict}[e]+"a.js"
+        # Strategy 1: Original pattern  e=>e+"."+{hash_dict}[e]+"a.js"
         try:
             parts = text.split('e=>e+"."+')
             if len(parts) > 1:
                 scripts_json = parts[1].split('[e]+"a.js"')[0]
-                for k, v in _json.loads(scripts_json).items():
+                for k, v in _json.loads(_fix_js_obj(scripts_json)).items():
                     yield _xclid.script_url(str(k), f"{v}a")
                 return
         except Exception:
             pass
 
-        # Strategy 2: New pattern  {dict}[e]+"a.js"
-        # Twitter changed function prefix (e=>"base"+e+... instead of e=>e+...)
-        # so we search for the dict literal directly before [e]+"a.js"
+        # Strategy 2: New two-dict pattern
+        #   ({name_dict}[e]||e)+"."+{hash_dict}[e]+"a.js"
+        # name_dict maps chunkId -> name (e.g. "ondemand.s")
+        # hash_dict maps chunkId -> content hash
         try:
-            for m in _re.finditer(r'(\{[^{}]+\})\[e\]\+"a\.js"', text):
-                try:
-                    data = _json.loads(m.group(1))
-                    if isinstance(data, dict) and len(data) > 3:
-                        for k, v in data.items():
-                            yield _xclid.script_url(str(k), f"{v}a")
-                        return
-                except Exception:
-                    continue
+            m = _re.search(
+                r'(\{[^{}]+\})\[e\]\|\|e\)\+"\."\+(\{[^{}]+\})\[e\]\+"a\.js"',
+                text,
+            )
+            if m:
+                name_dict = _json.loads(_fix_js_obj(m.group(1)))
+                hash_dict = _json.loads(_fix_js_obj(m.group(2)))
+                for k, v in hash_dict.items():
+                    name = name_dict.get(str(k), str(k))
+                    yield _xclid.script_url(name, f"{v}a")
+                return
         except Exception:
             pass
 
