@@ -19,9 +19,11 @@ DB_PATH       = os.environ.get('TWSCRAPE_DB',   'storage/app/private/twscrape.db
 MIN_LIKES     = int(os.environ.get('MIN_LIKES', '1000'))
 TWEETS_PER_USER = int(os.environ.get('TWEETS_PER_USER', '200'))
 
-TWITTER_USERNAME = os.environ.get('TWITTER_USERNAME', '')
-TWITTER_EMAIL    = os.environ.get('TWITTER_EMAIL', '')
-TWITTER_PASSWORD = os.environ.get('TWITTER_PASSWORD', '')
+TWITTER_USERNAME   = os.environ.get('TWITTER_USERNAME', '')
+TWITTER_EMAIL      = os.environ.get('TWITTER_EMAIL', '')
+TWITTER_PASSWORD   = os.environ.get('TWITTER_PASSWORD', '')
+TWITTER_AUTH_TOKEN = os.environ.get('TWITTER_AUTH_TOKEN', '')
+TWITTER_CT0        = os.environ.get('TWITTER_CT0', '')
 
 # dmm.co.jp の cid= を抽出
 FANZA_CID_RE = re.compile(
@@ -66,19 +68,28 @@ async def main():
 
     api = twscrape.API(DB_PATH)
 
-    # アカウントが未登録なら追加してログイン
+    # アカウントが未登録なら追加
     accounts_in_pool = await api.pool.get_all()
     if not accounts_in_pool:
-        if not (TWITTER_USERNAME and TWITTER_EMAIL and TWITTER_PASSWORD):
-            print(json.dumps({'error': 'TWITTER_USERNAME/EMAIL/PASSWORD が設定されていません'}))
+        if not TWITTER_USERNAME:
+            print(json.dumps({'error': 'TWITTER_USERNAME が設定されていません'}))
             sys.exit(1)
+
+        cookies = None
+        if TWITTER_AUTH_TOKEN and TWITTER_CT0:
+            # クッキー認証（推奨）
+            cookies = {'auth_token': TWITTER_AUTH_TOKEN, 'ct0': TWITTER_CT0}
+
         await api.pool.add_account(
             username=TWITTER_USERNAME,
-            password=TWITTER_PASSWORD,
-            email=TWITTER_EMAIL,
+            password=TWITTER_PASSWORD or 'dummy',
+            email=TWITTER_EMAIL or 'dummy@example.com',
             email_password='',
+            cookies=cookies,
         )
-        await api.pool.login_all()
+
+        if not cookies:
+            await api.pool.login_all()
 
     results = []
 
