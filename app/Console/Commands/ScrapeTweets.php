@@ -33,6 +33,8 @@ class ScrapeTweets extends Command
 
         $this->info('Twitterスクレイピング開始...');
 
+        $python = PHP_OS_FAMILY === 'Windows' ? 'python' : 'python3';
+
         $result = Process::env([
             'TWITTER_USERNAME' => config('services.twitter.username', ''),
             'TWITTER_EMAIL'    => config('services.twitter.email', ''),
@@ -40,7 +42,7 @@ class ScrapeTweets extends Command
             'ACCOUNTS_FILE'    => $accountsFile,
             'TWSCRAPE_DB'      => storage_path('app/private/twscrape.db'),
             'MIN_LIKES'        => $this->option('min-likes'),
-        ])->timeout(300)->run("python3 {$scriptPath}");
+        ])->timeout(300)->run("{$python} {$scriptPath}");
 
         // stderrの進捗ログを表示
         if ($result->errorOutput()) {
