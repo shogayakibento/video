@@ -11,6 +11,7 @@ import os
 import re
 import sys
 from pathlib import Path
+from urllib.parse import parse_qs, unquote, urlparse
 
 import twscrape
 
@@ -93,9 +94,19 @@ def get_tweet_urls(tweet) -> list[str]:
     urls = []
     if hasattr(tweet, 'links') and tweet.links:
         for link in tweet.links:
-            expanded = getattr(link, 'expanded', None) or getattr(link, 'url', None) or ''
-            if expanded:
-                urls.append(expanded)
+            raw = getattr(link, 'expanded', None) or getattr(link, 'url', None) or ''
+            if not raw:
+                continue
+            urls.append(raw)
+            # al.fanza.co.jp / al.dmm.co.jp のアフィリエイトリンクから
+            # lurl= パラメータをデコードして実際のDMM URLを取得
+            if 'al.fanza.co.jp' in raw or 'al.dmm.co.jp' in raw:
+                try:
+                    qs = parse_qs(urlparse(raw).query)
+                    if 'lurl' in qs:
+                        urls.append(unquote(qs['lurl'][0]))
+                except Exception:
+                    pass
     return urls
 
 
