@@ -23,26 +23,32 @@ try:
     import twscrape.xclid as _xclid
 
     def _fixed_get_scripts_list(text: str):
-        # Try original webpack chunk-map pattern first
+        # Strategy 1: Original pattern  e=>e+"."+{dict}[e]+"a.js"
         try:
             parts = text.split('e=>e+"."+')
             if len(parts) > 1:
                 scripts_json = parts[1].split('[e]+"a.js"')[0]
                 for k, v in _json.loads(scripts_json).items():
-                    yield _xclid.script_url(k, f"{v}a")
+                    yield _xclid.script_url(str(k), f"{v}a")
                 return
         except Exception:
             pass
-        # Fallback: extract script src URLs from HTML
-        found: set = set()
-        for m in _re.finditer(
-            r'https://abs\.twimg\.com/responsive-web/client-web/[^\s"\'<>]+\.js',
-            text,
-        ):
-            url = m.group(0).rstrip('",\'>;')
-            if url not in found:
-                found.add(url)
-                yield url
+
+        # Strategy 2: New pattern  {dict}[e]+"a.js"
+        # Twitter changed function prefix (e=>"base"+e+... instead of e=>e+...)
+        # so we search for the dict literal directly before [e]+"a.js"
+        try:
+            for m in _re.finditer(r'(\{[^{}]+\})\[e\]\+"a\.js"', text):
+                try:
+                    data = _json.loads(m.group(1))
+                    if isinstance(data, dict) and len(data) > 3:
+                        for k, v in data.items():
+                            yield _xclid.script_url(str(k), f"{v}a")
+                        return
+                except Exception:
+                    continue
+        except Exception:
+            pass
 
     _xclid.get_scripts_list = _fixed_get_scripts_list
 except Exception:
