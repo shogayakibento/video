@@ -2,6 +2,10 @@
 
 @section('title', ($categories[$activeCategory]['label'] ?? 'ランキング') . 'ランキング - FanzaGate')
 @section('description', 'FANZAの' . ($categories[$activeCategory]['label'] ?? '人気作品') . 'ランキング。' . ($categories[$activeCategory]['label'] ?? '動画・VR・DVD・コミック') . 'の人気作品をリアルタイムで更新。')
+{{-- ?category=douga は /ranking と同一コンテンツのため重複を防ぐ --}}
+@if($activeCategory === 'douga' && request()->has('category'))
+@section('robots', 'noindex, follow')
+@endif
 
 @section('content')
     <div class="page-header">

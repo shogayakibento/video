@@ -52,11 +52,23 @@ class SitemapController extends Controller
                 ['loc' => route('shorts'),              'priority' => '0.8', 'changefreq' => 'daily',  'lastmod' => $today],
                 ['loc' => route('actress.index'),       'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => $weeklyLastmod],
                 ['loc' => route('genre.index'),         'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => $weeklyLastmod],
+                ['loc' => route('privacy'),             'priority' => '0.3', 'changefreq' => 'yearly', 'lastmod' => $weeklyLastmod],
             ];
 
             foreach ($categories as $slug => $cat) {
                 $urls[] = [
                     'loc'        => route('category.show', $slug),
+                    'priority'   => '0.8',
+                    'changefreq' => 'daily',
+                    'lastmod'    => $today,
+                ];
+            }
+
+            // /ranking?category=X （dougaはデフォルトと重複するため除外）
+            foreach ($categories as $slug => $cat) {
+                if ($slug === 'douga') continue;
+                $urls[] = [
+                    'loc'        => route('ranking', ['category' => $slug]),
                     'priority'   => '0.8',
                     'changefreq' => 'daily',
                     'lastmod'    => $today,
