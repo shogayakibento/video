@@ -174,6 +174,13 @@ async def main():
         n_replies = sum(1 for t in tweet_map.values() if getattr(t, 'inReplyToTweetId', None))
         sys.stderr.write(f'  取得件数: {len(tweet_map)}ツイート（うち返信: {n_replies}件）\n')
 
+        # DEBUGモード: 最初の5件のURL一覧を出力
+        if os.environ.get('TWSCRAPE_DEBUG'):
+            for i, (_, t) in enumerate(list(tweet_map.items())[:5]):
+                urls = get_tweet_urls(t)
+                text_preview = (getattr(t, 'rawContent', '') or '')[:80].replace('\n', ' ')
+                sys.stderr.write(f'  [DEBUG] tweet={t.id} urls={urls} text={text_preview!r}\n')
+
         n_fanza = 0
         n_likes_ok = 0
         seen_tweet_ids: set[str] = set()
