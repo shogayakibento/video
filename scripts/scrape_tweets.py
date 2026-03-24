@@ -79,7 +79,7 @@ async def main():
 
         cookies = None
         if TWITTER_AUTH_TOKEN and TWITTER_CT0:
-            cookies = {'auth_token': TWITTER_AUTH_TOKEN, 'ct0': TWITTER_CT0}
+            cookies = f"auth_token={TWITTER_AUTH_TOKEN}; ct0={TWITTER_CT0}"
 
         await api.pool.add_account(
             username=TWITTER_USERNAME,
