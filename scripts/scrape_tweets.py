@@ -176,12 +176,9 @@ async def main():
 
         n_fanza = 0
         n_likes_ok = 0
+        seen_tweet_ids: set[str] = set()
 
         for tweet_id, tweet in tweet_map.items():
-            # 返信ツイートのみ対象
-            if not getattr(tweet, 'inReplyToTweetId', None):
-                continue
-
             # FANZA URLを探す
             all_text = (getattr(tweet, 'rawContent', '') or '') + ' ' + ' '.join(get_tweet_urls(tweet))
             cid = extract_fanza_cid(all_text)
@@ -189,43 +186,61 @@ async def main():
                 continue
             n_fanza += 1
 
-            # 親ツイートを取得（マップにあればそれを使う）
-            parent_id = tweet.inReplyToTweetId
-            parent = tweet_map.get(parent_id)
-            if not parent:
-                try:
-                    async with asyncio.timeout(TWEET_TIMEOUT):
-                        parent = await api.tweet_details(parent_id)
-                except TimeoutError:
-                    sys.stderr.write(f'  親ツイート取得タイムアウト {parent_id}\n')
-                    continue
-                except Exception as e:
-                    sys.stderr.write(f'  親ツイート取得失敗 {parent_id}: {e}\n')
+            parent_id = getattr(tweet, 'inReplyToTweetId', None)
+
+            if parent_id:
+                # 返信ツイート → 親ツイートのいいね数で判定
+                parent = tweet_map.get(parent_id)
+                if not parent:
+                    try:
+                        async with asyncio.timeout(TWEET_TIMEOUT):
+                            parent = await api.tweet_details(parent_id)
+                    except TimeoutError:
+                        sys.stderr.write(f'  親ツイート取得タイムアウト {parent_id}\n')
+                        continue
+                    except Exception as e:
+                        sys.stderr.write(f'  親ツイート取得失敗 {parent_id}: {e}\n')
+                        continue
+
+                if not parent:
                     continue
 
-            if not parent:
-                continue
+                like_count = getattr(parent, 'likeCount', 0) or 0
+                if like_count < MIN_LIKES:
+                    sys.stderr.write(f'  いいね不足(親): {cid} ({like_count}いいね < {MIN_LIKES})\n')
+                    continue
 
-            like_count = getattr(parent, 'likeCount', 0) or 0
-            if like_count < MIN_LIKES:
-                sys.stderr.write(f'  いいね不足: {cid} ({like_count}いいね < {MIN_LIKES})\n')
+                result_tweet = parent
+                result_author = parent.user
+            else:
+                # 通常ツイート → そのツイート自身のいいね数で判定
+                like_count = getattr(tweet, 'likeCount', 0) or 0
+                if like_count < MIN_LIKES:
+                    sys.stderr.write(f'  いいね不足(自): {cid} ({like_count}いいね < {MIN_LIKES})\n')
+                    continue
+
+                result_tweet = tweet
+                result_author = tweet.user
+
+            result_id = str(result_tweet.id)
+            if result_id in seen_tweet_ids:
                 continue
+            seen_tweet_ids.add(result_id)
             n_likes_ok += 1
 
-            author = parent.user
             results.append({
                 'dmm_content_id': cid,
-                'tweet_id':       str(parent.id),
-                'tweet_url':      f'https://x.com/{author.username}/status/{parent.id}',
-                'tweet_text':     getattr(parent, 'rawContent', ''),
-                'author_username': author.username,
+                'tweet_id':       result_id,
+                'tweet_url':      f'https://x.com/{result_author.username}/status/{result_id}',
+                'tweet_text':     getattr(result_tweet, 'rawContent', ''),
+                'author_username': result_author.username,
                 'like_count':     like_count,
-                'retweet_count':  getattr(parent, 'retweetCount', 0) or 0,
-                'tweeted_at':     parent.date.isoformat() if parent.date else None,
+                'retweet_count':  getattr(result_tweet, 'retweetCount', 0) or 0,
+                'tweeted_at':     result_tweet.date.isoformat() if result_tweet.date else None,
             })
             sys.stderr.write(f'  ヒット: {cid} ({like_count}いいね)\n')
 
-        sys.stderr.write(f'  フィルタ結果: FANZA含む返信={n_fanza}件、いいね{MIN_LIKES}以上={n_likes_ok}件\n')
+        sys.stderr.write(f'  フィルタ結果: FANZA含む={n_fanza}件、いいね{MIN_LIKES}以上={n_likes_ok}件\n')
 
     print(json.dumps(results, ensure_ascii=False, indent=2))
 
