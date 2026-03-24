@@ -15,6 +15,10 @@
 
 @section('title', $name . 'の動画一覧 - FanzaGate')
 @section('description', $name . ($ruby ? '（' . $ruby . '）' : '') . 'の出演FANZA動画一覧。' . ($cup ? $cup . 'カップ' : '') . ($height ? '身長' . $height . 'cm ' : '') . '人気順・新着順で作品をチェック。')
+@section('og_type', 'profile')
+@if($imageUrl)
+@section('og_image', $imageUrl)
+@endif
 @if($sort !== 'rank' || $cast !== 'all')
 @section('robots', 'noindex, follow')
 @endif
@@ -134,8 +138,27 @@
         'value'    => (int) $height,
         'unitCode' => 'CMT',
     ];
+
+    $itemListSchema = !empty($items) ? [
+        '@context'        => 'https://schema.org',
+        '@type'           => 'ItemList',
+        'name'            => $name . ' 出演作品一覧',
+        'description'     => $name . 'の出演FANZA動画一覧',
+        'numberOfItems'   => count($items),
+        'itemListElement' => array_map(fn($item, $index) => [
+            '@type'    => 'ListItem',
+            'position' => ($currentPage - 1) * 20 + $index + 1,
+            'name'     => $item['title'] ?? '',
+            'url'      => $item['URL'] ?? '',
+        ], $items, array_keys($items)),
+    ] : null;
 @endphp
 <script type="application/ld+json">
 {!! json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) !!}
 </script>
+@if($itemListSchema)
+<script type="application/ld+json">
+{!! json_encode($itemListSchema, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endif
 @endpush
