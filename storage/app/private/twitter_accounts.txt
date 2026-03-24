@@ -1,4 +1,4 @@
 # スクレイピング対象のTwitterアカウント（1行1アカウント、@不要）
-# 例:
-# nukidokorodouga
-# example_account
+av_damashii
+nukidokorodouga
+penne27436851
