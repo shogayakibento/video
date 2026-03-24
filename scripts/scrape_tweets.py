@@ -264,7 +264,8 @@ async def main():
 
         sys.stderr.write(f'  フィルタ結果: FANZA含む={n_fanza}件、いいね{MIN_LIKES}以上={n_likes_ok}件\n')
 
-    print(json.dumps(results, ensure_ascii=False, indent=2))
+    sys.stdout.buffer.write(json.dumps(results, ensure_ascii=False, indent=2).encode('utf-8'))
+    sys.stdout.buffer.write(b'\n')
 
 
 if __name__ == '__main__':
