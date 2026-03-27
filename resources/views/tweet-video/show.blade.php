@@ -36,7 +36,8 @@
     ]])
 
     <div class="mb-4">
-        <a href="{{ route('tweet.ranking.index') }}" class="text-gray-400 hover:text-accent text-sm transition">&larr; 戻る</a>
+        <a href="{{ route('tweet.ranking.index') }}" class="text-gray-400 hover:text-accent text-sm transition"
+           onclick="if(document.referrer){history.back();return false;}">&larr; 戻る</a>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
