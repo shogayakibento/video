@@ -74,6 +74,7 @@
     @stack('styles')
 </head>
 <body>
+    <script>window.appUrl = '{{ url('/') }}';</script>
     {{-- Header --}}
     <header class="header">
         <div class="container header-inner">
