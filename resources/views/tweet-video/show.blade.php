@@ -65,7 +65,7 @@
             <div class="flex flex-wrap items-center gap-4 mb-4 text-sm text-gray-400">
                 @if($video->actress)
                 <span>出演: @foreach(explode(', ', $video->actress) as $actressName)
-                    <a href="{{ route('actress.by-name', trim($actressName)) }}" class="hover:text-accent transition">{{ trim($actressName) }}</a>@if(!$loop->last), @endif
+                    <a href="{{ route('actress.by-name', trim($actressName)) }}" class="item-actress-link">{{ trim($actressName) }}</a>@if(!$loop->last), @endif
                 @endforeach</span>
                 @endif
                 @if($video->maker)<span>メーカー: {{ $video->maker }}</span>@endif
