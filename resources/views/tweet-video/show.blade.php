@@ -105,28 +105,6 @@
                 </div>
             @endif
 
-            {{-- 関連ツイート --}}
-            @if($video->tweets->isNotEmpty())
-                <div class="mt-6">
-                    <h3 class="text-lg font-bold mb-3">関連ツイート</h3>
-                    <div class="space-y-3">
-                        @foreach($video->tweets->sortByDesc('like_count')->take(5) as $tweet)
-                            <div class="bg-primary rounded-lg p-4">
-                                <div class="mb-2">
-                                    <span class="text-sm text-gray-400">&#64;{{ $tweet->author_username }}</span>
-                                </div>
-                                @if($tweet->tweet_text)
-                                    <p class="text-sm text-gray-300 mb-2">{{ $tweet->tweet_text }}</p>
-                                @endif
-                                <div class="flex gap-4 text-xs text-gray-500">
-                                    <span>{{ number_format($tweet->like_count) }} いいね</span>
-                                    <span>{{ number_format($tweet->retweet_count) }} RT</span>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
         </div>
 
         {{-- サイドバー: 関連動画 --}}
