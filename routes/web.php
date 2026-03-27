@@ -18,6 +18,7 @@ Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('categ
 Route::get('/genre', [GenreController::class, 'index'])->name('genre.index');
 Route::get('/genre/{slug}', [GenreController::class, 'show'])->name('genre.show');
 Route::get('/actress', [ActressController::class, 'index'])->name('actress.index');
+Route::get('/actress/by-name/{name}', [ActressController::class, 'showByName'])->name('actress.by-name');
 Route::get('/actress/{id}', [ActressController::class, 'show'])->name('actress.show');
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/ranking', [RankingController::class, 'index'])->name('ranking');

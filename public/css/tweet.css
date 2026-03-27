@@ -26,11 +26,23 @@
 
 /* ビデオカード（ガラスエフェクト） */
 .video-card {
+    position: relative;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     transition: border-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+}
+/* カード全体を覆う透明リンク（詳細ページへ） */
+.video-card-overlay-link {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+/* 女優名・FANZAボタンはオーバーレイより前面に */
+.video-card-above {
+    position: relative;
+    z-index: 1;
 }
 .video-card:hover {
     border-color: rgba(255, 45, 120, 0.45);

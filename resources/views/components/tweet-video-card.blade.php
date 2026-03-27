@@ -13,7 +13,8 @@
 @endphp
 
 <div class="video-card rounded-2xl overflow-hidden group">
-    <a href="{{ route('tweet.video.show', $video) }}" class="block">
+    <a href="{{ route('tweet.video.show', $video) }}" class="video-card-overlay-link" aria-hidden="true" tabindex="-1"></a>
+    <a href="{{ route('tweet.video.show', $video) }}" class="block" style="position: relative; z-index: 1;">
         <div class="relative overflow-hidden">
             @if($rank)
                 <div class="absolute top-2 left-2 z-10 {{ $rankClass }} text-white font-bold rounded-full w-8 h-8 flex items-center justify-center text-xs shadow-lg">
@@ -30,11 +31,11 @@
         </div>
     </a>
     <div class="p-3.5">
-        <a href="{{ route('tweet.video.show', $video) }}">
-            <h3 class="text-sm font-medium line-clamp-2 leading-snug hover:text-accent transition-colors duration-200">{{ $video->title }}</h3>
-        </a>
+        <h3 class="text-sm font-medium line-clamp-2 leading-snug" style="color: inherit;">{{ $video->title }}</h3>
         @if($video->actress)
-            <p class="text-xs mt-1.5 font-light tracking-wide" style="color: #7a7a9a;">{{ $video->actress }}</p>
+            <p class="text-xs mt-1.5 font-light tracking-wide video-card-above" style="color: #7a7a9a;">@foreach(explode(', ', $video->actress) as $actressName)
+                <a href="{{ route('actress.by-name', trim($actressName)) }}" class="item-actress-link">{{ trim($actressName) }}</a>@if(!$loop->last), @endif
+            @endforeach</p>
         @endif
         <div class="flex items-center justify-between mt-3">
             <div class="flex items-center gap-3 text-xs" style="color: #5a5a7a;">
@@ -48,7 +49,7 @@
                 </span>
             </div>
             <a href="{{ route('tweet.video.redirect', $video) }}" target="_blank" rel="nofollow noopener"
-               class="fanza-btn text-white text-xs px-3.5 py-1.5 rounded-lg font-semibold tracking-wider">
+               class="fanza-btn text-white text-xs px-3.5 py-1.5 rounded-lg font-semibold tracking-wider video-card-above">
                 FANZA
             </a>
         </div>
