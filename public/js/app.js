@@ -93,7 +93,7 @@
             titleEl.textContent   = title;
             if (actress) {
                 if (actressId) {
-                    actressEl.innerHTML = '出演: <a href="/actress/' + actressId + '" class="item-actress-link">'+actress+'</a>';
+                    actressEl.innerHTML = '出演: <a href="' + (window.appUrl || '') + '/actress/' + actressId + '" class="item-actress-link">'+actress+'</a>';
                 } else {
                     actressEl.textContent = '出演: ' + actress;
                 }
