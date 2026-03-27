@@ -34,7 +34,9 @@
             <h3 class="text-sm font-medium line-clamp-2 leading-snug hover:text-accent transition-colors duration-200">{{ $video->title }}</h3>
         </a>
         @if($video->actress)
-            <p class="text-xs mt-1.5 font-light tracking-wide" style="color: #7a7a9a;">{{ $video->actress }}</p>
+            <p class="text-xs mt-1.5 font-light tracking-wide" style="color: #7a7a9a;">@foreach(explode(', ', $video->actress) as $actressName)
+                <a href="{{ route('actress.by-name', trim($actressName)) }}" class="item-actress-link" onclick="event.stopPropagation()">{{ trim($actressName) }}</a>@if(!$loop->last), @endif
+            @endforeach</p>
         @endif
         <div class="flex items-center justify-between mt-3">
             <div class="flex items-center gap-3 text-xs" style="color: #5a5a7a;">
