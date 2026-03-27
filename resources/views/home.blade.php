@@ -151,7 +151,7 @@
 @push('scripts')
 <script>
 window.addEventListener('load', function () {
-    fetch('/actress?tab=ranking', { priority: 'low' }).catch(function(){});
+    fetch('{{ route('actress.index') }}?tab=ranking', { priority: 'low' }).catch(function(){});
 });
 </script>
 @verbatim
