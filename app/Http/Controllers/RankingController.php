@@ -51,8 +51,22 @@ class RankingController extends Controller
 
     public function tweetIndex(Request $request)
     {
-        $period = $request->get('period', 'all');
-        $genre = $request->get('genre', '');
+        if ($request->has('period')) {
+            $period = $request->get('period');
+            if (in_array($period, ['all', 'weekly', 'monthly'])) {
+                session(['tweet_ranking_period' => $period]);
+            } else {
+                $period = 'all';
+            }
+        } else {
+            $period = session('tweet_ranking_period', 'all');
+        }
+        if ($request->has('genre')) {
+            $genre = $request->get('genre', '');
+            session(['tweet_ranking_genre' => $genre]);
+        } else {
+            $genre = session('tweet_ranking_genre', '');
+        }
 
         $query = Video::query()->where('total_likes', '>', 0);
 

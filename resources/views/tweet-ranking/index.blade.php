@@ -35,7 +35,7 @@
         {{-- ジャンルフィルター --}}
         @if($genres->isNotEmpty())
             <div class="flex flex-wrap gap-2 mb-6">
-                <a href="{{ route('tweet.ranking.index', ['period' => $period]) }}"
+                <a href="{{ route('tweet.ranking.index', ['period' => $period, 'genre' => '']) }}"
                    class="px-3 py-1.5 rounded-full text-xs font-medium transition {{ empty($genre) ? 'filter-pill-active' : 'filter-pill' }}">
                     すべて
                 </a>
