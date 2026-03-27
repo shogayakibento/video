@@ -61,7 +61,12 @@ class RankingController extends Controller
         } else {
             $period = session('tweet_ranking_period', 'all');
         }
-        $genre = $request->get('genre', '');
+        if ($request->has('genre')) {
+            $genre = $request->get('genre', '');
+            session(['tweet_ranking_genre' => $genre]);
+        } else {
+            $genre = session('tweet_ranking_genre', '');
+        }
 
         $query = Video::query()->where('total_likes', '>', 0);
 
