@@ -175,6 +175,24 @@ public function index(Request $request, FanzaApiService $api)
         ]);
     }
 
+    public function showByName(string $name, FanzaApiService $api)
+    {
+        $actressId = \Illuminate\Support\Facades\Cache::remember(
+            'actress_id_by_name_' . md5($name),
+            86400 * 30,
+            function () use ($name, $api) {
+                $result = $api->getActresses(['keyword' => $name, 'hits' => 1]);
+                return $result['result']['actress'][0]['id'] ?? null;
+            }
+        );
+
+        if ($actressId) {
+            return redirect()->route('actress.show', $actressId);
+        }
+
+        return redirect()->route('actress.index');
+    }
+
     public function show(string $id, Request $request, FanzaApiService $api)
     {
         $actressResult = $api->getActresses(['actress_id' => $id]);
