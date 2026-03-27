@@ -19,9 +19,10 @@
 @if($imageUrl)
 @section('og_image', $imageUrl)
 @endif
-@if($sort !== 'rank' || $cast !== 'all')
+@if($sort !== 'rank' || $cast !== 'all' || $currentPage > 1)
 @section('robots', 'noindex, follow')
 @endif
+@section('canonical', route('actress.show', $actressId))
 
 @section('content')
     <div class="page-header">

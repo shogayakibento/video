@@ -14,18 +14,23 @@
             ? $__env->yieldContent('og_description')
             : $__env->yieldContent('description', 'FANZAの人気ランキング・新着動画・VR・DVDを毎日更新。X(Twitter)でバズった話題作もチェック！');
 
-        // canonical: sort は除去し、page（>1）と category のみ保持して重複コンテンツを防ぐ
-        $canonicalBase = request()->url();
-        $canonicalParams = [];
-        if (request()->has('page') && (int) request()->get('page') > 1) {
-            $canonicalParams['page'] = (int) request()->get('page');
+        // canonical: ビュー側で @section('canonical', '...') を定義した場合はそちらを優先。
+        // それ以外は sort を除去し、page（>1）と category のみ保持して重複コンテンツを防ぐ。
+        if ($__env->hasSection('canonical')) {
+            $canonicalUrl = $__env->yieldContent('canonical');
+        } else {
+            $canonicalBase = request()->url();
+            $canonicalParams = [];
+            if (request()->has('page') && (int) request()->get('page') > 1) {
+                $canonicalParams['page'] = (int) request()->get('page');
+            }
+            if (request()->has('category')) {
+                $canonicalParams['category'] = request()->get('category');
+            }
+            $canonicalUrl = $canonicalParams
+                ? $canonicalBase . '?' . http_build_query($canonicalParams)
+                : $canonicalBase;
         }
-        if (request()->has('category')) {
-            $canonicalParams['category'] = request()->get('category');
-        }
-        $canonicalUrl = $canonicalParams
-            ? $canonicalBase . '?' . http_build_query($canonicalParams)
-            : $canonicalBase;
 
         // og:image を絶対URLに正規化
         $ogImage = $__env->hasSection('og_image')
