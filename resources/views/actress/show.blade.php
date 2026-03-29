@@ -163,8 +163,8 @@
         </section>
         @endif
 
-        <div class="back-link" style="margin-top: 32px;">
-            <a href="{{ route('actress.index') }}">&larr; 女優一覧に戻る</a>
+        <div class="mt-8">
+            <a href="{{ route('actress.index') }}" class="text-gray-400 hover:text-accent text-sm transition">&larr; 女優一覧に戻る</a>
         </div>
     </div>
 @endsection

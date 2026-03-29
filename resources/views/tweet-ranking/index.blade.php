@@ -13,6 +13,10 @@
 @section('content')
 <div class="page-header">
     <div class="container">
+        @include('partials.breadcrumb', ['items' => [
+            ['label' => 'ホーム', 'url' => route('home')],
+            ['label' => 'X(Twitter)バズり動画ランキング'],
+        ]])
         <h1>X(Twitter)バズり動画ランキング</h1>
         <p>いいね数が多くバズったFANZAサンプル動画を毎日更新</p>
     </div>

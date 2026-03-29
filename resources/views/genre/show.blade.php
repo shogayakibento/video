@@ -67,9 +67,8 @@
             </div>
         @endif
 
-        {{-- Back to genre list --}}
-        <div class="back-link">
-            <a href="{{ route('genre.index') }}">&larr; ジャンル一覧に戻る</a>
+        <div class="mt-8">
+            <a href="{{ route('genre.index') }}" class="text-gray-400 hover:text-accent text-sm transition">&larr; ジャンル一覧に戻る</a>
         </div>
     </div>
 @endsection
