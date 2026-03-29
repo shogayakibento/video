@@ -13,7 +13,9 @@
 @endphp
 
 @if($contentId)
-<a href="{{ route('fanza.video.show', $contentId) }}" class="item-card">
+<div class="item-card item-card-clickable"
+     data-detail-url="{{ route('fanza.video.show', $contentId) }}"
+     role="link" tabindex="0">
 @else
 <a href="{{ $url }}" class="item-card" target="_blank" rel="noopener noreferrer">
 @endif
@@ -43,8 +45,10 @@
         <h3 class="item-title">{{ $title }}</h3>
         @if($actress)
             <p class="item-actress">
-                @if($actressId)
+                @if($contentId && $actressId)
                     <a href="{{ route('actress.show', $actressId) }}" class="item-actress-link" onclick="event.stopPropagation()">{{ $actress }}</a>
+                @elseif($actressId)
+                    <a href="{{ route('actress.show', $actressId) }}" class="item-actress-link">{{ $actress }}</a>
                 @else
                     {{ $actress }}
                 @endif
@@ -59,4 +63,8 @@
             @endif
         </div>
     </div>
+@if($contentId)
+</div>
+@else
 </a>
+@endif
