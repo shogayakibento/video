@@ -11,10 +11,15 @@
 @endpush
 
 @section('content')
+<div class="page-header">
+    <div class="container">
+        <h1>X(Twitter)バズり動画ランキング</h1>
+        <p>いいね数が多くバズったFANZAサンプル動画を毎日更新</p>
+    </div>
+</div>
+
 <div class="tweet-page">
     <div class="mb-8">
-        <h1 class="text-2xl font-bold mb-3 page-title">X(Twitter)バズりFANZA動画ランキング</h1>
-        <p class="text-sm mb-6" style="color: #6a6a8a;">X(Twitter)でいいね数が多くバズったFANZAサンプル動画を毎日更新でランキング</p>
 
         {{-- 期間フィルター --}}
         <div class="flex flex-wrap gap-2 mb-4">
