@@ -18,7 +18,7 @@
     </div>
 </div>
 
-<div class="tweet-page">
+<div class="tweet-page" style="padding-top: 1.5rem;">
     <div class="mb-8">
 
         {{-- 期間フィルター --}}
