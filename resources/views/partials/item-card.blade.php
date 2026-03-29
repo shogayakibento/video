@@ -47,8 +47,6 @@
             <p class="item-actress">
                 @if($contentId && $actressId)
                     <a href="{{ route('actress.show', $actressId) }}" class="item-actress-link" onclick="event.stopPropagation()">{{ $actress }}</a>
-                @elseif($actressId)
-                    <a href="{{ route('actress.show', $actressId) }}" class="item-actress-link">{{ $actress }}</a>
                 @else
                     {{ $actress }}
                 @endif
