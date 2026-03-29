@@ -118,7 +118,7 @@
                         <div class="flex gap-3 group">
                             <a href="{{ route('tweet.video.show', $related) }}" class="flex-shrink-0 w-32">
                                 <img src="{{ $related->thumbnail_url }}" alt="{{ $related->title }}"
-                                     class="w-full aspect-[3/2] object-cover group-hover:opacity-80 transition" loading="lazy">
+                                     class="w-full aspect-[3/2] object-cover rounded group-hover:opacity-80 transition" loading="lazy">
                             </a>
                             <div class="flex-1 min-w-0">
                                 <a href="{{ route('tweet.video.show', $related) }}" class="text-sm line-clamp-2 hover:text-accent transition">
