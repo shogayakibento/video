@@ -71,9 +71,9 @@ class RankingController extends Controller
         $query = Video::query()->where('total_likes', '>', 0);
 
         if ($period === 'weekly') {
-            $query->where('updated_at', '>=', now()->subWeek());
+            $query->whereHas('tweets', fn($q) => $q->where('tweeted_at', '>=', now()->subWeek()));
         } elseif ($period === 'monthly') {
-            $query->where('updated_at', '>=', now()->subMonth());
+            $query->whereHas('tweets', fn($q) => $q->where('tweeted_at', '>=', now()->subMonth()));
         }
 
         if (!empty($genre)) {
