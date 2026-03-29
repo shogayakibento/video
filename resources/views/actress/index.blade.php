@@ -214,6 +214,9 @@
                 }
             @endphp
             <div class="pagination">
+                @if($currentPage > 2)
+                    <a href="{{ route('actress.index', array_merge($paginationParams, ['page' => 1])) }}" class="page-btn">最初へ</a>
+                @endif
                 @if($currentPage > 1)
                     <a href="{{ route('actress.index', array_merge($paginationParams, ['page' => $currentPage - 1])) }}" class="page-btn">前へ</a>
                 @endif

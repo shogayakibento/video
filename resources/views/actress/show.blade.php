@@ -102,6 +102,9 @@
         {{-- Pagination --}}
         @if($totalPages > 1)
             <div class="pagination">
+                @if($currentPage > 2)
+                    <a href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast={{ $cast }}&page=1" class="page-btn">最初へ</a>
+                @endif
                 @if($currentPage > 1)
                     <a href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast={{ $cast }}&page={{ $currentPage - 1 }}" class="page-btn">前へ</a>
                 @endif
