@@ -1,17 +1,16 @@
 @extends('layouts.app')
 
 @php
-    $title        = $item['title'] ?? 'タイトル未設定';
+    $title       = $item['title'] ?? 'タイトル未設定';
     $affiliateUrl = $item['affiliateURL'] ?? $item['URL'] ?? '#';
-    $imageUrl     = str_replace('http://', 'https://', $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? '');
-    $contentId    = $item['content_id'] ?? '';
-    $actresses    = $item['iteminfo']['actress'] ?? [];
-    $genres       = $item['iteminfo']['genre'] ?? [];
-    $maker        = $item['iteminfo']['maker'][0]['name'] ?? null;
-    $review       = $item['review']['average'] ?? null;
-    $reviewCount  = $item['review']['count'] ?? null;
-    $price        = $item['prices']['price'] ?? null;
-    $releaseDate  = $item['date'] ?? null;
+    $imageUrl    = str_replace('http://', 'https://', $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? '');
+    $contentId   = $item['content_id'] ?? '';
+    $actresses   = $item['iteminfo']['actress'] ?? [];
+    $genres      = $item['iteminfo']['genre'] ?? [];
+    $maker       = $item['iteminfo']['maker'][0]['name'] ?? null;
+    $review      = $item['review']['average'] ?? null;
+    $price       = $item['prices']['price'] ?? null;
+    $releaseDate = $item['date'] ?? null;
 
     $genreSlugMap = collect(config('fanza.genres'))->mapWithKeys(fn($g, $slug) => [$g['label'] => $slug])->all();
 
@@ -75,8 +74,7 @@
 
             <h1 class="text-xl font-bold mb-3">{{ $title }}</h1>
 
-            {{-- 出演・メーカー・発売日 --}}
-            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mb-4 text-sm text-gray-400">
+            <div class="flex flex-wrap items-center gap-4 mb-4 text-sm text-gray-400">
                 @if($actresses)
                     <span>出演:
                         @foreach($actresses as $a)
@@ -86,34 +84,8 @@
                 @endif
                 @if($maker)<span>メーカー: {{ $maker }}</span>@endif
                 @if($releaseDate)<span>発売日: {{ $releaseDate }}</span>@endif
+                @if($review)<span>★ {{ $review }}</span>@endif
             </div>
-
-            {{-- 評価・価格 --}}
-            @if($review || $price)
-                <div class="flex items-center gap-6 mb-6 py-3 border-t border-b border-gray-700">
-                    @if($review)
-                        <div class="flex items-center gap-2 text-yellow-400">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                            </svg>
-                            <span class="font-bold text-lg">{{ $review }}</span>
-                            <span class="text-gray-400 text-sm">/ 5.0</span>
-                            @if($reviewCount)
-                                <span class="text-gray-500 text-xs">({{ number_format($reviewCount) }}件)</span>
-                            @endif
-                        </div>
-                    @endif
-                    @if($price)
-                        <div class="flex items-center gap-2 text-gray-300">
-                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            <span class="font-bold">{{ $price }}</span>
-                            <span class="text-gray-400 text-sm">円</span>
-                        </div>
-                    @endif
-                </div>
-            @endif
 
             {{-- FANZAリンク --}}
             <a href="{{ $affiliateUrl }}" target="_blank" rel="nofollow noopener"
@@ -165,11 +137,11 @@
                 <div class="space-y-4">
                     @foreach($actressItems as $related)
                         @php
-                            $rTitle   = $related['title'] ?? '';
-                            $rUrl     = route('fanza.video.show', $related['content_id'] ?? '');
-                            $rImg     = str_replace('http://', 'https://', $related['imageURL']['small'] ?? $related['imageURL']['large'] ?? '');
-                            $rActress = $related['iteminfo']['actress'][0]['name'] ?? '';
-                            $rReview  = $related['review']['average'] ?? null;
+                            $rTitle    = $related['title'] ?? '';
+                            $rUrl      = route('fanza.video.show', $related['content_id'] ?? '');
+                            $rImg      = str_replace('http://', 'https://', $related['imageURL']['small'] ?? $related['imageURL']['large'] ?? '');
+                            $rActress  = $related['iteminfo']['actress'][0]['name'] ?? '';
+                            $rReview   = $related['review']['average'] ?? null;
                         @endphp
                         <div class="flex gap-3 group">
                             <a href="{{ $rUrl }}" class="flex-shrink-0 w-32">
