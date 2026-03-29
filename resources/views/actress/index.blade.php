@@ -224,7 +224,10 @@
                 @endfor
 
                 @if($currentPage < $totalPages)
-                    <a href="{{ route('actress.index', array_merge($paginationParams, ['page' => $currentPage + 1])) }}" class="page-btn">次へ &raquo;</a>
+                    <a href="{{ route('actress.index', array_merge($paginationParams, ['page' => $currentPage + 1])) }}" class="page-btn">次へ »</a>
+                    @if($currentPage < $totalPages - 1)
+                        <a href="{{ route('actress.index', array_merge($paginationParams, ['page' => $totalPages])) }}" class="page-btn">最後 »»</a>
+                    @endif
                 @endif
             </div>
         @endif
