@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Video;
 use App\Services\FanzaApiService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class ActressController extends Controller
 {
@@ -246,14 +248,92 @@ public function index(Request $request, FanzaApiService $api)
             $totalPages = max(1, (int) ceil($totalCount / $hits));
         }
 
+        // --- Genre extraction (always from page-1 rank results for consistency) ---
+        $genreSourceResult = $api->getItems(array_merge($baseParams, ['hits' => 20, 'offset' => 1, 'sort' => 'rank']));
+        $genreSourceItems  = $genreSourceResult['result']['items'] ?? [];
+
+        $genreIdCount  = [];
+        $genreIdToName = [];
+        foreach ($genreSourceItems as $gItem) {
+            foreach ($gItem['iteminfo']['genre'] ?? [] as $g) {
+                $gid = $g['id'] ?? null;
+                if ($gid) {
+                    $genreIdCount[$gid]  = ($genreIdCount[$gid] ?? 0) + 1;
+                    $genreIdToName[$gid] = $g['name'] ?? '';
+                }
+            }
+        }
+        arsort($genreIdCount);
+        $topGenreId   = array_key_first($genreIdCount);
+        $topGenreNames = array_filter(
+            array_map(fn($gid) => $genreIdToName[$gid] ?? null, array_slice(array_keys($genreIdCount), 0, 3))
+        );
+
+        // --- Similar Actresses (cached per top genre) ---
+        $similarActresses = [];
+        if ($topGenreId) {
+            $similarActresses = Cache::remember(
+                'similar_actresses_genre_' . $topGenreId,
+                7200,
+                function () use ($api, $id, $topGenreId) {
+                    $genreItems = $api->getItems([
+                        'article'    => 'genre',
+                        'article_id' => $topGenreId,
+                        'hits'       => 100,
+                        'sort'       => 'rank',
+                    ])['result']['items'] ?? [];
+
+                    $countMap = [];
+                    foreach ($genreItems as $gItem) {
+                        foreach ($gItem['iteminfo']['actress'] ?? [] as $a) {
+                            $aid = $a['id'] ?? null;
+                            if ($aid && $aid !== $id) {
+                                $countMap[$aid] = ($countMap[$aid] ?? 0) + 1;
+                            }
+                        }
+                    }
+                    arsort($countMap);
+                    $topIds = array_slice(array_keys($countMap), 0, 6);
+
+                    $result = [];
+                    foreach ($topIds as $aid) {
+                        $detail = $api->getActresses(['actress_id' => $aid]);
+                        $info   = $detail['result']['actress'][0] ?? null;
+                        if ($info) {
+                            $result[] = $info;
+                        }
+                    }
+                    return $result;
+                }
+            );
+        }
+
+        // --- Fan Recommendations: DB videos matching top genres ---
+        $recommendedVideos = collect();
+        if (!empty($topGenreNames)) {
+            $recommendedVideos = Video::where('total_likes', '>', 0)
+                ->where(function ($q) use ($topGenreNames) {
+                    foreach (array_values($topGenreNames) as $i => $name) {
+                        $method = $i === 0 ? 'where' : 'orWhere';
+                        $q->$method('genre', 'like', '%' . $name . '%');
+                    }
+                })
+                ->when(!empty($actress['name']), fn($q) => $q->where('actress', 'not like', '%' . $actress['name'] . '%'))
+                ->orderByDesc('total_likes')
+                ->limit(6)
+                ->get();
+        }
+
         return view('actress.show', [
-            'actress'     => $actress,
-            'items'       => $items,
-            'currentPage' => $page,
-            'totalPages'  => $totalPages,
-            'totalCount'  => $totalCount,
-            'sort'        => $sort,
-            'cast'        => $cast,
+            'actress'            => $actress,
+            'items'              => $items,
+            'currentPage'        => $page,
+            'totalPages'         => $totalPages,
+            'totalCount'         => $totalCount,
+            'sort'               => $sort,
+            'cast'               => $cast,
+            'similarActresses'   => $similarActresses,
+            'recommendedVideos'  => $recommendedVideos,
         ]);
     }
 }

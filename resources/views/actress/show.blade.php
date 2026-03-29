@@ -117,7 +117,62 @@
             </div>
         @endif
 
-        <div class="back-link">
+        {{-- Fan Recommendations --}}
+        @if($recommendedVideos->isNotEmpty())
+        <section style="margin-top: 48px;">
+            <div class="section-header">
+                <h2 class="section-title">{{ $name }}好きな人へのおすすめ</h2>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: -16px; margin-bottom: 20px; text-align: center;">X(Twitter)で話題の関連ジャンル作品</p>
+            <div class="grid grid-cols-2 md:grid-cols-3" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;">
+                @foreach($recommendedVideos as $rec)
+                    <x-tweet-video-card :video="$rec" />
+                @endforeach
+            </div>
+        </section>
+        @endif
+
+        {{-- Similar Actresses --}}
+        @if(!empty($similarActresses))
+        <section style="margin-top: 48px;">
+            <div class="section-header">
+                <h2 class="section-title">{{ $name }}に似た女優</h2>
+            </div>
+            <div class="actress-grid" style="grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));">
+                @foreach($similarActresses as $sim)
+                    @php
+                        $simId   = $sim['id'] ?? '';
+                        $simName = $sim['name'] ?? '';
+                        $simImg  = str_replace('http://', 'https://', $sim['imageURL']['large'] ?? $sim['imageURL']['small'] ?? '');
+                        $simRuby = $sim['ruby'] ?? '';
+                    @endphp
+                    @if($simId)
+                    <a href="{{ route('actress.show', $simId) }}" class="actress-card">
+                        <div class="actress-thumb">
+                            @if($simImg)
+                                <img src="{{ $simImg }}" alt="{{ $simName }}" loading="lazy">
+                            @else
+                                <div class="actress-thumb-placeholder">
+                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                                    </svg>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="actress-info">
+                            <span class="actress-name">{{ $simName }}</span>
+                            @if($simRuby)
+                                <span class="actress-ruby">{{ $simRuby }}</span>
+                            @endif
+                        </div>
+                    </a>
+                    @endif
+                @endforeach
+            </div>
+        </section>
+        @endif
+
+        <div class="back-link" style="margin-top: 32px;">
             <a href="{{ route('actress.index') }}">&larr; 女優一覧に戻る</a>
         </div>
     </div>
