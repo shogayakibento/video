@@ -107,14 +107,14 @@
 
         </div>
 
-        {{-- サイドバー: 関連動画 --}}
+        {{-- サイドバー: この動画を見た人はこちらも --}}
         <div class="lg:col-span-1">
-            <h3 class="text-lg font-bold mb-3">関連動画</h3>
-            @if($relatedVideos->isEmpty())
+            <h3 class="text-lg font-bold mb-3">この動画を見た人はこちらも</h3>
+            @if($alsoWatched->isEmpty())
                 <p class="text-gray-500 text-sm">関連動画はありません</p>
             @else
                 <div class="space-y-4">
-                    @foreach($relatedVideos as $related)
+                    @foreach($alsoWatched as $related)
                         <div class="flex gap-3 group">
                             <a href="{{ route('tweet.video.show', $related) }}" class="flex-shrink-0 w-32">
                                 <img src="{{ $related->thumbnail_url }}" alt="{{ $related->title }}"
