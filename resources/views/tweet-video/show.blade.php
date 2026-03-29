@@ -98,8 +98,12 @@
                     <h3 class="text-sm text-gray-400 mb-2">ジャンル</h3>
                     <div class="flex flex-wrap gap-2">
                         @foreach(explode(', ', $video->genre) as $g)
-                            <a href="{{ route('tweet.ranking.index', ['genre' => $g]) }}"
-                               class="bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs px-3 py-1 rounded-full transition">{{ $g }}</a>
+                            @if(!in_array($g, $excludeGenres))
+                                <a href="{{ route('tweet.ranking.index', ['genre' => $g]) }}"
+                                   class="bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs px-3 py-1 rounded-full transition">{{ $g }}</a>
+                            @else
+                                <span class="bg-gray-800 text-gray-500 text-xs px-3 py-1 rounded-full">{{ $g }}</span>
+                            @endif
                         @endforeach
                     </div>
                 </div>
@@ -118,7 +122,7 @@
                         <div class="flex gap-3 group">
                             <a href="{{ route('tweet.video.show', $related) }}" class="flex-shrink-0 w-32">
                                 <img src="{{ $related->thumbnail_url }}" alt="{{ $related->title }}"
-                                     class="w-full aspect-video object-cover rounded group-hover:opacity-80 transition" loading="lazy">
+                                     class="w-full aspect-[3/2] object-cover rounded group-hover:opacity-80 transition" loading="lazy">
                             </a>
                             <div class="flex-1 min-w-0">
                                 <a href="{{ route('tweet.video.show', $related) }}" class="text-sm line-clamp-2 hover:text-accent transition">

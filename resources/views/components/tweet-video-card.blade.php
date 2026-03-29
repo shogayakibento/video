@@ -32,9 +32,10 @@
     <div class="p-3.5">
         <h3 class="text-sm font-medium line-clamp-2 leading-snug" style="color: inherit;">{{ $video->title }}</h3>
         @if($video->actress)
-            <p class="text-xs mt-1.5 font-light tracking-wide video-card-above" style="color: #7a7a9a;">@foreach(explode(', ', $video->actress) as $actressName)
-                <a href="{{ route('actress.by-name', trim($actressName)) }}" class="item-actress-link">{{ trim($actressName) }}</a>@if(!$loop->last), @endif
-            @endforeach</p>
+            @php $firstActress = trim(explode(', ', $video->actress)[0]); @endphp
+            <p class="text-xs mt-1.5 font-light tracking-wide video-card-above" style="color: #7a7a9a;">
+                <a href="{{ route('actress.by-name', $firstActress) }}" class="item-actress-link">{{ $firstActress }}</a>
+            </p>
         @endif
         <div class="flex items-center justify-between mt-3">
             <div class="flex items-center gap-3 text-xs" style="color: #5a5a7a;">

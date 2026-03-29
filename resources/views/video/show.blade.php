@@ -12,6 +12,8 @@
     $price       = $item['prices']['price'] ?? null;
     $releaseDate = $item['date'] ?? null;
 
+    $genreSlugMap = collect(config('fanza.genres'))->mapWithKeys(fn($g, $slug) => [$g['label'] => $slug])->all();
+
     $primaryActressName = $actresses[0]['name'] ?? null;
     $primaryActressId   = $actresses[0]['id'] ?? null;
     $primaryGenreName   = $genres[0]['name'] ?? null;
@@ -82,7 +84,8 @@
                 @endif
                 @if($maker)<span>メーカー: {{ $maker }}</span>@endif
                 @if($releaseDate)<span>発売日: {{ $releaseDate }}</span>@endif
-                @if($review)<span>★ {{ $review }}</span>@endif
+                @if($review)<span class="text-yellow-400">★ {{ $review }}</span>@endif
+                @if($price)<span class="item-price">{{ preg_replace('/~$/', '円〜', $price) }}{{ str_ends_with($price, '~') ? '' : '円' }}</span>@endif
             </div>
 
             {{-- FANZAリンク --}}
@@ -97,8 +100,13 @@
                     <h3 class="text-sm text-gray-400 mb-2">ジャンル</h3>
                     <div class="flex flex-wrap gap-2">
                         @foreach($genres as $g)
-                            <a href="{{ route('genre.show', $g['keyword'] ?? $g['name']) }}"
-                               class="bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs px-3 py-1 rounded-full transition">{{ $g['name'] }}</a>
+                            @php $matchedSlug = $genreSlugMap[$g['name']] ?? null; @endphp
+                            @if($matchedSlug)
+                                <a href="{{ route('genre.show', $matchedSlug) }}"
+                                   class="bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs px-3 py-1 rounded-full transition">{{ $g['name'] }}</a>
+                            @else
+                                <span class="bg-gray-800 text-gray-500 text-xs px-3 py-1 rounded-full">{{ $g['name'] }}</span>
+                            @endif
                         @endforeach
                     </div>
                 </div>
@@ -108,7 +116,7 @@
             @if(!empty($alsoWatched))
                 <div class="mt-4">
                     <h2 class="text-lg font-bold mb-4">
-                        @if($primaryGenreName){{ $primaryGenreName }}好きな人はこちらも@else関連作品@endif
+                        この作品を見た人はこちらも視聴しています
                     </h2>
                     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem;">
                         @foreach($alsoWatched as $related)
@@ -132,14 +140,14 @@
                         @php
                             $rTitle    = $related['title'] ?? '';
                             $rUrl      = route('fanza.video.show', $related['content_id'] ?? '');
-                            $rImg      = str_replace('http://', 'https://', $related['imageURL']['small'] ?? $related['imageURL']['large'] ?? '');
+                            $rImg      = str_replace('http://', 'https://', $related['imageURL']['large'] ?? $related['imageURL']['small'] ?? '');
                             $rActress  = $related['iteminfo']['actress'][0]['name'] ?? '';
                             $rReview   = $related['review']['average'] ?? null;
                         @endphp
                         <div class="flex gap-3 group">
                             <a href="{{ $rUrl }}" class="flex-shrink-0 w-32">
                                 <img src="{{ $rImg }}" alt="{{ $rTitle }}"
-                                     class="w-full aspect-video object-cover rounded group-hover:opacity-80 transition" loading="lazy">
+                                     class="w-full aspect-[3/2] object-cover rounded group-hover:opacity-80 transition" loading="lazy">
                             </a>
                             <div class="flex-1 min-w-0">
                                 <a href="{{ $rUrl }}" class="text-sm line-clamp-2 hover:text-accent transition">{{ $rTitle }}</a>

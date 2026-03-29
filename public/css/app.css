@@ -2586,3 +2586,6 @@ img {
         pointer-events: auto;
     }
 }
+
+.text-yellow-400 { color: #f59e0b; }
+.aspect-\[3\/2\] { aspect-ratio: 3 / 2; }
