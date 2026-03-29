@@ -72,6 +72,45 @@
             </div>
         </div>
 
+        {{-- 似てる女優 --}}
+        @if(!empty($similarActresses))
+        <div class="similar-actresses mb-6">
+            <h2 class="section-title">
+                <svg class="w-5 h-5 inline-block mr-1" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                {{ $name }}に似た女優
+            </h2>
+            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+                @foreach(array_slice($similarActresses, 0, 6) as $sim)
+                    @php
+                        $simId    = $sim['id'] ?? '';
+                        $simName  = $sim['name'] ?? '';
+                        $simImg   = str_replace('http://', 'https://', $sim['imageURL']['small'] ?? '');
+                        $simHeight = $sim['height'] ?? null;
+                        $simBust   = $sim['bust'] ?? null;
+                        $simCup    = $sim['cup'] ?? null;
+                    @endphp
+                    <a href="{{ route('actress.show', $simId) }}" class="text-center group">
+                        <div class="overflow-hidden rounded-lg mb-1 bg-gray-800">
+                            @if($simImg)
+                                <img src="{{ $simImg }}" alt="{{ $simName }}"
+                                     class="w-full object-cover aspect-[3/4] group-hover:opacity-80 transition" loading="lazy">
+                            @else
+                                <div class="w-full aspect-[3/4] flex items-center justify-center text-gray-600 text-4xl">👤</div>
+                            @endif
+                        </div>
+                        <p class="text-xs font-medium group-hover:text-accent transition truncate">{{ $simName }}</p>
+                        @if($simHeight || $simBust)
+                            <p class="text-xs text-gray-500">
+                                @if($simHeight){{ $simHeight }}cm@endif
+                                @if($simBust && $simCup) / B{{ $simBust }}({{ $simCup }})@endif
+                            </p>
+                        @endif
+                    </a>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
         {{-- Sort & Cast Filter --}}
         <div class="filter-bar" style="flex-wrap: wrap; gap: 6px;">
             <a href="{{ route('actress.show', $actressId) }}?sort=rank&cast={{ $cast }}" class="tab-btn {{ $sort === 'rank' ? 'active' : '' }}">人気順</a>

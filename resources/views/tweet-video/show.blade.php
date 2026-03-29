@@ -133,6 +133,35 @@
             @endif
         </div>
     </div>
+
+    {{-- 「〇〇好きな人におすすめ」レコメンドセクション --}}
+    @if($recommendedVideos->isNotEmpty() && $actressLabel)
+    <div class="mt-10">
+        <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <span class="text-accent">{{ $actressLabel }}</span>好きな人におすすめ
+        </h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+            @foreach($recommendedVideos as $rec)
+                <div class="group">
+                    <a href="{{ route('tweet.video.show', $rec) }}" class="block">
+                        <div class="relative overflow-hidden rounded-lg mb-2">
+                            <img src="{{ $rec->thumbnail_url }}" alt="{{ $rec->title }}"
+                                 class="w-full aspect-video object-cover group-hover:opacity-80 transition" loading="lazy">
+                            <span class="absolute bottom-1 right-1 bg-black/70 text-accent text-xs px-1.5 py-0.5 rounded">
+                                ♥ {{ number_format($rec->total_likes) }}
+                            </span>
+                        </div>
+                        <p class="text-xs line-clamp-2 group-hover:text-accent transition">{{ $rec->title }}</p>
+                        @if($rec->actress)
+                            <p class="text-xs text-gray-500 mt-0.5 truncate">{{ $rec->actress }}</p>
+                        @endif
+                    </a>
+                </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
 </div>
 
 @endsection

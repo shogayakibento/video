@@ -175,6 +175,42 @@ public function index(Request $request, FanzaApiService $api)
         ]);
     }
 
+    /**
+     * 身長・バストが近い女優を最大6人返す（本人除く）
+     */
+    private function getSimilarActresses(array $actress, string $currentId, FanzaApiService $api): array
+    {
+        $height = (int) ($actress['height'] ?? 0);
+        $bust   = (int) ($actress['bust'] ?? 0);
+        $cup    = $actress['cup'] ?? '';
+
+        // スペック情報がなければ空返却
+        if (!$height && !$bust) {
+            return [];
+        }
+
+        $params = ['hits' => 30, 'offset' => 1];
+
+        if ($height) {
+            $params['gte_height'] = $height - 4;
+            $params['lte_height'] = $height + 4;
+        }
+        if ($bust && isset(self::CUP_BUST_MAP[$cup])) {
+            [$bustMin, $bustMax] = self::CUP_BUST_MAP[$cup];
+            $params['gte_bust'] = $bustMin;
+            $params['lte_bust'] = $bustMax;
+        }
+
+        $result = $api->getActresses($params) ?? [];
+        $candidates = $result['result']['actress'] ?? [];
+
+        // 本人を除いて最大6件
+        return array_values(array_filter(
+            array_slice($candidates, 0, 20),
+            fn($a) => ($a['id'] ?? '') !== $currentId
+        ));
+    }
+
     public function showByName(string $name, FanzaApiService $api)
     {
         $actressId = \Illuminate\Support\Facades\Cache::remember(
@@ -246,14 +282,18 @@ public function index(Request $request, FanzaApiService $api)
             $totalPages = max(1, (int) ceil($totalCount / $hits));
         }
 
+        // 似てる女優: 身長・バストが近い女優をAPIで取得
+        $similarActresses = $this->getSimilarActresses($actress, $id, $api);
+
         return view('actress.show', [
-            'actress'     => $actress,
-            'items'       => $items,
-            'currentPage' => $page,
-            'totalPages'  => $totalPages,
-            'totalCount'  => $totalCount,
-            'sort'        => $sort,
-            'cast'        => $cast,
+            'actress'          => $actress,
+            'items'            => $items,
+            'currentPage'      => $page,
+            'totalPages'       => $totalPages,
+            'totalCount'       => $totalCount,
+            'sort'             => $sort,
+            'cast'             => $cast,
+            'similarActresses' => $similarActresses,
         ]);
     }
 }
