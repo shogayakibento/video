@@ -36,7 +36,9 @@ class TweetVideoController extends Controller
                 ->get();
         }
 
-        return view('tweet-video.show', compact('video', 'relatedVideos'));
+        $excludeGenres = ['単体作品', 'ハイビジョン', '独占配信', '4K', 'デジモ', 'ギリモザ'];
+
+        return view('tweet-video.show', compact('video', 'relatedVideos', 'excludeGenres'));
     }
 
     public function redirect(Video $video, Request $request)

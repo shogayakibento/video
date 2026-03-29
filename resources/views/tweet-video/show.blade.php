@@ -98,8 +98,12 @@
                     <h3 class="text-sm text-gray-400 mb-2">ジャンル</h3>
                     <div class="flex flex-wrap gap-2">
                         @foreach(explode(', ', $video->genre) as $g)
-                            <a href="{{ route('tweet.ranking.index', ['genre' => $g]) }}"
-                               class="bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs px-3 py-1 rounded-full transition">{{ $g }}</a>
+                            @if(!in_array($g, $excludeGenres))
+                                <a href="{{ route('tweet.ranking.index', ['genre' => $g]) }}"
+                                   class="bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs px-3 py-1 rounded-full transition">{{ $g }}</a>
+                            @else
+                                <span class="bg-gray-800 text-gray-500 text-xs px-3 py-1 rounded-full">{{ $g }}</span>
+                            @endif
                         @endforeach
                     </div>
                 </div>
