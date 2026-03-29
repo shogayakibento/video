@@ -120,12 +120,16 @@
             iframe.src = '';
         }
 
-        // Open on clickable cards
+        // Navigate to detail page on clickable cards
         document.addEventListener('click', function (e) {
             var card = e.target.closest('.item-card-clickable');
             if (card) {
-                e.preventDefault();
-                openModal(card);
+                var detailUrl = card.dataset.detailUrl;
+                if (detailUrl) {
+                    window.location.href = detailUrl;
+                } else {
+                    openModal(card);
+                }
                 return;
             }
         });
@@ -136,7 +140,12 @@
                 var card = e.target.closest('.item-card-clickable');
                 if (card) {
                     e.preventDefault();
-                    openModal(card);
+                    var detailUrl = card.dataset.detailUrl;
+                    if (detailUrl) {
+                        window.location.href = detailUrl;
+                    } else {
+                        openModal(card);
+                    }
                 }
             }
             if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {

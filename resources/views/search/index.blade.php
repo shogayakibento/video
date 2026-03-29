@@ -41,8 +41,11 @@
 
             @if($totalPages > 1)
                 <div class="pagination">
+                    @if($currentPage > 2)
+                        <a href="{{ route('search') }}?q={{ urlencode($keyword) }}&page=1" class="page-btn">最初へ</a>
+                    @endif
                     @if($currentPage > 1)
-                        <a href="{{ route('search') }}?q={{ urlencode($keyword) }}&page={{ $currentPage - 1 }}" class="page-btn">&laquo; 前へ</a>
+                        <a href="{{ route('search') }}?q={{ urlencode($keyword) }}&page={{ $currentPage - 1 }}" class="page-btn">前へ</a>
                     @endif
 
                     @for($i = max(1, $currentPage - 2); $i <= min($totalPages, $currentPage + 2); $i++)
@@ -51,7 +54,10 @@
                     @endfor
 
                     @if($currentPage < $totalPages)
-                        <a href="{{ route('search') }}?q={{ urlencode($keyword) }}&page={{ $currentPage + 1 }}" class="page-btn">次へ &raquo;</a>
+                        <a href="{{ route('search') }}?q={{ urlencode($keyword) }}&page={{ $currentPage + 1 }}" class="page-btn">次へ</a>
+                        @if($currentPage < $totalPages - 1)
+                            <a href="{{ route('search') }}?q={{ urlencode($keyword) }}&page={{ $totalPages }}" class="page-btn">最後へ</a>
+                        @endif
                     @endif
                 </div>
             @endif

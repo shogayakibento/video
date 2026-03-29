@@ -71,16 +71,22 @@ class RankingController extends Controller
         $query = Video::query()->where('total_likes', '>', 0);
 
         if ($period === 'weekly') {
-            $query->where('updated_at', '>=', now()->subWeek());
+            $query->whereHas('tweets', fn($q) => $q->where('tweeted_at', '>=', now()->subWeek()))
+                  ->withSum(['tweets as period_likes' => fn($q) => $q->where('tweeted_at', '>=', now()->subWeek())], 'like_count');
         } elseif ($period === 'monthly') {
-            $query->where('updated_at', '>=', now()->subMonth());
+            $query->whereHas('tweets', fn($q) => $q->where('tweeted_at', '>=', now()->subMonth()))
+                  ->withSum(['tweets as period_likes' => fn($q) => $q->where('tweeted_at', '>=', now()->subMonth())], 'like_count');
         }
 
         if (!empty($genre)) {
             $query->where('genre', 'like', "%{$genre}%");
         }
 
-        $videos = $query->orderByDesc('weekly_likes')->orderByDesc('total_likes')->paginate(20);
+        if ($period === 'all') {
+            $videos = $query->orderByDesc('total_likes')->paginate(20);
+        } else {
+            $videos = $query->orderByDesc('period_likes')->paginate(20);
+        }
 
         $excludeGenres = ['単体作品', 'ハイビジョン', '独占配信', '4K', 'デジモ', 'ギリモザ'];
 

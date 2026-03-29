@@ -12,7 +12,7 @@
         : number_format($n);
 @endphp
 
-<div class="video-card rounded-2xl overflow-hidden group">
+<div class="video-card rounded-2xl overflow-hidden">
     <a href="{{ route('tweet.video.show', $video) }}" class="video-card-overlay-link" aria-hidden="true" tabindex="-1"></a>
     <a href="{{ route('tweet.video.show', $video) }}" class="block" style="position: relative; z-index: 1;">
         <div class="relative overflow-hidden">
@@ -24,10 +24,9 @@
             <img
                 src="{{ $video->thumbnail_url }}"
                 alt="{{ $video->title }}"
-                class="w-full object-cover transition-transform duration-500 group-hover:scale-105" style="aspect-ratio: 3/2"
+                class="w-full object-cover" style="aspect-ratio: 3/2"
                 loading="lazy"
             >
-            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
         </div>
     </a>
     <div class="p-3.5">
