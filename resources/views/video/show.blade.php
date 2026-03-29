@@ -9,6 +9,7 @@
     $genres      = $item['iteminfo']['genre'] ?? [];
     $maker       = $item['iteminfo']['maker'][0]['name'] ?? null;
     $review      = $item['review']['average'] ?? null;
+    $reviewCount = $item['review']['count'] ?? null;
     $price       = $item['prices']['price'] ?? null;
     $releaseDate = $item['date'] ?? null;
 
@@ -74,7 +75,7 @@
 
             <h1 class="text-xl font-bold mb-3">{{ $title }}</h1>
 
-            <div class="flex flex-wrap items-center gap-4 mb-4 text-sm text-gray-400">
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mb-4 text-sm text-gray-400">
                 @if($actresses)
                     <span>出演:
                         @foreach($actresses as $a)
@@ -84,13 +85,39 @@
                 @endif
                 @if($maker)<span>メーカー: {{ $maker }}</span>@endif
                 @if($releaseDate)<span>発売日: {{ $releaseDate }}</span>@endif
-                @if($review)<span>★ {{ $review }}</span>@endif
             </div>
+
+            {{-- 評価・価格 --}}
+            @if($review || $price)
+                <div class="flex items-center gap-6 mb-6 py-3 border-t border-b border-gray-700">
+                    @if($review)
+                        <div class="flex items-center gap-1.5 text-yellow-400">
+                            <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                            </svg>
+                            <span class="font-bold text-lg leading-none">{{ $review }}</span>
+                            <span class="text-gray-500 text-sm">/ 5.0</span>
+                            @if($reviewCount)
+                                <span class="text-gray-500 text-xs">({{ number_format($reviewCount) }}件)</span>
+                            @endif
+                        </div>
+                    @endif
+                    @if($price)
+                        <div class="text-gray-300 text-sm">
+                            <span class="font-bold text-base">{{ $price }}</span>
+                            <span class="text-gray-400">円</span>
+                        </div>
+                    @endif
+                </div>
+            @endif
 
             {{-- FANZAリンク --}}
             <a href="{{ $affiliateUrl }}" target="_blank" rel="nofollow noopener"
-               class="inline-block bg-accent hover:bg-red-600 text-white font-bold px-8 py-3 rounded-lg transition text-center mb-6">
+               class="flex items-center justify-center gap-2 w-full sm:w-auto bg-accent hover:bg-red-600 text-white font-bold px-8 py-3 rounded-lg transition mb-6">
                 FANZAで詳細を見る
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
             </a>
 
             {{-- ジャンルタグ --}}
