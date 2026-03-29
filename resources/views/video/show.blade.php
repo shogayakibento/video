@@ -116,7 +116,7 @@
             @if(!empty($alsoWatched))
                 <div class="mt-4">
                     <h2 class="text-lg font-bold mb-4">
-                        @if($primaryGenreName){{ $primaryGenreName }}好きな人はこちらも@else関連作品@endif
+                        この動画を見た人はこちらも
                     </h2>
                     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem;">
                         @foreach($alsoWatched as $related)
