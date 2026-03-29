@@ -84,7 +84,7 @@
                 @endif
                 @if($maker)<span>メーカー: {{ $maker }}</span>@endif
                 @if($releaseDate)<span>発売日: {{ $releaseDate }}</span>@endif
-                @if($review)<span>★ {{ $review }}</span>@endif
+                @if($review)<span class="text-yellow-400">★ {{ $review }}</span>@endif
             </div>
 
             {{-- FANZAリンク --}}
