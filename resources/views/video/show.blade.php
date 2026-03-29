@@ -12,6 +12,8 @@
     $price       = $item['prices']['price'] ?? null;
     $releaseDate = $item['date'] ?? null;
 
+    $genreSlugMap = collect(config('fanza.genres'))->mapWithKeys(fn($g, $slug) => [$g['label'] => $slug])->all();
+
     $primaryActressName = $actresses[0]['name'] ?? null;
     $primaryActressId   = $actresses[0]['id'] ?? null;
     $primaryGenreName   = $genres[0]['name'] ?? null;
@@ -97,8 +99,13 @@
                     <h3 class="text-sm text-gray-400 mb-2">ジャンル</h3>
                     <div class="flex flex-wrap gap-2">
                         @foreach($genres as $g)
-                            <a href="{{ route('genre.show', $g['keyword'] ?? $g['name']) }}"
-                               class="bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs px-3 py-1 rounded-full transition">{{ $g['name'] }}</a>
+                            @php $matchedSlug = $genreSlugMap[$g['name']] ?? null; @endphp
+                            @if($matchedSlug)
+                                <a href="{{ route('genre.show', $matchedSlug) }}"
+                                   class="bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs px-3 py-1 rounded-full transition">{{ $g['name'] }}</a>
+                            @else
+                                <span class="bg-gray-800 text-gray-500 text-xs px-3 py-1 rounded-full">{{ $g['name'] }}</span>
+                            @endif
                         @endforeach
                     </div>
                 </div>
