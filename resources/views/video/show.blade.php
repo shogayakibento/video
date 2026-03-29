@@ -46,7 +46,7 @@
     ]])
 
     <div class="mb-4">
-        <a href="{{ route('ranking') }}" class="text-gray-400 hover:text-accent text-sm transition">&larr; 戻る</a>
+        <a href="javascript:history.back()" class="text-gray-400 hover:text-accent text-sm transition">&larr; 戻る</a>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
