@@ -18,11 +18,14 @@
     </div>
 </div>
 
-<div class="tweet-page" style="padding-top: 1.5rem;">
+<div class="container">
     @include('partials.breadcrumb', ['items' => [
         ['label' => 'ホーム', 'url' => route('home')],
         ['label' => 'X(Twitter)バズり動画ランキング'],
     ]])
+</div>
+
+<div class="tweet-page" style="padding-top: 1.5rem;">
     <div class="mb-8">
 
         {{-- 期間フィルター --}}
