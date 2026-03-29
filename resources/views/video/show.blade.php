@@ -139,7 +139,7 @@
                         @php
                             $rTitle    = $related['title'] ?? '';
                             $rUrl      = route('fanza.video.show', $related['content_id'] ?? '');
-                            $rImg      = str_replace('http://', 'https://', $related['imageURL']['small'] ?? $related['imageURL']['large'] ?? '');
+                            $rImg      = str_replace('http://', 'https://', $related['imageURL']['large'] ?? $related['imageURL']['small'] ?? '');
                             $rActress  = $related['iteminfo']['actress'][0]['name'] ?? '';
                             $rReview   = $related['review']['average'] ?? null;
                         @endphp
