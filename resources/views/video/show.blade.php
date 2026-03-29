@@ -85,7 +85,7 @@
                 @if($maker)<span>メーカー: {{ $maker }}</span>@endif
                 @if($releaseDate)<span>発売日: {{ $releaseDate }}</span>@endif
                 @if($review)<span class="text-yellow-400">★ {{ $review }}</span>@endif
-                @if($price)<span>{{ $price }}円</span>@endif
+                @if($price)<span class="item-price">{{ preg_replace('/~$/', '円〜', $price) }}{{ str_ends_with($price, '~') ? '' : '円' }}</span>@endif
             </div>
 
             {{-- FANZAリンク --}}
