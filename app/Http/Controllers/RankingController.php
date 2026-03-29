@@ -80,7 +80,11 @@ class RankingController extends Controller
             $query->where('genre', 'like', "%{$genre}%");
         }
 
-        $videos = $query->orderByDesc('total_likes')->paginate(20);
+        if ($period === 'all') {
+            $videos = $query->orderByDesc('total_likes')->paginate(20);
+        } else {
+            $videos = $query->orderByDesc('weekly_likes')->orderByDesc('total_likes')->paginate(20);
+        }
 
         $excludeGenres = ['単体作品', 'ハイビジョン', '独占配信', '4K', 'デジモ', 'ギリモザ'];
 
