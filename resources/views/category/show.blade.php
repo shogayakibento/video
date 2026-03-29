@@ -50,7 +50,7 @@
         @if($totalPages > 1)
             <div class="pagination">
                 @if($currentPage > 1)
-                    <a href="{{ route('category.show', $slug) }}?sort={{ $sort }}&page={{ $currentPage - 1 }}" class="page-btn">&laquo; 前へ</a>
+                    <a href="{{ route('category.show', $slug) }}?sort={{ $sort }}&page={{ $currentPage - 1 }}" class="page-btn">前へ</a>
                 @endif
 
                 @for($i = max(1, $currentPage - 2); $i <= min($totalPages, $currentPage + 2); $i++)
@@ -59,9 +59,9 @@
                 @endfor
 
                 @if($currentPage < $totalPages)
-                    <a href="{{ route('category.show', $slug) }}?sort={{ $sort }}&page={{ $currentPage + 1 }}" class="page-btn">次へ »</a>
+                    <a href="{{ route('category.show', $slug) }}?sort={{ $sort }}&page={{ $currentPage + 1 }}" class="page-btn">次へ</a>
                     @if($currentPage < $totalPages - 1)
-                        <a href="{{ route('category.show', $slug) }}?sort={{ $sort }}&page={{ $totalPages }}" class="page-btn">最後 »»</a>
+                        <a href="{{ route('category.show', $slug) }}?sort={{ $sort }}&page={{ $totalPages }}" class="page-btn">最後へ</a>
                     @endif
                 @endif
             </div>
