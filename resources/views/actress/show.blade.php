@@ -117,21 +117,6 @@
             </div>
         @endif
 
-        {{-- Fan Recommendations --}}
-        @if($recommendedVideos->isNotEmpty())
-        <section style="margin-top: 48px;">
-            <div class="section-header">
-                <h2 class="section-title">{{ $name }}好きな人へのおすすめ</h2>
-            </div>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: -16px; margin-bottom: 20px; text-align: center;">X(Twitter)で話題の関連ジャンル作品</p>
-            <div class="grid grid-cols-2 md:grid-cols-3" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;">
-                @foreach($recommendedVideos as $rec)
-                    <x-tweet-video-card :video="$rec" />
-                @endforeach
-            </div>
-        </section>
-        @endif
-
         {{-- Similar Actresses --}}
         @if(!empty($similarActresses))
         <section style="margin-top: 48px;">
