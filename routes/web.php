@@ -9,6 +9,7 @@ use App\Http\Controllers\RankingController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShortsController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\FanzaVideoController;
 use App\Http\Controllers\TweetVideoController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,7 @@ Route::get('/actress/by-name/{name}', [ActressController::class, 'showByName'])-
 Route::get('/actress/{id}', [ActressController::class, 'show'])->name('actress.show');
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/ranking', [RankingController::class, 'index'])->name('ranking');
+Route::get('/video/{contentId}', [FanzaVideoController::class, 'show'])->name('fanza.video.show');
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/sitemap-pages.xml', [SitemapController::class, 'pages'])->name('sitemap.pages');
 Route::get('/sitemap-actresses.xml', [SitemapController::class, 'actresses'])->name('sitemap.actresses');
