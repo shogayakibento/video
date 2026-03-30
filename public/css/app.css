@@ -1472,6 +1472,33 @@ img {
     object-fit: cover;
 }
 
+.actress-profile-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.actress-profile-similar {
+    width: 200px;
+    flex-shrink: 0;
+    border-left: 1px solid var(--border);
+    padding-left: 1.5rem;
+}
+
+.actress-profile-similar-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+}
+
+.actress-profile-similar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
 .actress-profile-details h2 {
     font-size: 1.5rem;
     color: var(--text-heading);
@@ -1525,6 +1552,18 @@ img {
     .actress-profile-image {
         width: 140px;
         height: 140px;
+    }
+
+    .actress-profile-similar {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid var(--border);
+        padding-left: 0;
+        padding-top: 1rem;
+    }
+
+    .actress-profile-similar-grid {
+        grid-template-columns: repeat(6, 1fr);
     }
 
     .actress-specs {

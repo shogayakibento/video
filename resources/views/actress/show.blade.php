@@ -70,33 +70,31 @@
                 </div>
                 <p class="actress-work-count">出演作品: {{ number_format($totalCount) }}件</p>
             </div>
-        </div>
-
-        {{-- Similar Actresses Strip --}}
-        @if(!empty($similarActresses))
-        <div class="similar-actresses-strip">
-            <span class="similar-actresses-label">似た女優</span>
-            <div class="similar-actresses-scroll">
-                @foreach($similarActresses as $sim)
-                    @php
-                        $simId   = $sim['id'] ?? '';
-                        $simName = $sim['name'] ?? '';
-                        $simImg  = str_replace('http://', 'https://', $sim['imageURL']['large'] ?? $sim['imageURL']['small'] ?? '');
-                    @endphp
-                    @if($simId)
-                    <a href="{{ route('actress.show', $simId) }}" class="similar-actress-chip">
-                        <div class="similar-actress-chip-thumb">
-                            @if($simImg)
-                                <img src="{{ $simImg }}" alt="{{ $simName }}" loading="lazy">
-                            @endif
-                        </div>
-                        <span>{{ $simName }}</span>
-                    </a>
-                    @endif
-                @endforeach
+            @if(!empty($similarActresses))
+            <div class="actress-profile-similar">
+                <div class="actress-profile-similar-label">似た女優</div>
+                <div class="actress-profile-similar-grid">
+                    @foreach($similarActresses as $sim)
+                        @php
+                            $simId   = $sim['id'] ?? '';
+                            $simName = $sim['name'] ?? '';
+                            $simImg  = str_replace('http://', 'https://', $sim['imageURL']['large'] ?? $sim['imageURL']['small'] ?? '');
+                        @endphp
+                        @if($simId)
+                        <a href="{{ route('actress.show', $simId) }}" class="similar-actress-chip">
+                            <div class="similar-actress-chip-thumb">
+                                @if($simImg)
+                                    <img src="{{ $simImg }}" alt="{{ $simName }}" loading="lazy">
+                                @endif
+                            </div>
+                            <span>{{ $simName }}</span>
+                        </a>
+                        @endif
+                    @endforeach
+                </div>
             </div>
+            @endif
         </div>
-        @endif
 
         {{-- Sort & Cast Filter --}}
         <div class="filter-bar" style="flex-wrap: wrap; gap: 6px;">
