@@ -248,7 +248,7 @@ public function index(Request $request, FanzaApiService $api)
         }
 
         // --- Similar Actresses ---
-        $cacheKey = 'similar_actresses_v7_' . $id;
+        $cacheKey = 'similar_actresses_v8_' . $id;
         $similarActresses = Cache::get($cacheKey);
         if ($similarActresses === null) {
             $similarActresses = $this->findSimilarByMeasurements($api, $id, $actress);
@@ -313,11 +313,9 @@ public function index(Request $request, FanzaApiService $api)
             if (!$aid || $aid === (string) $id) {
                 continue;
             }
-            if (empty($a['imageURL']['large']) && empty($a['imageURL']['small'])) {
+            if (!isset($poolIds[$aid])) {
                 continue;
             }
-            // プール内の女優を優先（スコアにボーナス）
-            $poolBonus = isset($poolIds[$aid]) ? 0 : 0.5;
 
             $score = 0.0;
             $dims  = 0;
@@ -355,12 +353,15 @@ public function index(Request $request, FanzaApiService $api)
                 continue;
             }
 
-            $scored[] = ['actress' => $a, 'score' => sqrt($score) + $poolBonus];
+            $scored[] = ['actress' => $a, 'score' => sqrt($score)];
         }
 
         usort($scored, fn($x, $y) => $x['score'] <=> $y['score']);
 
-        return array_map(fn($s) => $s['actress'], array_slice($scored, 0, 6));
+        $result = array_map(fn($s) => $s['actress'], array_slice($scored, 0, 6));
+
+        // プール内で6人揃わなければ共演者フォールバックへ
+        return count($result) >= 3 ? $result : [];
     }
 
     /**
