@@ -248,7 +248,7 @@ public function index(Request $request, FanzaApiService $api)
         }
 
         // --- Similar Actresses ---
-        $cacheKey = 'similar_actresses_v3_' . $id;
+        $cacheKey = 'similar_actresses_v4_' . $id;
         $similarActresses = Cache::get($cacheKey);
         if ($similarActresses === null) {
             $similarActresses = $this->findSimilarByMeasurements($api, $id, $actress);
@@ -309,6 +309,10 @@ public function index(Request $request, FanzaApiService $api)
         foreach ($candidates as $a) {
             $aid = (string) ($a['id'] ?? '');
             if (!$aid || $aid === (string) $id) {
+                continue;
+            }
+            // 画像なし（引退・古い女優）を除外
+            if (empty($a['imageURL']['large']) && empty($a['imageURL']['small'])) {
                 continue;
             }
 
