@@ -118,9 +118,11 @@
                     <h2 class="text-lg font-bold mb-4">
                         この作品を見た人はこちらも視聴しています
                     </h2>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem;">
+                    <div style="display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 0.5rem; scrollbar-width: thin;">
                         @foreach($alsoWatched as $related)
-                            @include('partials.item-card', ['item' => $related])
+                            <div style="flex: 0 0 160px;">
+                                @include('partials.item-card', ['item' => $related])
+                            </div>
                         @endforeach
                     </div>
                 </div>
