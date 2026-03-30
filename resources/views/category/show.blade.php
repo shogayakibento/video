@@ -11,7 +11,7 @@
     <div class="page-header">
         <div class="container">
             @php
-                $sortLabels = ['rank' => '人気ランキング', 'date' => '新着順', 'review' => 'レビュー順'];
+                $sortLabels = ['rank' => '人気ランキング', 'date' => '新着作品', 'review' => 'レビュー順'];
                 $sortDescs  = [
                     'rank'   => 'FANZAの人気' . $category['label'] . '作品ランキング',
                     'date'   => '最新の' . $category['label'] . '作品一覧',
