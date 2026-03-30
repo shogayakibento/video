@@ -22,8 +22,11 @@
         ]])
 
         @if($keyword)
-            <div class="search-meta">
-                <p>「<strong>{{ $keyword }}</strong>」の検索結果: <span class="result-count">{{ number_format($totalCount) }}件</span></p>
+            <div class="filter-bar">
+                <a href="{{ route('search') }}?q={{ urlencode($keyword) }}&sort=rank" class="tab-btn {{ $sort === 'rank' ? 'active' : '' }}">人気順</a>
+                <a href="{{ route('search') }}?q={{ urlencode($keyword) }}&sort=date" class="tab-btn {{ $sort === 'date' ? 'active' : '' }}">新着順</a>
+                <a href="{{ route('search') }}?q={{ urlencode($keyword) }}&sort=review" class="tab-btn {{ $sort === 'review' ? 'active' : '' }}">レビュー順</a>
+                <span class="filter-count">{{ number_format($totalCount) }}件</span>
             </div>
 
             <div class="items-grid content-grid">
@@ -42,21 +45,21 @@
             @if($totalPages > 1)
                 <div class="pagination">
                     @if($currentPage > 2)
-                        <a href="{{ route('search') }}?q={{ urlencode($keyword) }}&page=1" class="page-btn">最初へ</a>
+                        <a href="{{ route('search') }}?q={{ urlencode($keyword) }}&sort={{ $sort }}&page=1" class="page-btn">最初へ</a>
                     @endif
                     @if($currentPage > 1)
-                        <a href="{{ route('search') }}?q={{ urlencode($keyword) }}&page={{ $currentPage - 1 }}" class="page-btn">前へ</a>
+                        <a href="{{ route('search') }}?q={{ urlencode($keyword) }}&sort={{ $sort }}&page={{ $currentPage - 1 }}" class="page-btn">前へ</a>
                     @endif
 
                     @for($i = max(1, $currentPage - 2); $i <= min($totalPages, $currentPage + 2); $i++)
-                        <a href="{{ route('search') }}?q={{ urlencode($keyword) }}&page={{ $i }}"
+                        <a href="{{ route('search') }}?q={{ urlencode($keyword) }}&sort={{ $sort }}&page={{ $i }}"
                            class="page-btn {{ $i === $currentPage ? 'active' : '' }}">{{ $i }}</a>
                     @endfor
 
                     @if($currentPage < $totalPages)
-                        <a href="{{ route('search') }}?q={{ urlencode($keyword) }}&page={{ $currentPage + 1 }}" class="page-btn">次へ</a>
+                        <a href="{{ route('search') }}?q={{ urlencode($keyword) }}&sort={{ $sort }}&page={{ $currentPage + 1 }}" class="page-btn">次へ</a>
                         @if($currentPage < $totalPages - 1)
-                            <a href="{{ route('search') }}?q={{ urlencode($keyword) }}&page={{ $totalPages }}" class="page-btn">最後へ</a>
+                            <a href="{{ route('search') }}?q={{ urlencode($keyword) }}&sort={{ $sort }}&page={{ $totalPages }}" class="page-btn">最後へ</a>
                         @endif
                     @endif
                 </div>

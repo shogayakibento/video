@@ -12,6 +12,7 @@ class SearchController extends Controller
         $keyword = $request->input('q', '');
         $service = $request->input('service', 'digital');
         $floor = $request->input('floor', 'videoa');
+        $sort = in_array($request->input('sort'), ['rank', 'date', 'review']) ? $request->input('sort') : 'rank';
         $page = max(1, (int) $request->input('page', 1));
         $hits = 20;
         $offset = (($page - 1) * $hits) + 1;
@@ -20,7 +21,7 @@ class SearchController extends Controller
         $totalCount = 0;
 
         if ($keyword) {
-            $result = $api->search($keyword, $service, $floor, $hits, $offset);
+            $result = $api->search($keyword, $service, $floor, $hits, $offset, $sort);
             $items = $result['result']['items'] ?? [];
             $totalCount = $result['result']['total_count'] ?? 0;
         }
@@ -35,6 +36,7 @@ class SearchController extends Controller
             'totalCount' => $totalCount,
             'service' => $service,
             'floor' => $floor,
+            'sort' => $sort,
             'categories' => config('fanza.categories'),
         ]);
     }

@@ -72,7 +72,7 @@ class FanzaApiService
         ]);
     }
 
-    public function search(string $keyword, string $service = 'digital', string $floor = 'videoa', int $hits = 20, int $offset = 1): array
+    public function search(string $keyword, string $service = 'digital', string $floor = 'videoa', int $hits = 20, int $offset = 1, string $sort = 'rank'): array
     {
         return $this->getItems([
             'service' => $service,
@@ -80,6 +80,7 @@ class FanzaApiService
             'keyword' => $keyword,
             'hits' => $hits,
             'offset' => $offset,
+            'sort' => $sort,
         ]);
     }
 
