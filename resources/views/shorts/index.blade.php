@@ -38,6 +38,14 @@ body.shorts-page > script[src*="banner_placement"] {
         padding: 10px !important;
     }
 
+    .shorts-player-box {
+        padding-bottom: 0 !important;
+        height: auto !important;
+        width: 100% !important;
+        aspect-ratio: 16 / 9 !important;
+        position: relative !important;
+    }
+
     .shorts-info-overlay {
         position: relative !important;
         top: auto !important;
