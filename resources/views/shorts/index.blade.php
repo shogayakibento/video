@@ -40,8 +40,9 @@ body.shorts-page > script[src*="banner_placement"] {
 
     .shorts-player-box {
         padding-bottom: 0 !important;
-        height: auto !important;
-        width: 100% !important;
+        height: 100% !important;
+        width: auto !important;
+        max-width: 100% !important;
         aspect-ratio: 16 / 9 !important;
         position: relative !important;
     }
