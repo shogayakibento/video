@@ -43,6 +43,7 @@
 
         {{-- Actress Profile --}}
         <div class="actress-profile">
+            <div class="actress-profile-left">
             @if($imageUrl)
                 <div class="actress-profile-image">
                     <img src="{{ $imageUrl }}" alt="{{ $name }}">
@@ -70,6 +71,7 @@
                 </div>
                 <p class="actress-work-count">出演作品: {{ number_format($totalCount) }}件</p>
             </div>
+            </div>{{-- /.actress-profile-left --}}
             @if(!empty($similarActresses))
             <div class="actress-profile-similar">
                 <div class="actress-profile-similar-label">似た女優</div>

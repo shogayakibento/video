@@ -1472,8 +1472,15 @@ img {
     object-fit: cover;
 }
 
-.actress-profile-details {
+.actress-profile-left {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
     flex: 1;
+    min-width: 0;
+}
+
+.actress-profile-details {
     min-width: 0;
 }
 
@@ -1552,6 +1559,10 @@ img {
     .actress-profile-image {
         width: 140px;
         height: 140px;
+    }
+
+    .actress-profile-left {
+        width: 100%;
     }
 
     .actress-profile-similar {
@@ -2666,8 +2677,7 @@ img {
     gap: 4px;
     text-decoration: none;
     color: var(--text-primary);
-    flex-shrink: 0;
-    width: 64px;
+    min-width: 0;
 }
 
 .similar-actress-chip:hover .similar-actress-chip-thumb {
