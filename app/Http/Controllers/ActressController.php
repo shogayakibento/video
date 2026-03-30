@@ -248,7 +248,7 @@ public function index(Request $request, FanzaApiService $api)
         }
 
         // --- Similar Actresses ---
-        $cacheKey = 'similar_actresses_v9_' . $id;
+        $cacheKey = 'similar_actresses_v10_' . $id;
         $similarActresses = Cache::get($cacheKey);
         if ($similarActresses === null) {
             $similarActresses = $this->findSimilarByMeasurements($api, $id, $actress);
@@ -301,10 +301,6 @@ public function index(Request $request, FanzaApiService $api)
         if ($height !== null) {
             $params['gte_height'] = $height - 8;
             $params['lte_height'] = $height + 8;
-        }
-        // 対象女優のbirthdayがない場合は1990年以降生まれに絞る
-        if ($age === null) {
-            $params['gte_birthday'] = '1990-01-01';
         }
 
         $candidates = $api->getActresses($params)['result']['actress'] ?? [];
