@@ -248,7 +248,7 @@ public function index(Request $request, FanzaApiService $api)
         }
 
         // --- Similar Actresses ---
-        $cacheKey = 'similar_actresses_v12_' . $id;
+        $cacheKey = 'similar_actresses_v13_' . $id;
         $similarActresses = Cache::get($cacheKey);
         if ($similarActresses === null) {
             $similarActresses = $this->findSimilarByMeasurements($api, $id, $actress, $baseParams);
@@ -276,9 +276,11 @@ public function index(Request $request, FanzaApiService $api)
     }
 
     /**
-     * Find actresses with similar body measurements using weighted Euclidean distance.
-     * Uses FANZA ActressSearch API filtered by bust/height range, then scores by
-     * all available dimensions: height, bust, cup, waist, hip, age.
+     * Find similar actresses: genre-first filter, then body measurement scoring.
+     * 1. Extract target actress's top genre from her videos
+     * 2. Get pool actresses appearing in that genre
+     * 3. Score by body measurements (height, bust, cup, waist, hip, age)
+     * Falls back to pool-only measurement filter if genre yields < 3 candidates.
      */
     private function findSimilarByMeasurements(FanzaApiService $api, string $id, array $actress, array $baseParams): array
     {
@@ -291,27 +293,11 @@ public function index(Request $request, FanzaApiService $api)
         $cup    = ($actress['cup']      ?? '') !== '' ? ($cupOrder[strtoupper($actress['cup'])] ?? null) : null;
         $age    = ($actress['birthday'] ?? '') !== '' ? (int) date('Y') - (int) substr($actress['birthday'], 0, 4) : null;
 
-        if ($bust === null && $height === null) {
-            return [];
-        }
-
-        $params = ['hits' => 100, 'offset' => 1];
-        if ($bust !== null) {
-            $params['gte_bust'] = $bust - 10;
-            $params['lte_bust'] = $bust + 10;
-        }
-        if ($height !== null) {
-            $params['gte_height'] = $height - 8;
-            $params['lte_height'] = $height + 8;
-        }
-
-        $candidates = $api->getActresses($params)['result']['actress'] ?? [];
-
         $poolIds = array_flip(array_column($api->getRankingPool(), 'id'));
 
-        // 対象女優のトップ3ジャンルを抽出
-        $genreVideos  = $api->getItems(array_merge($baseParams, ['hits' => 20, 'offset' => 1, 'sort' => 'rank']))['result']['items'] ?? [];
-        $genreCount   = [];
+        // 対象女優のトップジャンルを抽出
+        $genreVideos = $api->getItems(array_merge($baseParams, ['hits' => 20, 'offset' => 1, 'sort' => 'rank']))['result']['items'] ?? [];
+        $genreCount  = [];
         foreach ($genreVideos as $item) {
             foreach ($item['iteminfo']['genre'] ?? [] as $g) {
                 $gid = $g['id'] ?? null;
@@ -319,68 +305,81 @@ public function index(Request $request, FanzaApiService $api)
             }
         }
         arsort($genreCount);
-        $topGenreIds = array_slice(array_keys($genreCount), 0, 3);
+        $topGenreId = array_key_first($genreCount);
 
-        // ジャンル別の出演女優セットを構築（キャッシュ済みAPIコール）
-        $genreActressCount = [];
-        foreach ($topGenreIds as $gid) {
-            $items = $api->getItems(['article' => 'genre', 'article_id' => $gid, 'hits' => 100, 'sort' => 'rank'])['result']['items'] ?? [];
-            foreach ($items as $item) {
+        // トップジャンルのプール内女優IDを収集
+        $genrePoolIds = [];
+        if ($topGenreId) {
+            $genreItems = $api->getItems(['article' => 'genre', 'article_id' => $topGenreId, 'hits' => 100, 'sort' => 'rank'])['result']['items'] ?? [];
+            foreach ($genreItems as $item) {
                 foreach ($item['iteminfo']['actress'] ?? [] as $a) {
                     $aid = (string) ($a['id'] ?? '');
-                    if ($aid) $genreActressCount[$aid] = ($genreActressCount[$aid] ?? 0) + 1;
+                    if ($aid && isset($poolIds[$aid]) && $aid !== (string) $id) {
+                        $genrePoolIds[$aid] = true;
+                    }
                 }
             }
         }
 
+        // 体型範囲で候補取得
+        $bodyParams = ['hits' => 100, 'offset' => 1];
+        if ($bust !== null) {
+            $bodyParams['gte_bust'] = $bust - 10;
+            $bodyParams['lte_bust'] = $bust + 10;
+        }
+        if ($height !== null) {
+            $bodyParams['gte_height'] = $height - 8;
+            $bodyParams['lte_height'] = $height + 8;
+        }
+        $bodyCandidates = ($bust !== null || $height !== null)
+            ? ($api->getActresses($bodyParams)['result']['actress'] ?? [])
+            : [];
+        $bodyIds = array_flip(array_column($bodyCandidates, 'id'));
+
+        // ジャンル候補と体型候補の交差 → スコアリング対象
+        // 交差が3未満ならジャンル候補のみ（体型条件を緩和）
+        $scoringPool = array_filter($bodyCandidates, fn($a) => isset($genrePoolIds[(string) ($a['id'] ?? '')]));
+        if (count($scoringPool) < 3) {
+            // ジャンルプール内でまだスコアリングされていない女優を追加取得
+            foreach (array_keys($genrePoolIds) as $aid) {
+                if (!isset($bodyIds[$aid])) {
+                    $info = $api->getActresses(['actress_id' => $aid])['result']['actress'][0] ?? null;
+                    if ($info) $scoringPool[] = $info;
+                }
+            }
+        }
+
+        // 体型スコアでソート
         $scored = [];
-        foreach ($candidates as $a) {
+        foreach ($scoringPool as $a) {
             $aid = (string) ($a['id'] ?? '');
-            if (!$aid || $aid === (string) $id) {
-                continue;
-            }
-            if (!isset($poolIds[$aid])) {
-                continue;
-            }
+            if (!$aid || $aid === (string) $id) continue;
 
             $score = 0.0;
             $dims  = 0;
 
             if ($height !== null && ($a['height'] ?? '') !== '') {
-                $score += (($height - (int) $a['height']) / 10) ** 2;
-                $dims++;
+                $score += (($height - (int) $a['height']) / 10) ** 2; $dims++;
             }
             if ($bust !== null && ($a['bust'] ?? '') !== '') {
-                $score += (($bust - (int) $a['bust']) / 8) ** 2;
-                $dims++;
+                $score += (($bust - (int) $a['bust']) / 8) ** 2; $dims++;
             }
             if ($waist !== null && ($a['waist'] ?? '') !== '') {
-                $score += (($waist - (int) $a['waist']) / 6) ** 2;
-                $dims++;
+                $score += (($waist - (int) $a['waist']) / 6) ** 2; $dims++;
             }
             if ($hip !== null && ($a['hip'] ?? '') !== '') {
-                $score += (($hip - (int) $a['hip']) / 6) ** 2;
-                $dims++;
+                $score += (($hip - (int) $a['hip']) / 6) ** 2; $dims++;
             }
             if ($cup !== null && ($a['cup'] ?? '') !== '') {
                 $aCup = $cupOrder[strtoupper($a['cup'])] ?? null;
-                if ($aCup !== null) {
-                    $score += (($cup - $aCup) / 2) ** 2;
-                    $dims++;
-                }
+                if ($aCup !== null) { $score += (($cup - $aCup) / 2) ** 2; $dims++; }
             }
             if ($age !== null && ($a['birthday'] ?? '') !== '') {
                 $aAge = (int) date('Y') - (int) substr($a['birthday'], 0, 4);
-                $score += (($age - $aAge) / 5) ** 2;
-                $dims++;
+                $score += (($age - $aAge) / 5) ** 2; $dims++;
             }
 
-            if ($dims === 0) {
-                continue;
-            }
-
-            $sharedGenres = $genreActressCount[$aid] ?? 0;
-            $scored[] = ['actress' => $a, 'score' => sqrt($score) - ($sharedGenres * 0.2)];
+            $scored[] = ['actress' => $a, 'score' => $dims > 0 ? sqrt($score) : PHP_INT_MAX];
         }
 
         usort($scored, fn($x, $y) => $x['score'] <=> $y['score']);
