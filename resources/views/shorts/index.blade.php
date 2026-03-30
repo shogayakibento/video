@@ -39,12 +39,21 @@ body.shorts-page > script[src*="banner_placement"] {
     }
 
     .shorts-player-box {
-        padding-bottom: 0 !important;
-        height: 100% !important;
-        width: auto !important;
-        max-width: 100% !important;
-        aspect-ratio: 16 / 9 !important;
+        padding-bottom: 65% !important;
+        height: 0 !important;
+        width: 100% !important;
+        aspect-ratio: auto !important;
         position: relative !important;
+    }
+
+    .shorts-iframe {
+        position: absolute !important;
+        inset: auto !important;
+        top: -15% !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 125% !important;
+        transform: none !important;
     }
 
     .shorts-info-overlay {
