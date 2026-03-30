@@ -57,12 +57,10 @@ body.shorts-page > script[src*="banner_placement"] {
     }
 
     .shorts-info-overlay {
-        display: flex !important;
         position: relative !important;
         top: auto !important;
         bottom: auto !important;
         left: auto !important;
-        right: auto !important;
         transform: none !important;
         width: 300px !important;
         flex-shrink: 0 !important;
@@ -76,8 +74,6 @@ body.shorts-page > script[src*="banner_placement"] {
         gap: 10px !important;
         justify-content: flex-start !important;
         overflow-y: auto !important;
-        pointer-events: auto !important;
-        z-index: auto !important;
     }
 
     .shorts-info-text {
