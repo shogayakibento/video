@@ -247,61 +247,14 @@ public function index(Request $request, FanzaApiService $api)
             $totalPages = max(1, (int) ceil($totalCount / $hits));
         }
 
-        // --- Genre extraction (always from page-1 rank results for consistency) ---
-        $genreSourceResult = $api->getItems(array_merge($baseParams, ['hits' => 20, 'offset' => 1, 'sort' => 'rank']));
-        $genreSourceItems  = $genreSourceResult['result']['items'] ?? [];
-
-        $genreIdCount  = [];
-        $genreIdToName = [];
-        foreach ($genreSourceItems as $gItem) {
-            foreach ($gItem['iteminfo']['genre'] ?? [] as $g) {
-                $gid = $g['id'] ?? null;
-                if ($gid) {
-                    $genreIdCount[$gid]  = ($genreIdCount[$gid] ?? 0) + 1;
-                    $genreIdToName[$gid] = $g['name'] ?? '';
-                }
+        // --- Similar Actresses (measurement-based, cached per actress) ---
+        $similarActresses = Cache::remember(
+            'similar_actresses_body_' . $id,
+            86400,
+            function () use ($api, $id, $actress) {
+                return $this->findSimilarByMeasurements($api, $id, $actress);
             }
-        }
-        arsort($genreIdCount);
-        $topGenreId   = array_key_first($genreIdCount);
-        // --- Similar Actresses (cached per top genre) ---
-        $similarActresses = [];
-        if ($topGenreId) {
-            $similarActresses = Cache::remember(
-                'similar_actresses_genre_' . $topGenreId,
-                7200,
-                function () use ($api, $id, $topGenreId) {
-                    $genreItems = $api->getItems([
-                        'article'    => 'genre',
-                        'article_id' => $topGenreId,
-                        'hits'       => 100,
-                        'sort'       => 'rank',
-                    ])['result']['items'] ?? [];
-
-                    $countMap = [];
-                    foreach ($genreItems as $gItem) {
-                        foreach ($gItem['iteminfo']['actress'] ?? [] as $a) {
-                            $aid = $a['id'] ?? null;
-                            if ($aid && $aid !== $id) {
-                                $countMap[$aid] = ($countMap[$aid] ?? 0) + 1;
-                            }
-                        }
-                    }
-                    arsort($countMap);
-                    $topIds = array_slice(array_keys($countMap), 0, 6);
-
-                    $result = [];
-                    foreach ($topIds as $aid) {
-                        $detail = $api->getActresses(['actress_id' => $aid]);
-                        $info   = $detail['result']['actress'][0] ?? null;
-                        if ($info) {
-                            $result[] = $info;
-                        }
-                    }
-                    return $result;
-                }
-            );
-        }
+        );
 
         return view('actress.show', [
             'actress'          => $actress,
@@ -313,5 +266,82 @@ public function index(Request $request, FanzaApiService $api)
             'cast'             => $cast,
             'similarActresses' => $similarActresses,
         ]);
+    }
+
+    /**
+     * Find actresses with similar body measurements using weighted Euclidean distance.
+     * Uses FANZA ActressSearch API filtered by bust/height range, then scores by
+     * all available dimensions: height, bust, cup, waist, hip.
+     */
+    private function findSimilarByMeasurements(FanzaApiService $api, string $id, array $actress): array
+    {
+        $cupOrder = ['A' => 1, 'B' => 2, 'C' => 3, 'D' => 4, 'E' => 5, 'F' => 6, 'G' => 7, 'H' => 8, 'I' => 9];
+
+        $height = ($actress['height'] ?? '') !== '' ? (int) $actress['height'] : null;
+        $bust   = ($actress['bust']   ?? '') !== '' ? (int) $actress['bust']   : null;
+        $waist  = ($actress['waist']  ?? '') !== '' ? (int) $actress['waist']  : null;
+        $hip    = ($actress['hip']    ?? '') !== '' ? (int) $actress['hip']    : null;
+        $cup    = ($actress['cup']    ?? '') !== '' ? ($cupOrder[strtoupper($actress['cup'])] ?? null) : null;
+
+        if ($bust === null && $height === null) {
+            return [];
+        }
+
+        $params = ['hits' => 100, 'offset' => 1];
+        if ($bust !== null) {
+            $params['gte_bust'] = $bust - 10;
+            $params['lte_bust'] = $bust + 10;
+        }
+        if ($height !== null) {
+            $params['gte_height'] = $height - 8;
+            $params['lte_height'] = $height + 8;
+        }
+
+        $candidates = $api->getActresses($params)['result']['actress'] ?? [];
+
+        $scored = [];
+        foreach ($candidates as $a) {
+            $aid = $a['id'] ?? null;
+            if (!$aid || $aid === $id) {
+                continue;
+            }
+
+            $score = 0.0;
+            $dims  = 0;
+
+            if ($height !== null && ($a['height'] ?? '') !== '') {
+                $score += (($height - (int) $a['height']) / 10) ** 2;
+                $dims++;
+            }
+            if ($bust !== null && ($a['bust'] ?? '') !== '') {
+                $score += (($bust - (int) $a['bust']) / 8) ** 2;
+                $dims++;
+            }
+            if ($waist !== null && ($a['waist'] ?? '') !== '') {
+                $score += (($waist - (int) $a['waist']) / 6) ** 2;
+                $dims++;
+            }
+            if ($hip !== null && ($a['hip'] ?? '') !== '') {
+                $score += (($hip - (int) $a['hip']) / 6) ** 2;
+                $dims++;
+            }
+            if ($cup !== null && ($a['cup'] ?? '') !== '') {
+                $aCup = $cupOrder[strtoupper($a['cup'])] ?? null;
+                if ($aCup !== null) {
+                    $score += (($cup - $aCup) / 2) ** 2;
+                    $dims++;
+                }
+            }
+
+            if ($dims === 0) {
+                continue;
+            }
+
+            $scored[] = ['actress' => $a, 'score' => sqrt($score)];
+        }
+
+        usort($scored, fn($x, $y) => $x['score'] <=> $y['score']);
+
+        return array_map(fn($s) => $s['actress'], array_slice($scored, 0, 6));
     }
 }
