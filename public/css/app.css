@@ -1473,13 +1473,13 @@ img {
 }
 
 .actress-profile-details {
-    flex: 1;
     min-width: 0;
 }
 
 .actress-profile-similar {
-    width: 200px;
+    width: 220px;
     flex-shrink: 0;
+    margin-left: auto;
     border-left: 1px solid var(--border);
     padding-left: 1.5rem;
 }
@@ -1496,7 +1496,7 @@ img {
 .actress-profile-similar-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    gap: 8px 4px;
 }
 
 .actress-profile-details h2 {
@@ -2698,10 +2698,10 @@ img {
     font-size: 0.7rem;
     text-align: center;
     line-height: 1.2;
+    width: 100%;
     overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     transition: color 0.15s;
 }
 
