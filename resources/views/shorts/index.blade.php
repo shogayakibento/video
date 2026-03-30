@@ -39,11 +39,12 @@ body.shorts-page > script[src*="banner_placement"] {
     }
 
     .shorts-player-box {
-        padding-bottom: 0 !important;
-        height: auto !important;
         width: 100% !important;
-        aspect-ratio: 16 / 9 !important;
+        height: calc((100vw - 300px) * 9 / 16) !important;
+        padding-bottom: 0 !important;
+        aspect-ratio: auto !important;
         position: relative !important;
+        overflow: hidden !important;
     }
 
     .shorts-info-overlay {
