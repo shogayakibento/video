@@ -105,25 +105,32 @@ class FanzaApiService
      */
     public function getRankingPool(): array
     {
-        return Cache::remember('actress_ranking_pool_v3', 7200, function () {
-            $seen = [];
-            $pool = [];
+        $cached = Cache::get('actress_ranking_pool_v3');
+        if (!empty($cached)) {
+            return $cached;
+        }
 
-            foreach ([1, 101, 201, 301, 401] as $offset) {
-                $result = $this->getItems(['hits' => 100, 'offset' => $offset, 'sort' => 'rank']);
-                foreach ($result['result']['items'] ?? [] as $item) {
-                    foreach ($item['iteminfo']['actress'] ?? [] as $a) {
-                        $id = $a['id'] ?? null;
-                        if ($id && !isset($seen[$id])) {
-                            $seen[$id] = true;
-                            $pool[] = ['id' => $id, 'name' => $a['name'] ?? '', 'ruby' => $a['ruby'] ?? ''];
-                        }
+        $seen = [];
+        $pool = [];
+
+        foreach ([1, 101, 201, 301, 401] as $offset) {
+            $result = $this->getItems(['hits' => 100, 'offset' => $offset, 'sort' => 'rank']);
+            foreach ($result['result']['items'] ?? [] as $item) {
+                foreach ($item['iteminfo']['actress'] ?? [] as $a) {
+                    $id = $a['id'] ?? null;
+                    if ($id && !isset($seen[$id])) {
+                        $seen[$id] = true;
+                        $pool[] = ['id' => $id, 'name' => $a['name'] ?? '', 'ruby' => $a['ruby'] ?? ''];
                     }
                 }
             }
+        }
 
-            return $pool;
-        });
+        if (!empty($pool)) {
+            Cache::put('actress_ranking_pool_v3', $pool, 7200);
+        }
+
+        return $pool;
     }
 
     public function getActresses(array $overrides = []): ?array
