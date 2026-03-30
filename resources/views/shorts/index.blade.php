@@ -47,6 +47,16 @@ body.shorts-page > script[src*="banner_placement"] {
         overflow: hidden !important;
     }
 
+    .shorts-iframe {
+        inset: auto !important;
+        top: -40px !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        height: calc(min(100vh - 64px, (100vw - 300px) * 9 / 16) + 40px) !important;
+        transform: none !important;
+    }
+
     .shorts-info-overlay {
         position: relative !important;
         top: auto !important;
