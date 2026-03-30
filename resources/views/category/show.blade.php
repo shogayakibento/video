@@ -10,7 +10,7 @@
     {{-- Page Header --}}
     <div class="page-header">
         <div class="container">
-            <h1>{{ $category['label'] }}</h1>
+            <h1>{{ $category['label'] }}{{ $sort === 'rank' ? ' 人気ランキング' : '' }}</h1>
             <p>{{ $category['description'] }}</p>
         </div>
     </div>
