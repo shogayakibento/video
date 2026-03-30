@@ -41,7 +41,7 @@ body.shorts-page > script[src*="banner_placement"] {
     .shorts-player-box {
         padding-bottom: 0 !important;
         height: auto !important;
-        width: min(100%, calc((100vh - 64px) * 16 / 9)) !important;
+        width: 100% !important;
         aspect-ratio: 16 / 9 !important;
         position: relative !important;
     }
@@ -72,11 +72,6 @@ body.shorts-page > script[src*="banner_placement"] {
 
     .shorts-info-text {
         flex: 1;
-    }
-
-    .shorts-price-text {
-        font-size: 0.95rem !important;
-        margin: 4px 0 0 !important;
     }
 
     .shorts-cta-btn {
@@ -373,11 +368,11 @@ body.shorts-page > script[src*="banner_placement"] {
                         @endforeach
                     </div>
                     @endif
-                </div>
 
-                @if($price)
-                <p class="shorts-price-text">{{ preg_replace('/~$/', '円〜', $price) }}{{ str_ends_with($price, '~') ? '' : '円' }}</p>
-                @endif
+                    @if($price)
+                    <p class="shorts-price-text">{{ preg_replace('/~$/', '円〜', $price) }}{{ str_ends_with($price, '~') ? '' : '円' }}</p>
+                    @endif
+                </div>
 
                 <a href="{{ $url }}"
                    target="_blank"
