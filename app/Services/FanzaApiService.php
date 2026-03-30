@@ -105,11 +105,11 @@ class FanzaApiService
      */
     public function getRankingPool(): array
     {
-        return Cache::remember('actress_ranking_pool_v2', 7200, function () {
+        return Cache::remember('actress_ranking_pool_v3', 7200, function () {
             $seen = [];
             $pool = [];
 
-            foreach ([1, 101, 201] as $offset) {
+            foreach ([1, 101, 201, 301, 401] as $offset) {
                 $result = $this->getItems(['hits' => 100, 'offset' => $offset, 'sort' => 'rank']);
                 foreach ($result['result']['items'] ?? [] as $item) {
                     foreach ($item['iteminfo']['actress'] ?? [] as $a) {
