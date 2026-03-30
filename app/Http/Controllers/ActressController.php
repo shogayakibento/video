@@ -271,17 +271,18 @@ public function index(Request $request, FanzaApiService $api)
     /**
      * Find actresses with similar body measurements using weighted Euclidean distance.
      * Uses FANZA ActressSearch API filtered by bust/height range, then scores by
-     * all available dimensions: height, bust, cup, waist, hip.
+     * all available dimensions: height, bust, cup, waist, hip, age.
      */
     private function findSimilarByMeasurements(FanzaApiService $api, string $id, array $actress): array
     {
         $cupOrder = ['A' => 1, 'B' => 2, 'C' => 3, 'D' => 4, 'E' => 5, 'F' => 6, 'G' => 7, 'H' => 8, 'I' => 9];
 
-        $height = ($actress['height'] ?? '') !== '' ? (int) $actress['height'] : null;
-        $bust   = ($actress['bust']   ?? '') !== '' ? (int) $actress['bust']   : null;
-        $waist  = ($actress['waist']  ?? '') !== '' ? (int) $actress['waist']  : null;
-        $hip    = ($actress['hip']    ?? '') !== '' ? (int) $actress['hip']    : null;
-        $cup    = ($actress['cup']    ?? '') !== '' ? ($cupOrder[strtoupper($actress['cup'])] ?? null) : null;
+        $height = ($actress['height']   ?? '') !== '' ? (int) $actress['height'] : null;
+        $bust   = ($actress['bust']     ?? '') !== '' ? (int) $actress['bust']   : null;
+        $waist  = ($actress['waist']    ?? '') !== '' ? (int) $actress['waist']  : null;
+        $hip    = ($actress['hip']      ?? '') !== '' ? (int) $actress['hip']    : null;
+        $cup    = ($actress['cup']      ?? '') !== '' ? ($cupOrder[strtoupper($actress['cup'])] ?? null) : null;
+        $age    = ($actress['birthday'] ?? '') !== '' ? (int) date('Y') - (int) substr($actress['birthday'], 0, 4) : null;
 
         if ($bust === null && $height === null) {
             return [];
@@ -331,6 +332,11 @@ public function index(Request $request, FanzaApiService $api)
                     $score += (($cup - $aCup) / 2) ** 2;
                     $dims++;
                 }
+            }
+            if ($age !== null && ($a['birthday'] ?? '') !== '') {
+                $aAge = (int) date('Y') - (int) substr($a['birthday'], 0, 4);
+                $score += (($age - $aAge) / 5) ** 2;
+                $dims++;
             }
 
             if ($dims === 0) {
