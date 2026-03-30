@@ -43,7 +43,7 @@
 <div class="tweet-page">
     @include('partials.breadcrumb', ['items' => [
         ['label' => 'ホーム', 'url' => route('home')],
-        ['label' => 'ランキング', 'url' => route('ranking')],
+        ['label' => '動画', 'url' => route('category.show', 'douga') . '?sort=rank'],
         ['label' => $title],
     ]])
 
