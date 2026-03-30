@@ -248,7 +248,7 @@ public function index(Request $request, FanzaApiService $api)
         }
 
         // --- Similar Actresses ---
-        $cacheKey = 'similar_actresses_v5_' . $id;
+        $cacheKey = 'similar_actresses_v6_' . $id;
         $similarActresses = Cache::get($cacheKey);
         if ($similarActresses === null) {
             $similarActresses = $this->findSimilarByMeasurements($api, $id, $actress);
