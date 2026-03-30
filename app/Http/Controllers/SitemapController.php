@@ -47,7 +47,6 @@ class SitemapController extends Controller
 
             $urls = [
                 ['loc' => route('home'),                'priority' => '1.0', 'changefreq' => 'daily',  'lastmod' => $today],
-                ['loc' => route('ranking'),             'priority' => '0.9', 'changefreq' => 'daily',  'lastmod' => $today],
                 ['loc' => route('tweet.ranking.index'), 'priority' => '0.9', 'changefreq' => 'daily',  'lastmod' => $today],
                 ['loc' => route('shorts'),              'priority' => '0.8', 'changefreq' => 'daily',  'lastmod' => $today],
                 ['loc' => route('actress.index'),       'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => $staticLastmod],

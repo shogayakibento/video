@@ -43,7 +43,7 @@
 <div class="tweet-page">
     @include('partials.breadcrumb', ['items' => [
         ['label' => 'ホーム', 'url' => route('home')],
-        ['label' => 'ランキング', 'url' => route('ranking')],
+        ['label' => '動画', 'url' => route('category.show', 'douga') . '?sort=rank'],
         ['label' => $title],
     ]])
 
@@ -112,19 +112,6 @@
                 </div>
             @endif
 
-            {{-- この作品が好きな人はこちらも --}}
-            @if(!empty($alsoWatched))
-                <div class="mt-4">
-                    <h2 class="text-lg font-bold mb-4">
-                        この作品を見た人はこちらも視聴しています
-                    </h2>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem;">
-                        @foreach($alsoWatched as $related)
-                            @include('partials.item-card', ['item' => $related])
-                        @endforeach
-                    </div>
-                </div>
-            @endif
         </div>
 
         {{-- サイドバー: 同じ女優の作品 --}}
@@ -160,6 +147,18 @@
             @endif
         </div>
     </div>
+
+    {{-- この作品が好きな人はこちらも --}}
+    @if(!empty($alsoWatched))
+        <div class="mt-8">
+            <h2 class="text-lg font-bold mb-4">この作品を見た人はこちらも視聴しています</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem;">
+                @foreach($alsoWatched as $related)
+                    @include('partials.item-card', ['item' => $related])
+                @endforeach
+            </div>
+        </div>
+    @endif
 </div>
 @endsection
 

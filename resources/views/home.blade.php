@@ -15,7 +15,7 @@
                 <button type="submit" class="search-btn">検索</button>
             </form>
             <div class="hero-tags">
-                <a href="{{ route('ranking') }}" class="tag">人気作品</a>
+                <a href="{{ route('category.show', 'douga') }}?sort=rank" class="tag">人気作品</a>
                 <a href="{{ route('category.show', 'douga') }}?sort=date" class="tag">新着作品</a>
                 <a href="{{ route('category.show', 'vr') }}" class="tag">VR動画</a>
                 <a href="{{ route('genre.index') }}" class="tag">ジャンル一覧</a>
@@ -28,7 +28,7 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">人気ランキング</h2>
-                <a href="{{ route('ranking') }}" class="section-link">すべて見る →</a>
+                <a href="{{ route('category.show', 'douga') }}?sort=rank" class="section-link">すべて見る →</a>
             </div>
             <div class="items-grid">
                 @foreach(array_slice($rankingItems, 0, 8) as $index => $item)
