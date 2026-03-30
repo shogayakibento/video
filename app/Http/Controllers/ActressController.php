@@ -248,7 +248,7 @@ public function index(Request $request, FanzaApiService $api)
         }
 
         // --- Similar Actresses ---
-        $cacheKey = 'similar_actresses_v2_' . $id;
+        $cacheKey = 'similar_actresses_v3_' . $id;
         $similarActresses = Cache::get($cacheKey);
         if ($similarActresses === null) {
             $similarActresses = $this->findSimilarByMeasurements($api, $id, $actress);
@@ -307,8 +307,8 @@ public function index(Request $request, FanzaApiService $api)
 
         $scored = [];
         foreach ($candidates as $a) {
-            $aid = $a['id'] ?? null;
-            if (!$aid || $aid === $id) {
+            $aid = (string) ($a['id'] ?? '');
+            if (!$aid || $aid === (string) $id) {
                 continue;
             }
 
@@ -367,8 +367,8 @@ public function index(Request $request, FanzaApiService $api)
         $countMap = [];
         foreach ($videos as $item) {
             foreach ($item['iteminfo']['actress'] ?? [] as $a) {
-                $aid = $a['id'] ?? null;
-                if ($aid && $aid !== $id) {
+                $aid = (string) ($a['id'] ?? '');
+                if ($aid && $aid !== (string) $id) {
                     $countMap[$aid] = ($countMap[$aid] ?? 0) + 1;
                 }
             }
