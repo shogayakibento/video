@@ -112,21 +112,6 @@
                 </div>
             @endif
 
-            {{-- この作品が好きな人はこちらも --}}
-            @if(!empty($alsoWatched))
-                <div class="mt-4">
-                    <h2 class="text-lg font-bold mb-4">
-                        この作品を見た人はこちらも視聴しています
-                    </h2>
-                    <div style="display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 0.5rem; scrollbar-width: thin;">
-                        @foreach($alsoWatched as $related)
-                            <div style="flex: 0 0 160px;">
-                                @include('partials.item-card', ['item' => $related])
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
         </div>
 
         {{-- サイドバー: 同じ女優の作品 --}}
@@ -162,6 +147,20 @@
             @endif
         </div>
     </div>
+
+    {{-- この作品が好きな人はこちらも --}}
+    @if(!empty($alsoWatched))
+        <div class="mt-8">
+            <h2 class="text-lg font-bold mb-4">この作品を見た人はこちらも視聴しています</h2>
+            <div style="display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 0.5rem; scrollbar-width: thin;">
+                @foreach($alsoWatched as $related)
+                    <div style="flex: 0 0 160px;">
+                        @include('partials.item-card', ['item' => $related])
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
 </div>
 @endsection
 
