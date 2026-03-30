@@ -154,9 +154,7 @@
             <h2 class="text-lg font-bold mb-4">この作品を見た人はこちらも視聴しています</h2>
             <div style="display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 0.5rem; scrollbar-width: thin;">
                 @foreach($alsoWatched as $related)
-                    <div style="flex: 0 0 160px;">
-                        @include('partials.item-card', ['item' => $related])
-                    </div>
+                    @include('partials.item-card', ['item' => $related])
                 @endforeach
             </div>
         </div>
