@@ -11,14 +11,14 @@
     <div class="page-header">
         <div class="container">
             @php
-                $sortLabels = ['rank' => ' 人気ランキング', 'date' => ' 新着順', 'review' => ' レビュー順'];
+                $sortLabels = ['rank' => '人気ランキング', 'date' => '新着順', 'review' => 'レビュー順'];
                 $sortDescs  = [
                     'rank'   => 'FANZAの人気' . $category['label'] . '作品ランキング',
                     'date'   => '最新の' . $category['label'] . '作品一覧',
                     'review' => 'レビュー高評価の' . $category['label'] . '作品一覧',
                 ];
             @endphp
-            <h1>{{ $category['label'] }}{{ $sortLabels[$sort] ?? '' }}</h1>
+            <h1>{{ $sortLabels[$sort] ?? $category['label'] }}</h1>
             <p>{{ $sortDescs[$sort] ?? $category['description'] }}</p>
         </div>
     </div>
