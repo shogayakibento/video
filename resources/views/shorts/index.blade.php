@@ -32,19 +32,8 @@ body.shorts-page > script[src*="banner_placement"] {
         min-width: 0 !important;
         width: auto !important;
         max-width: none !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        padding: 10px !important;
-    }
-
-    .shorts-player-box {
-        width: 100% !important;
-        height: calc((100vw - 300px) * 9 / 16) !important;
-        padding-bottom: 0 !important;
-        aspect-ratio: auto !important;
-        position: relative !important;
-        overflow: hidden !important;
+        display: block !important;
+        padding: 0 !important;
     }
 
     .shorts-info-overlay {
