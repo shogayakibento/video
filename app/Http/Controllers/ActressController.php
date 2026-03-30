@@ -248,13 +248,15 @@ public function index(Request $request, FanzaApiService $api)
         }
 
         // --- Similar Actresses ---
-        $cacheKey = 'similar_actresses_v10_' . $id;
+        $cacheKey = 'similar_actresses_v11_' . $id;
         $similarActresses = Cache::get($cacheKey);
         if ($similarActresses === null) {
             $similarActresses = $this->findSimilarByMeasurements($api, $id, $actress);
-            if (empty($similarActresses)) {
-                // Fallback: co-star frequency from existing video items
-                $similarActresses = $this->findSimilarByCoStars($api, $id, $baseParams);
+            if (count($similarActresses) < 6) {
+                $exclude = array_column($similarActresses, 'id');
+                $coStars = $this->findSimilarByCoStars($api, $id, $baseParams, $exclude);
+                $needed  = 6 - count($similarActresses);
+                $similarActresses = array_merge($similarActresses, array_slice($coStars, 0, $needed));
             }
             if (!empty($similarActresses)) {
                 Cache::put($cacheKey, $similarActresses, 86400);
@@ -358,25 +360,23 @@ public function index(Request $request, FanzaApiService $api)
 
         usort($scored, fn($x, $y) => $x['score'] <=> $y['score']);
 
-        $result = array_map(fn($s) => $s['actress'], array_slice($scored, 0, 6));
-
-        // プール内で6人揃わなければ共演者フォールバックへ
-        return count($result) >= 3 ? $result : [];
+        return array_map(fn($s) => $s['actress'], array_slice($scored, 0, 6));
     }
 
     /**
      * Fallback: find actresses who frequently co-star with the target actress.
      * Fetches top 50 videos and counts co-star appearances.
      */
-    private function findSimilarByCoStars(FanzaApiService $api, string $id, array $baseParams): array
+    private function findSimilarByCoStars(FanzaApiService $api, string $id, array $baseParams, array $excludeIds = []): array
     {
         $videos = $api->getItems(array_merge($baseParams, ['hits' => 50, 'offset' => 1, 'sort' => 'rank']))['result']['items'] ?? [];
 
+        $excluded = array_flip(array_map('strval', $excludeIds));
         $countMap = [];
         foreach ($videos as $item) {
             foreach ($item['iteminfo']['actress'] ?? [] as $a) {
                 $aid = (string) ($a['id'] ?? '');
-                if ($aid && $aid !== (string) $id) {
+                if ($aid && $aid !== (string) $id && !isset($excluded[$aid])) {
                     $countMap[$aid] = ($countMap[$aid] ?? 0) + 1;
                 }
             }
