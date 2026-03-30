@@ -10,8 +10,16 @@
     {{-- Page Header --}}
     <div class="page-header">
         <div class="container">
-            <h1>{{ $category['label'] }}{{ $sort === 'rank' ? ' 人気ランキング' : '' }}</h1>
-            <p>{{ $category['description'] }}</p>
+            @php
+                $sortLabels = ['rank' => ' 人気ランキング', 'date' => ' 新着順', 'review' => ' レビュー順'];
+                $sortDescs  = [
+                    'rank'   => 'FANZAの人気' . $category['label'] . '作品ランキング',
+                    'date'   => '最新の' . $category['label'] . '作品一覧',
+                    'review' => 'レビュー高評価の' . $category['label'] . '作品一覧',
+                ];
+            @endphp
+            <h1>{{ $category['label'] }}{{ $sortLabels[$sort] ?? '' }}</h1>
+            <p>{{ $sortDescs[$sort] ?? $category['description'] }}</p>
         </div>
     </div>
 
