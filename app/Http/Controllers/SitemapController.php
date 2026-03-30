@@ -82,7 +82,8 @@ class SitemapController extends Controller
         $content = Cache::remember('sitemap_actresses_xml', 86400, function () use ($api) {
             $staticLastmod = '2025-01-01T00:00:00+09:00';
 
-            $actressIds = Cache::remember('sitemap_actress_ids', 86400, function () use ($api) {
+            $actressIds = Cache::get('sitemap_actress_ids');
+            if ($actressIds === null) {
                 $result = $api->getItems([
                     'service' => 'digital',
                     'floor'   => 'videoa',
@@ -101,8 +102,11 @@ class SitemapController extends Controller
                     }
                 }
 
-                return array_values($seen);
-            });
+                $actressIds = array_values($seen);
+                if (!empty($actressIds)) {
+                    Cache::put('sitemap_actress_ids', $actressIds, 86400);
+                }
+            }
 
             $urls = [];
             foreach ($actressIds as $id) {
