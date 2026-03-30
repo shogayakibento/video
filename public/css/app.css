@@ -1503,7 +1503,7 @@ img {
 .actress-profile-similar-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px 6px;
+    gap: 6px 4px;
 }
 
 .actress-profile-details h2 {
