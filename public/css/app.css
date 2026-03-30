@@ -1472,6 +1472,40 @@ img {
     object-fit: cover;
 }
 
+.actress-profile-left {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    flex: 1;
+    min-width: 0;
+}
+
+.actress-profile-details {
+    min-width: 0;
+}
+
+.actress-profile-similar {
+    width: 290px;
+    flex-shrink: 0;
+    border-left: 1px solid var(--border);
+    padding-left: 1.5rem;
+}
+
+.actress-profile-similar-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+}
+
+.actress-profile-similar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px 6px;
+}
+
 .actress-profile-details h2 {
     font-size: 1.5rem;
     color: var(--text-heading);
@@ -1525,6 +1559,22 @@ img {
     .actress-profile-image {
         width: 140px;
         height: 140px;
+    }
+
+    .actress-profile-left {
+        width: 100%;
+    }
+
+    .actress-profile-similar {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid var(--border);
+        padding-left: 0;
+        padding-top: 1rem;
+    }
+
+    .actress-profile-similar-grid {
+        grid-template-columns: repeat(6, 1fr);
     }
 
     .actress-specs {
@@ -2588,4 +2638,186 @@ img {
 }
 
 .text-yellow-400 { color: #f59e0b; }
+
+/* ===== Similar Actresses Strip ===== */
+.similar-actresses-strip {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.similar-actresses-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.similar-actresses-scroll {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 2px;
+}
+
+.similar-actresses-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.similar-actress-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+    color: var(--text-primary);
+    min-width: 0;
+}
+
+.similar-actress-chip:hover .similar-actress-chip-thumb {
+    border-color: rgba(255, 45, 120, 0.6);
+}
+
+.similar-actress-chip:hover span {
+    color: var(--accent);
+}
+
+.similar-actress-chip-thumb {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--border);
+    background: var(--bg-light);
+    transition: border-color 0.15s;
+}
+
+.similar-actress-chip-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.similar-actress-chip span {
+    font-size: 0.7rem;
+    text-align: center;
+    line-height: 1.2;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    transition: color 0.15s;
+}
+
+/* ===== Actress Show Layout (main + sidebar) ===== */
+.actress-show-layout {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+}
+
+.actress-show-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.actress-show-sidebar {
+    width: 200px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 20px;
+}
+
+.actress-show-sidebar .sidebar-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+.actress-show-sidebar .sidebar-actress-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.actress-show-sidebar .sidebar-actress-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: background 0.15s;
+}
+
+.actress-show-sidebar .sidebar-actress-item:hover {
+    background: var(--bg-light);
+}
+
+.actress-show-sidebar .sidebar-actress-thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: var(--bg-light);
+}
+
+.actress-show-sidebar .sidebar-actress-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.actress-show-sidebar .sidebar-actress-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.3;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+@media (max-width: 960px) {
+    .actress-show-layout {
+        flex-direction: column;
+    }
+
+    .actress-show-sidebar {
+        width: 100%;
+        position: static;
+    }
+
+    .actress-show-sidebar .sidebar-actress-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .actress-show-sidebar .sidebar-actress-item {
+        flex-direction: column;
+        text-align: center;
+        width: 80px;
+        padding: 8px 4px;
+        gap: 4px;
+    }
+
+    .actress-show-sidebar .sidebar-actress-thumb {
+        width: 56px;
+        height: 56px;
+    }
+}
 .aspect-\[3\/2\] { aspect-ratio: 3 / 2; }

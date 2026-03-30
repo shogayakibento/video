@@ -247,60 +247,14 @@ public function index(Request $request, FanzaApiService $api)
             $totalPages = max(1, (int) ceil($totalCount / $hits));
         }
 
-        // --- Genre extraction (always from page-1 rank results for consistency) ---
-        $genreSourceResult = $api->getItems(array_merge($baseParams, ['hits' => 20, 'offset' => 1, 'sort' => 'rank']));
-        $genreSourceItems  = $genreSourceResult['result']['items'] ?? [];
-
-        $genreIdCount  = [];
-        $genreIdToName = [];
-        foreach ($genreSourceItems as $gItem) {
-            foreach ($gItem['iteminfo']['genre'] ?? [] as $g) {
-                $gid = $g['id'] ?? null;
-                if ($gid) {
-                    $genreIdCount[$gid]  = ($genreIdCount[$gid] ?? 0) + 1;
-                    $genreIdToName[$gid] = $g['name'] ?? '';
-                }
+        // --- Similar Actresses (co-star based) ---
+        $cacheKey = 'similar_actresses_v14_' . $id;
+        $similarActresses = Cache::get($cacheKey);
+        if ($similarActresses === null) {
+            $similarActresses = $this->findSimilarByCoStars($api, $id, $baseParams);
+            if (!empty($similarActresses)) {
+                Cache::put($cacheKey, $similarActresses, 86400);
             }
-        }
-        arsort($genreIdCount);
-        $topGenreId   = array_key_first($genreIdCount);
-        // --- Similar Actresses (cached per top genre) ---
-        $similarActresses = [];
-        if ($topGenreId) {
-            $similarActresses = Cache::remember(
-                'similar_actresses_genre_' . $topGenreId,
-                7200,
-                function () use ($api, $id, $topGenreId) {
-                    $genreItems = $api->getItems([
-                        'article'    => 'genre',
-                        'article_id' => $topGenreId,
-                        'hits'       => 100,
-                        'sort'       => 'rank',
-                    ])['result']['items'] ?? [];
-
-                    $countMap = [];
-                    foreach ($genreItems as $gItem) {
-                        foreach ($gItem['iteminfo']['actress'] ?? [] as $a) {
-                            $aid = $a['id'] ?? null;
-                            if ($aid && $aid !== $id) {
-                                $countMap[$aid] = ($countMap[$aid] ?? 0) + 1;
-                            }
-                        }
-                    }
-                    arsort($countMap);
-                    $topIds = array_slice(array_keys($countMap), 0, 6);
-
-                    $result = [];
-                    foreach ($topIds as $aid) {
-                        $detail = $api->getActresses(['actress_id' => $aid]);
-                        $info   = $detail['result']['actress'][0] ?? null;
-                        if ($info) {
-                            $result[] = $info;
-                        }
-                    }
-                    return $result;
-                }
-            );
         }
 
         return view('actress.show', [
@@ -313,5 +267,41 @@ public function index(Request $request, FanzaApiService $api)
             'cast'             => $cast,
             'similarActresses' => $similarActresses,
         ]);
+    }
+
+    /**
+     * Find actresses who frequently co-star with the target actress.
+     * Fetches top 50 videos and counts co-star appearances.
+     */
+    private function findSimilarByCoStars(FanzaApiService $api, string $id, array $baseParams, array $excludeIds = []): array
+    {
+        $videos = $api->getItems(array_merge($baseParams, ['hits' => 50, 'offset' => 1, 'sort' => 'rank']))['result']['items'] ?? [];
+
+        $excluded = array_flip(array_map('strval', $excludeIds));
+        $countMap = [];
+        foreach ($videos as $item) {
+            foreach ($item['iteminfo']['actress'] ?? [] as $a) {
+                $aid = (string) ($a['id'] ?? '');
+                if ($aid && $aid !== (string) $id && !isset($excluded[$aid])) {
+                    $countMap[$aid] = ($countMap[$aid] ?? 0) + 1;
+                }
+            }
+        }
+
+        if (empty($countMap)) {
+            return [];
+        }
+
+        arsort($countMap);
+        $topIds = array_slice(array_keys($countMap), 0, 6);
+
+        $result = [];
+        foreach ($topIds as $aid) {
+            $info = $api->getActresses(['actress_id' => $aid])['result']['actress'][0] ?? null;
+            if ($info) {
+                $result[] = $info;
+            }
+        }
+        return $result;
     }
 }

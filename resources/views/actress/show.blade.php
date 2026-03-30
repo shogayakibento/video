@@ -43,6 +43,7 @@
 
         {{-- Actress Profile --}}
         <div class="actress-profile">
+            <div class="actress-profile-left">
             @if($imageUrl)
                 <div class="actress-profile-image">
                     <img src="{{ $imageUrl }}" alt="{{ $name }}">
@@ -70,6 +71,31 @@
                 </div>
                 <p class="actress-work-count">出演作品: {{ number_format($totalCount) }}件</p>
             </div>
+            </div>{{-- /.actress-profile-left --}}
+            @if(!empty($similarActresses))
+            <div class="actress-profile-similar">
+                <div class="actress-profile-similar-label">似た女優</div>
+                <div class="actress-profile-similar-grid">
+                    @foreach($similarActresses as $sim)
+                        @php
+                            $simId   = $sim['id'] ?? '';
+                            $simName = $sim['name'] ?? '';
+                            $simImg  = str_replace('http://', 'https://', $sim['imageURL']['large'] ?? $sim['imageURL']['small'] ?? '');
+                        @endphp
+                        @if($simId)
+                        <a href="{{ route('actress.show', $simId) }}" class="similar-actress-chip">
+                            <div class="similar-actress-chip-thumb">
+                                @if($simImg)
+                                    <img src="{{ $simImg }}" alt="{{ $simName }}" loading="lazy">
+                                @endif
+                            </div>
+                            <span>{{ $simName }}</span>
+                        </a>
+                        @endif
+                    @endforeach
+                </div>
+            </div>
+            @endif
         </div>
 
         {{-- Sort & Cast Filter --}}
@@ -121,46 +147,6 @@
                     @endif
                 @endif
             </div>
-        @endif
-
-        {{-- Similar Actresses --}}
-        @if(!empty($similarActresses))
-        <section style="margin-top: 48px;">
-            <div class="section-header">
-                <h2 class="section-title">{{ $name }}に似た女優</h2>
-            </div>
-            <div class="actress-grid" style="grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));">
-                @foreach($similarActresses as $sim)
-                    @php
-                        $simId   = $sim['id'] ?? '';
-                        $simName = $sim['name'] ?? '';
-                        $simImg  = str_replace('http://', 'https://', $sim['imageURL']['large'] ?? $sim['imageURL']['small'] ?? '');
-                        $simRuby = $sim['ruby'] ?? '';
-                    @endphp
-                    @if($simId)
-                    <a href="{{ route('actress.show', $simId) }}" class="actress-card">
-                        <div class="actress-thumb">
-                            @if($simImg)
-                                <img src="{{ $simImg }}" alt="{{ $simName }}" loading="lazy">
-                            @else
-                                <div class="actress-thumb-placeholder">
-                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-                                    </svg>
-                                </div>
-                            @endif
-                        </div>
-                        <div class="actress-info">
-                            <span class="actress-name">{{ $simName }}</span>
-                            @if($simRuby)
-                                <span class="actress-ruby">{{ $simRuby }}</span>
-                            @endif
-                        </div>
-                    </a>
-                    @endif
-                @endforeach
-            </div>
-        </section>
         @endif
 
         <div class="back-link" style="margin-top: 32px;">
