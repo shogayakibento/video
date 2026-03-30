@@ -38,24 +38,6 @@ body.shorts-page > script[src*="banner_placement"] {
         padding: 10px !important;
     }
 
-    .shorts-player-box {
-        padding-bottom: 65% !important;
-        height: 0 !important;
-        width: 100% !important;
-        aspect-ratio: auto !important;
-        position: relative !important;
-    }
-
-    .shorts-iframe {
-        position: absolute !important;
-        inset: auto !important;
-        top: -15% !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 125% !important;
-        transform: none !important;
-    }
-
     .shorts-info-overlay {
         position: relative !important;
         top: auto !important;
