@@ -15,43 +15,76 @@ body.shorts-page > script[src*="banner_placement"] {
     display: none !important;
 }
 
-/* ====== デスクトップ: Info panel を動画の直下に配置 ====== */
+/* ====== デスクトップ: 左:動画 / 右:情報パネル の2カラムレイアウト ====== */
 @media (min-width: 641px) {
+    .shorts-item {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: stretch !important;
+    }
+
+    .shorts-player-wrap {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        transform: none !important;
+        flex: 1 !important;
+        min-width: 0 !important;
+        width: auto !important;
+        max-width: none !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 10px !important;
+    }
+
+    .shorts-player-box {
+        padding-bottom: 0 !important;
+        height: auto !important;
+        width: min(100%, calc((100vh - 64px) * 16 / 9)) !important;
+        aspect-ratio: 16 / 9 !important;
+        position: relative !important;
+    }
+
     .shorts-info-overlay {
-        /*
-         * top = video_center + half_video_height
-         * video_center = 44% (player-wrap top)
-         * half_height  = min(41%, 337.5px)
-         *   41%   = 16/9 * 0.82 * 0.28125  (小画面: 幅が係数でスケール)
-         *   337.5 = 1200px * 0.5625 / 2     (大画面: max-width:1200px で確定)
-         */
-        top: calc(44% + min(41%, 337.5px));
-        bottom: auto;
-        left: 50%;
-        transform: translateX(-50%);
-        width: min(100%, calc((100vh - 64px) * 16 / 9 * 0.82));
-        max-width: 1200px;
-        padding: 10px 14px 12px;
-        background: rgba(12, 12, 12, 0.92);
-        backdrop-filter: blur(16px);
-        border-radius: 0 0 14px 14px;
-        pointer-events: auto;
-        display: flex;
-        align-items: center;
-        gap: 14px;
+        position: relative !important;
+        top: auto !important;
+        bottom: auto !important;
+        left: auto !important;
+        transform: none !important;
+        width: 300px !important;
+        flex-shrink: 0 !important;
+        max-width: none !important;
+        border-radius: 0 !important;
+        padding: 24px 16px !important;
+        background: rgba(12, 12, 12, 0.95) !important;
+        backdrop-filter: blur(16px) !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+        justify-content: flex-start !important;
+        overflow-y: auto !important;
+    }
+
+    .shorts-info-text {
+        flex: 1;
+    }
+
+    .shorts-price-text {
+        font-size: 0.95rem !important;
+        margin: 4px 0 0 !important;
     }
 
     .shorts-cta-btn {
         position: static !important;
-        flex-shrink: 0;
-        bottom: auto;
-        right: auto;
-        padding: 8px 12px;
-        font-size: 0.72rem;
-        white-space: nowrap;
-        line-height: 1.3;
-        text-align: center;
-        box-shadow: 0 2px 12px rgba(255, 45, 120, 0.5);
+        width: 100% !important;
+        text-align: center !important;
+        justify-content: center !important;
+        padding: 10px 14px !important;
+        font-size: 0.82rem !important;
+        white-space: normal !important;
+        line-height: 1.4 !important;
+        box-shadow: 0 2px 12px rgba(255, 45, 120, 0.5) !important;
     }
 }
 
@@ -336,11 +369,11 @@ body.shorts-page > script[src*="banner_placement"] {
                         @endforeach
                     </div>
                     @endif
-
-                    @if($price)
-                    <p class="shorts-price-text">{{ preg_replace('/~$/', '円〜', $price) }}{{ str_ends_with($price, '~') ? '' : '円' }}</p>
-                    @endif
                 </div>
+
+                @if($price)
+                <p class="shorts-price-text">{{ preg_replace('/~$/', '円〜', $price) }}{{ str_ends_with($price, '~') ? '' : '円' }}</p>
+                @endif
 
                 <a href="{{ $url }}"
                    target="_blank"
