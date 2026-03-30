@@ -248,7 +248,7 @@ public function index(Request $request, FanzaApiService $api)
         }
 
         // --- Similar Actresses ---
-        $cacheKey = 'similar_actresses_v6_' . $id;
+        $cacheKey = 'similar_actresses_v7_' . $id;
         $similarActresses = Cache::get($cacheKey);
         if ($similarActresses === null) {
             $similarActresses = $this->findSimilarByMeasurements($api, $id, $actress);
@@ -305,7 +305,6 @@ public function index(Request $request, FanzaApiService $api)
 
         $candidates = $api->getActresses($params)['result']['actress'] ?? [];
 
-        // ランキングプールに含まれる女優IDのみに絞る（現役・人気女優フィルター）
         $poolIds = array_flip(array_column($api->getRankingPool(), 'id'));
 
         $scored = [];
@@ -314,9 +313,11 @@ public function index(Request $request, FanzaApiService $api)
             if (!$aid || $aid === (string) $id) {
                 continue;
             }
-            if (!isset($poolIds[$aid])) {
+            if (empty($a['imageURL']['large']) && empty($a['imageURL']['small'])) {
                 continue;
             }
+            // プール内の女優を優先（スコアにボーナス）
+            $poolBonus = isset($poolIds[$aid]) ? 0 : 0.5;
 
             $score = 0.0;
             $dims  = 0;
@@ -354,7 +355,7 @@ public function index(Request $request, FanzaApiService $api)
                 continue;
             }
 
-            $scored[] = ['actress' => $a, 'score' => sqrt($score)];
+            $scored[] = ['actress' => $a, 'score' => sqrt($score) + $poolBonus];
         }
 
         usort($scored, fn($x, $y) => $x['score'] <=> $y['score']);
