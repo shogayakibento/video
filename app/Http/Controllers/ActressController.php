@@ -248,10 +248,10 @@ public function index(Request $request, FanzaApiService $api)
         }
 
         // --- Similar Actresses ---
-        $cacheKey = 'similar_actresses_v11_' . $id;
+        $cacheKey = 'similar_actresses_v12_' . $id;
         $similarActresses = Cache::get($cacheKey);
         if ($similarActresses === null) {
-            $similarActresses = $this->findSimilarByMeasurements($api, $id, $actress);
+            $similarActresses = $this->findSimilarByMeasurements($api, $id, $actress, $baseParams);
             if (count($similarActresses) < 6) {
                 $exclude = array_column($similarActresses, 'id');
                 $coStars = $this->findSimilarByCoStars($api, $id, $baseParams, $exclude);
@@ -280,7 +280,7 @@ public function index(Request $request, FanzaApiService $api)
      * Uses FANZA ActressSearch API filtered by bust/height range, then scores by
      * all available dimensions: height, bust, cup, waist, hip, age.
      */
-    private function findSimilarByMeasurements(FanzaApiService $api, string $id, array $actress): array
+    private function findSimilarByMeasurements(FanzaApiService $api, string $id, array $actress, array $baseParams): array
     {
         $cupOrder = ['A' => 1, 'B' => 2, 'C' => 3, 'D' => 4, 'E' => 5, 'F' => 6, 'G' => 7, 'H' => 8, 'I' => 9];
 
@@ -308,6 +308,30 @@ public function index(Request $request, FanzaApiService $api)
         $candidates = $api->getActresses($params)['result']['actress'] ?? [];
 
         $poolIds = array_flip(array_column($api->getRankingPool(), 'id'));
+
+        // 対象女優のトップ3ジャンルを抽出
+        $genreVideos  = $api->getItems(array_merge($baseParams, ['hits' => 20, 'offset' => 1, 'sort' => 'rank']))['result']['items'] ?? [];
+        $genreCount   = [];
+        foreach ($genreVideos as $item) {
+            foreach ($item['iteminfo']['genre'] ?? [] as $g) {
+                $gid = $g['id'] ?? null;
+                if ($gid) $genreCount[$gid] = ($genreCount[$gid] ?? 0) + 1;
+            }
+        }
+        arsort($genreCount);
+        $topGenreIds = array_slice(array_keys($genreCount), 0, 3);
+
+        // ジャンル別の出演女優セットを構築（キャッシュ済みAPIコール）
+        $genreActressCount = [];
+        foreach ($topGenreIds as $gid) {
+            $items = $api->getItems(['article' => 'genre', 'article_id' => $gid, 'hits' => 100, 'sort' => 'rank'])['result']['items'] ?? [];
+            foreach ($items as $item) {
+                foreach ($item['iteminfo']['actress'] ?? [] as $a) {
+                    $aid = (string) ($a['id'] ?? '');
+                    if ($aid) $genreActressCount[$aid] = ($genreActressCount[$aid] ?? 0) + 1;
+                }
+            }
+        }
 
         $scored = [];
         foreach ($candidates as $a) {
@@ -355,7 +379,8 @@ public function index(Request $request, FanzaApiService $api)
                 continue;
             }
 
-            $scored[] = ['actress' => $a, 'score' => sqrt($score)];
+            $sharedGenres = $genreActressCount[$aid] ?? 0;
+            $scored[] = ['actress' => $a, 'score' => sqrt($score) - ($sharedGenres * 0.2)];
         }
 
         usort($scored, fn($x, $y) => $x['score'] <=> $y['score']);
