@@ -72,96 +72,87 @@
             </div>
         </div>
 
-        {{-- Sort & Cast Filter --}}
-        <div class="filter-bar" style="flex-wrap: wrap; gap: 6px;">
-            <a href="{{ route('actress.show', $actressId) }}?sort=rank&cast={{ $cast }}" class="tab-btn {{ $sort === 'rank' ? 'active' : '' }}">人気順</a>
-            <a href="{{ route('actress.show', $actressId) }}?sort=date&cast={{ $cast }}" class="tab-btn {{ $sort === 'date' ? 'active' : '' }}">新着順</a>
-            <a href="{{ route('actress.show', $actressId) }}?sort=review&cast={{ $cast }}" class="tab-btn {{ $sort === 'review' ? 'active' : '' }}">レビュー順</a>
-            <span style="margin: 0 4px; color: var(--text-muted); align-self: center;">|</span>
-            <a href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast=all"   class="tab-btn {{ $cast === 'all'   ? 'active' : '' }}">全て</a>
-            <a href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast=solo"  class="tab-btn {{ $cast === 'solo'  ? 'active' : '' }}">単体</a>
-            <a href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast=multi" class="tab-btn {{ $cast === 'multi' ? 'active' : '' }}">複数出演</a>
-            @if($cast !== 'all')
-                <span class="filter-count">{{ number_format($totalCount) }}件</span>
+        <div class="actress-show-layout">
+            {{-- Main Content --}}
+            <div class="actress-show-main">
+                {{-- Sort & Cast Filter --}}
+                <div class="filter-bar" style="flex-wrap: wrap; gap: 6px;">
+                    <a href="{{ route('actress.show', $actressId) }}?sort=rank&cast={{ $cast }}" class="tab-btn {{ $sort === 'rank' ? 'active' : '' }}">人気順</a>
+                    <a href="{{ route('actress.show', $actressId) }}?sort=date&cast={{ $cast }}" class="tab-btn {{ $sort === 'date' ? 'active' : '' }}">新着順</a>
+                    <a href="{{ route('actress.show', $actressId) }}?sort=review&cast={{ $cast }}" class="tab-btn {{ $sort === 'review' ? 'active' : '' }}">レビュー順</a>
+                    <span style="margin: 0 4px; color: var(--text-muted); align-self: center;">|</span>
+                    <a href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast=all"   class="tab-btn {{ $cast === 'all'   ? 'active' : '' }}">全て</a>
+                    <a href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast=solo"  class="tab-btn {{ $cast === 'solo'  ? 'active' : '' }}">単体</a>
+                    <a href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast=multi" class="tab-btn {{ $cast === 'multi' ? 'active' : '' }}">複数出演</a>
+                    @if($cast !== 'all')
+                        <span class="filter-count">{{ number_format($totalCount) }}件</span>
+                    @endif
+                </div>
+
+                {{-- Items Grid --}}
+                <div class="items-grid content-grid">
+                    @forelse($items as $index => $item)
+                        @include('partials.item-card', ['item' => $item, 'rank' => $sort === 'rank' ? (($currentPage - 1) * 20) + $index + 1 : null, 'eager' => $index === 0 && $currentPage === 1])
+                    @empty
+                        <div class="empty-state">
+                            <p>作品が見つかりませんでした。</p>
+                        </div>
+                    @endforelse
+                </div>
+
+                @include('partials.ad-inline', ['bannerId' => '1829_300_250'])
+
+                {{-- Pagination --}}
+                @if($totalPages > 1)
+                    <div class="pagination">
+                        @if($currentPage > 2)
+                            <a href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast={{ $cast }}&page=1" class="page-btn">最初へ</a>
+                        @endif
+                        @if($currentPage > 1)
+                            <a href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast={{ $cast }}&page={{ $currentPage - 1 }}" class="page-btn">前へ</a>
+                        @endif
+
+                        @for($i = max(1, $currentPage - 2); $i <= min($totalPages, $currentPage + 2); $i++)
+                            <a href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast={{ $cast }}&page={{ $i }}"
+                               class="page-btn {{ $i === $currentPage ? 'active' : '' }}">{{ $i }}</a>
+                        @endfor
+
+                        @if($currentPage < $totalPages)
+                            <a href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast={{ $cast }}&page={{ $currentPage + 1 }}" class="page-btn">次へ</a>
+                            @if($currentPage < $totalPages - 1)
+                                <a href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast={{ $cast }}&page={{ $totalPages }}" class="page-btn">最後へ</a>
+                            @endif
+                        @endif
+                    </div>
+                @endif
+            </div>
+
+            {{-- Sidebar: Similar Actresses --}}
+            @if(!empty($similarActresses))
+            <aside class="actress-show-sidebar">
+                <div class="sidebar-title">似た女優</div>
+                <div class="sidebar-actress-list">
+                    @foreach($similarActresses as $sim)
+                        @php
+                            $simId   = $sim['id'] ?? '';
+                            $simName = $sim['name'] ?? '';
+                            $simImg  = str_replace('http://', 'https://', $sim['imageURL']['large'] ?? $sim['imageURL']['small'] ?? '');
+                        @endphp
+                        @if($simId)
+                        <a href="{{ route('actress.show', $simId) }}" class="sidebar-actress-item">
+                            <div class="sidebar-actress-thumb">
+                                @if($simImg)
+                                    <img src="{{ $simImg }}" alt="{{ $simName }}" loading="lazy">
+                                @endif
+                            </div>
+                            <span class="sidebar-actress-name">{{ $simName }}</span>
+                        </a>
+                        @endif
+                    @endforeach
+                </div>
+            </aside>
             @endif
         </div>
-
-        {{-- Items Grid --}}
-        <div class="items-grid content-grid">
-            @forelse($items as $index => $item)
-                @include('partials.item-card', ['item' => $item, 'rank' => $sort === 'rank' ? (($currentPage - 1) * 20) + $index + 1 : null, 'eager' => $index === 0 && $currentPage === 1])
-            @empty
-                <div class="empty-state">
-                    <p>作品が見つかりませんでした。</p>
-                </div>
-            @endforelse
-        </div>
-
-        @include('partials.ad-inline', ['bannerId' => '1829_300_250'])
-
-        {{-- Pagination --}}
-        @if($totalPages > 1)
-            <div class="pagination">
-                @if($currentPage > 2)
-                    <a href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast={{ $cast }}&page=1" class="page-btn">最初へ</a>
-                @endif
-                @if($currentPage > 1)
-                    <a href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast={{ $cast }}&page={{ $currentPage - 1 }}" class="page-btn">前へ</a>
-                @endif
-
-                @for($i = max(1, $currentPage - 2); $i <= min($totalPages, $currentPage + 2); $i++)
-                    <a href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast={{ $cast }}&page={{ $i }}"
-                       class="page-btn {{ $i === $currentPage ? 'active' : '' }}">{{ $i }}</a>
-                @endfor
-
-                @if($currentPage < $totalPages)
-                    <a href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast={{ $cast }}&page={{ $currentPage + 1 }}" class="page-btn">次へ</a>
-                    @if($currentPage < $totalPages - 1)
-                        <a href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast={{ $cast }}&page={{ $totalPages }}" class="page-btn">最後へ</a>
-                    @endif
-                @endif
-            </div>
-        @endif
-
-        {{-- Similar Actresses --}}
-        @if(!empty($similarActresses))
-        <section style="margin-top: 48px;">
-            <div class="section-header">
-                <h2 class="section-title">{{ $name }}に似た女優</h2>
-            </div>
-            <div class="actress-grid" style="grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));">
-                @foreach($similarActresses as $sim)
-                    @php
-                        $simId   = $sim['id'] ?? '';
-                        $simName = $sim['name'] ?? '';
-                        $simImg  = str_replace('http://', 'https://', $sim['imageURL']['large'] ?? $sim['imageURL']['small'] ?? '');
-                        $simRuby = $sim['ruby'] ?? '';
-                    @endphp
-                    @if($simId)
-                    <a href="{{ route('actress.show', $simId) }}" class="actress-card">
-                        <div class="actress-thumb">
-                            @if($simImg)
-                                <img src="{{ $simImg }}" alt="{{ $simName }}" loading="lazy">
-                            @else
-                                <div class="actress-thumb-placeholder">
-                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-                                    </svg>
-                                </div>
-                            @endif
-                        </div>
-                        <div class="actress-info">
-                            <span class="actress-name">{{ $simName }}</span>
-                            @if($simRuby)
-                                <span class="actress-ruby">{{ $simRuby }}</span>
-                            @endif
-                        </div>
-                    </a>
-                    @endif
-                @endforeach
-            </div>
-        </section>
-        @endif
 
         <div class="back-link" style="margin-top: 32px;">
             <a href="{{ route('actress.index') }}">&larr; 女優一覧に戻る</a>
