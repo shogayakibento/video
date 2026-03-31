@@ -28,26 +28,19 @@ body.shorts-page > script[src*="banner_placement"] {
         top: auto !important;
         left: auto !important;
         transform: none !important;
-        flex: 1.25 !important;
-        min-width: 0 !important;
-        width: auto !important;
-        max-width: none !important;
-        height: 100% !important;
-        padding: 0 !important;
-    }
-
-    .shorts-player-box {
+        display: flex !important;
+        align-items: center !important;
+        max-width: calc((100vh - 64px) * 16 / 9) !important;
+        aspect-ratio: 16 / 9 !important;
+        height: auto !important;
         padding-bottom: 0 !important;
+        margin: 0 auto !important;
+
+        inset: 0 !important;
+        top: 0 !important;
+        left: 0 !important;
         width: 100% !important;
         height: 100% !important;
-        aspect-ratio: auto !important;
-        position: relative !important;
-    }
-
-    .shorts-iframe {
-        inset: 0 !important;
-        top: -10% !important;
-        left: -10% !important;
         width: 120% !important;
         height: 120% !important;
         transform: none !important;
