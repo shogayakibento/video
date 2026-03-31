@@ -35,12 +35,13 @@ body.shorts-page > script[src*="banner_placement"] {
 
     /* 中の動画を拡大して枠いっぱいに合わせる（デスクトップ） */
     .shorts-iframe {
-        inset: auto !important;
-        top: -10% !important;
-        left: -6% !important;
-        width: 112% !important;
-        height: 120% !important;
-        transform: none !important;
+        inset: 0 !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        transform: scale(1.28) !important;
+        transform-origin: center center !important;
     }
 
         height: 100% !important;
