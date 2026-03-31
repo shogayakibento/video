@@ -34,17 +34,14 @@ body.shorts-page > script[src*="banner_placement"] {
         max-width: none !important;
         height: 100% !important;
         padding: 0 !important;
-        display: flex !important;
-        align-items: center !important;
     }
 
     .shorts-player-box {
-        width: 100% !important;
-        aspect-ratio: 16 / 9 !important;
         padding-bottom: 0 !important;
-        height: auto !important;
+        width: 100% !important;
+        height: 100% !important;
+        aspect-ratio: auto !important;
         position: relative !important;
-        max-height: 100% !important;
     }
 
     .shorts-iframe {
