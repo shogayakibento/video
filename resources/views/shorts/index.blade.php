@@ -32,26 +32,22 @@ body.shorts-page > script[src*="banner_placement"] {
         min-width: 0 !important;
         width: auto !important;
         max-width: none !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
         height: 100% !important;
-        padding: 10px !important;
+        padding: 0 !important;
     }
 
     .shorts-player-box {
         padding-bottom: 0 !important;
-        height: auto !important;
         width: 100% !important;
-        /* 通常サンプル再生と同じ見え方（padding-top:65%相当）に合わせる */
-        aspect-ratio: 20 / 13 !important;
+        height: 100% !important;
+        aspect-ratio: auto !important;
         position: relative !important;
     }
 
-    /* 通常のサンプルiframeと同様に、上部を少しトリミングして枠へフィット */
+    /* 左カラムのプレイヤー枠いっぱいに動画を合わせる */
     .shorts-iframe {
-        top: -15% !important;
-        height: 125% !important;
+        top: 0 !important;
+        height: 100% !important;
         transform: none !important;
     }
 
