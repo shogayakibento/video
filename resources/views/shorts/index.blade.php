@@ -39,9 +39,10 @@ body.shorts-page > script[src*="banner_placement"] {
     .shorts-player-box {
         padding-bottom: 0 !important;
         width: 100% !important;
-        height: 100% !important;
-        aspect-ratio: auto !important;
+        height: auto !important;
+        aspect-ratio: 16 / 9 !important;
         position: relative !important;
+        max-height: 100% !important;
     }
 
     .shorts-iframe {
@@ -49,8 +50,7 @@ body.shorts-page > script[src*="banner_placement"] {
         top: 0 !important;
         left: 0 !important;
         width: 100% !important;
-        top: -6% !important;
-        height: 108% !important;
+        height: 100% !important;
         transform: none !important;
     }
 
