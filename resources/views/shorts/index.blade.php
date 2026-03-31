@@ -35,6 +35,7 @@ body.shorts-page > script[src*="banner_placement"] {
 
     /* 中の動画を拡大して枠いっぱいに合わせる（デスクトップ） */
     .shorts-iframe {
+        inset: auto !important;
         top: -10% !important;
         left: -6% !important;
         width: 112% !important;
