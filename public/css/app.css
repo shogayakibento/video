@@ -2386,10 +2386,11 @@ img {
 
 .shorts-iframe {
     position: absolute;
-    inset: 0;
+    top: -40px;
+    left: 0;
+    right: 0;
     width: 100%;
     height: calc(100% + 40px);
-    transform: translateY(-40px);
     border: none;
 }
 
