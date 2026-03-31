@@ -32,35 +32,27 @@ body.shorts-page > script[src*="banner_placement"] {
         min-width: 0 !important;
         width: auto !important;
         max-width: none !important;
+        height: 100% !important;
+        padding: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+    }
 
-    /* 中の動画を拡大して枠いっぱいに合わせる（デスクトップ） */
+    .shorts-player-box {
+        width: 100% !important;
+        aspect-ratio: 16 / 9 !important;
+        padding-bottom: 0 !important;
+        height: auto !important;
+        position: relative !important;
+        max-height: 100% !important;
+    }
+
     .shorts-iframe {
         inset: 0 !important;
         top: 0 !important;
         left: 0 !important;
         width: 100% !important;
         height: 100% !important;
-        transform: translateY(10%) scale(1.28) !important;
-        transform-origin: center center !important;
-    }
-
-        height: 100% !important;
-        padding: 0 !important;
-    }
-
-    .shorts-player-box {
-        padding-bottom: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        aspect-ratio: auto !important;
-        position: relative !important;
-    }
-
-    /* 左カラムのプレイヤー枠いっぱいに動画を合わせる */
-    .shorts-iframe {
-        /* プレイヤー外の下余白を隠すため、少し上へ寄せて拡大 */
-        top: -6% !important;
-        height: 108% !important;
         transform: none !important;
     }
 
