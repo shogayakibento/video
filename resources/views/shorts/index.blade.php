@@ -44,6 +44,15 @@ body.shorts-page > script[src*="banner_placement"] {
         width: 100% !important;
         aspect-ratio: 16 / 9 !important;
         position: relative !important;
+        overflow: hidden !important;
+    }
+
+    .shorts-iframe {
+        position: absolute !important;
+        inset: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        transform: none !important;
     }
 
     .shorts-info-overlay {
