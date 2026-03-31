@@ -42,13 +42,15 @@ body.shorts-page > script[src*="banner_placement"] {
         padding-bottom: 0 !important;
         height: auto !important;
         width: 100% !important;
-        aspect-ratio: 16 / 9 !important;
+        /* 通常サンプル再生と同じ見え方（padding-top:65%相当）に合わせる */
+        aspect-ratio: 20 / 13 !important;
         position: relative !important;
     }
 
-    /* DMMプレイヤーを枠ぴったりに表示 */
+    /* 通常のサンプルiframeと同様に、上部を少しトリミングして枠へフィット */
     .shorts-iframe {
-        height: 100% !important;
+        top: -15% !important;
+        height: 125% !important;
         transform: none !important;
     }
 
