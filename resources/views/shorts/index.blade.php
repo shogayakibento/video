@@ -46,6 +46,12 @@ body.shorts-page > script[src*="banner_placement"] {
         position: relative !important;
     }
 
+    /* DMMプレイヤーを枠ぴったりに表示 */
+    .shorts-iframe {
+        height: 100% !important;
+        transform: none !important;
+    }
+
     .shorts-info-overlay {
         position: relative !important;
         top: auto !important;
