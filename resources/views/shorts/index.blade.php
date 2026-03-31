@@ -32,29 +32,18 @@ body.shorts-page > script[src*="banner_placement"] {
         min-width: 0 !important;
         width: auto !important;
         max-width: none !important;
-        display: block !important;
-        padding: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 10px !important;
     }
 
     .shorts-player-box {
-        padding-top: 56.25% !important;
         padding-bottom: 0 !important;
-        height: 0 !important;
+        height: auto !important;
         width: 100% !important;
-        aspect-ratio: auto !important;
+        aspect-ratio: 16 / 9 !important;
         position: relative !important;
-        overflow: hidden !important;
-    }
-
-    .shorts-iframe {
-        position: absolute !important;
-        inset: auto !important;
-        top: -40px !important;
-        left: 0 !important;
-        right: 0 !important;
-        width: 100% !important;
-        height: calc(100% + 40px) !important;
-        transform: none !important;
     }
 
     .shorts-info-overlay {
