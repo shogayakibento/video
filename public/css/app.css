@@ -2388,9 +2388,8 @@ img {
     position: absolute;
     inset: 0;
     width: 100%;
-    height: 100%;
-    transform: scale(1.08);
-    transform-origin: center center;
+    height: calc(100% + 40px);
+    transform: translateY(-40px);
     border: none;
 }
 
