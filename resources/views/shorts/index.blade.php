@@ -40,7 +40,7 @@ body.shorts-page > script[src*="banner_placement"] {
         left: 0 !important;
         width: 100% !important;
         height: 100% !important;
-        transform: translateY(6%) scale(1.28) !important;
+        transform: translateY(10%) scale(1.28) !important;
         transform-origin: center center !important;
     }
 
