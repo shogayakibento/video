@@ -28,18 +28,15 @@ body.shorts-page > script[src*="banner_placement"] {
         top: auto !important;
         left: auto !important;
         transform: none !important;
-        display: flex !important;
-        align-items: center !important;
-        height: auto !important;
-        aspect-ratio: 16 / 9 !important;
-        padding-bottom: 0 !important;
-        margin: 0 auto !important;
-
-        inset: 0 !important;
-        top: 0 !important;
-        left: 0 !important;
         width: 100% !important;
         height: 100% !important;
+        aspect-ratio: auto !important;
+
+        inset: 0 !important;
+        top: -6% !important;
+        left: -6% !important;
+        width: 112% !important;
+        height: 112% !important;
         width: 120% !important;
         height: 120% !important;
         transform: none !important;
