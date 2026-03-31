@@ -39,8 +39,8 @@ body.shorts-page > script[src*="banner_placement"] {
     }
 
     .shorts-player-box {
-        /* 16:9の高さからタイトルバー分(32px)だけ短くしてクリップ */
-        padding-bottom: calc(56.25% - 32px) !important;
+        /* 16:9の動画が黒帯なしで収まるよう、DMMのUI分(タイトル~32px+コントロール~58px=90px)だけ高くする */
+        padding-bottom: calc(56.25% + 90px) !important;
         height: 0 !important;
         width: 100% !important;
         aspect-ratio: auto !important;
@@ -49,14 +49,10 @@ body.shorts-page > script[src*="banner_placement"] {
     }
 
     .shorts-iframe {
-        /* iframeは正確な16:9サイズで描画し、上部32pxをクリップで隠す */
         position: absolute !important;
-        inset: auto !important;
-        top: -32px !important;
-        left: 0 !important;
-        right: 0 !important;
+        inset: 0 !important;
         width: 100% !important;
-        height: calc(100% + 32px) !important;
+        height: 100% !important;
         transform: none !important;
     }
 
