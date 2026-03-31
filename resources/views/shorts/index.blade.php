@@ -49,9 +49,9 @@ body.shorts-page > script[src*="banner_placement"] {
         top: 0 !important;
         left: 0 !important;
         width: 100% !important;
-        height: 100% !important;
-        transform: scale(1.18) !important;
-        transform-origin: center center !important;
+        top: -6% !important;
+        height: 108% !important;
+        transform: none !important;
     }
 
     .shorts-info-overlay {
