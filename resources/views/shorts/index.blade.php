@@ -28,7 +28,7 @@ body.shorts-page > script[src*="banner_placement"] {
         top: auto !important;
         left: auto !important;
         transform: none !important;
-        flex: 1 !important;
+        flex: 1.25 !important;
         min-width: 0 !important;
         width: auto !important;
         max-width: none !important;
@@ -46,10 +46,10 @@ body.shorts-page > script[src*="banner_placement"] {
 
     .shorts-iframe {
         inset: 0 !important;
-        top: -6% !important;
-        left: -6% !important;
-        width: 112% !important;
-        height: 112% !important;
+        top: -10% !important;
+        left: -10% !important;
+        width: 120% !important;
+        height: 120% !important;
         transform: none !important;
     }
 
@@ -59,7 +59,7 @@ body.shorts-page > script[src*="banner_placement"] {
         bottom: auto !important;
         left: auto !important;
         transform: none !important;
-        width: 300px !important;
+        width: 260px !important;
         flex-shrink: 0 !important;
         max-width: none !important;
         border-radius: 0 !important;
