@@ -35,6 +35,7 @@ body.shorts-page > script[src*="banner_placement"] {
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
+        height: 100% !important;
         padding: 10px !important;
     }
 
