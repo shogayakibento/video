@@ -37,7 +37,7 @@ body.shorts-page > script[src*="banner_placement"] {
     }
 
     .shorts-player-box {
-        padding-top: 65% !important;
+        padding-top: 56.25% !important;
         padding-bottom: 0 !important;
         height: 0 !important;
         width: 100% !important;
@@ -49,11 +49,11 @@ body.shorts-page > script[src*="banner_placement"] {
     .shorts-iframe {
         position: absolute !important;
         inset: auto !important;
-        top: -15% !important;
+        top: -40px !important;
         left: 0 !important;
         right: 0 !important;
         width: 100% !important;
-        height: 125% !important;
+        height: calc(100% + 40px) !important;
         transform: none !important;
     }
 
