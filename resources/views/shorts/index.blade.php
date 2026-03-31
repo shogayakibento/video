@@ -50,7 +50,8 @@ body.shorts-page > script[src*="banner_placement"] {
         left: 0 !important;
         width: 100% !important;
         height: 100% !important;
-        transform: none !important;
+        transform: scale(1.18) !important;
+        transform-origin: center center !important;
     }
 
     .shorts-info-overlay {
