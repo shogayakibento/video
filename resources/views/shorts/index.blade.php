@@ -46,8 +46,9 @@ body.shorts-page > script[src*="banner_placement"] {
 
     /* 左カラムのプレイヤー枠いっぱいに動画を合わせる */
     .shorts-iframe {
-        top: 0 !important;
-        height: 100% !important;
+        /* プレイヤー外の下余白を隠すため、少し上へ寄せて拡大 */
+        top: -12% !important;
+        height: 112% !important;
         transform: none !important;
     }
 
