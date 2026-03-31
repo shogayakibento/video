@@ -39,19 +39,24 @@ body.shorts-page > script[src*="banner_placement"] {
     }
 
     .shorts-player-box {
-        padding-bottom: 0 !important;
-        height: auto !important;
+        /* 16:9の高さからタイトルバー分(32px)だけ短くしてクリップ */
+        padding-bottom: calc(56.25% - 32px) !important;
+        height: 0 !important;
         width: 100% !important;
-        aspect-ratio: 16 / 9 !important;
+        aspect-ratio: auto !important;
         position: relative !important;
         overflow: hidden !important;
     }
 
     .shorts-iframe {
+        /* iframeは正確な16:9サイズで描画し、上部32pxをクリップで隠す */
         position: absolute !important;
-        inset: 0 !important;
+        inset: auto !important;
+        top: -32px !important;
+        left: 0 !important;
+        right: 0 !important;
         width: 100% !important;
-        height: 100% !important;
+        height: calc(100% + 32px) !important;
         transform: none !important;
     }
 
