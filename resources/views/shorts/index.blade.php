@@ -32,28 +32,28 @@ body.shorts-page > script[src*="banner_placement"] {
         min-width: 0 !important;
         width: auto !important;
         max-width: none !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
+        display: block !important;
         padding: 0 !important;
     }
 
     .shorts-player-box {
-        height: min(calc(100vh - 64px), calc((100vw - 300px) * 9 / 16)) !important;
-        width: min(100%, calc((100vh - 64px) * 16 / 9)) !important;
+        padding-top: 65% !important;
         padding-bottom: 0 !important;
+        height: 0 !important;
+        width: 100% !important;
         aspect-ratio: auto !important;
         position: relative !important;
         overflow: hidden !important;
     }
 
     .shorts-iframe {
+        position: absolute !important;
         inset: auto !important;
-        top: -40px !important;
+        top: -15% !important;
         left: 0 !important;
         right: 0 !important;
         width: 100% !important;
-        height: calc(min(100vh - 64px, (100vw - 300px) * 9 / 16) + 40px) !important;
+        height: 125% !important;
         transform: none !important;
     }
 
@@ -481,6 +481,12 @@ body.shorts-page > script[src*="banner_placement"] {
             if (entry.isIntersecting) {
                 currentIdx = idx;
                 if (counterEl) counterEl.textContent = idx + 1;
+
+                // Load iframe
+                if (iframe && iframe.dataset.src && iframe.src !== iframe.dataset.src) {
+                    iframe.src = iframe.dataset.src;
+                }
+                if (thumb) thumb.style.display = 'none';
                 updateNavButtons();
             } else {
                 // Unload iframe to stop video & save resources
@@ -488,26 +494,11 @@ body.shorts-page > script[src*="banner_placement"] {
                     iframe.src = 'about:blank';
                 }
                 if (thumb) thumb.style.display = '';
-                item.dataset.played = '';
             }
         });
     }, { threshold: 0.6 });
 
-    /* サムネイルクリックで iframe を読み込み・再生 */
-    items.forEach(function (item) {
-        var thumb  = item.querySelector('.shorts-thumb-placeholder');
-        var iframe = item.querySelector('.shorts-iframe');
-        if (thumb && iframe) {
-            thumb.addEventListener('click', function () {
-                if (iframe.dataset.src && iframe.src !== iframe.dataset.src) {
-                    iframe.src = iframe.dataset.src;
-                }
-                thumb.style.display = 'none';
-                item.dataset.played = '1';
-            });
-        }
-        observer.observe(item);
-    });
+    items.forEach(function (item) { observer.observe(item); });
 
     /* ---------- Navigate ---------- */
     function goTo(idx) {
