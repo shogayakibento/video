@@ -39,10 +39,10 @@ body.shorts-page > script[src*="banner_placement"] {
     }
 
     .shorts-player-box {
-        padding-bottom: 0 !important;
-        height: auto !important;
+        padding-bottom: 56.25% !important; /* 16:9 */
+        height: 0 !important;
         width: 100% !important;
-        aspect-ratio: 16 / 9 !important;
+        aspect-ratio: unset !important;
         position: relative !important;
     }
 
