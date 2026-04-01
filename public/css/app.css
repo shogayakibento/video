@@ -2605,8 +2605,7 @@ img {
     }
 
     .shorts-player-box {
-        /* iframeの下端をもう少し見せるため縦比率を大きく */
-        padding-bottom: 63%;
+        padding-bottom: 56.25%; /* 16:9 — iframeサイズ(1280_720)と統一 */
     }
 
     .shorts-nav-btns {
