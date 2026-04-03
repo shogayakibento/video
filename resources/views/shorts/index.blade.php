@@ -32,32 +32,26 @@ body.shorts-page > script[src*="banner_placement"] {
         min-width: 0 !important;
         width: auto !important;
         max-width: none !important;
-
-    /* サンプルモーダルと同じクロップ比率 */
-    .shorts-iframe {
-        left: 0 !important;
-        right: 0 !important;
-        width: 100% !important;
-        top: -15% !important;
-        height: 125% !important;
-        transform: none !important;
-    }
-
-        height: 100% !important;
+        display: flex !important;
+        align-items: center !important;
         padding: 0 !important;
     }
 
     .shorts-player-box {
-        padding-bottom: 0 !important;
         width: 100% !important;
-        height: 100% !important;
-        aspect-ratio: auto !important;
+        height: auto !important;
+        padding-bottom: 0 !important;
+        aspect-ratio: 100/65 !important;
+        max-height: calc(100vh - 56px) !important;
         position: relative !important;
     }
 
-    /* 左カラムのプレイヤー枠いっぱいに動画を合わせる */
+    /* サンプルモーダルと同じクロップ */
     .shorts-iframe {
-        /* サンプルモーダルと同じクロップ比率 */
+        position: absolute !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
         top: -15% !important;
         height: 125% !important;
         transform: none !important;
