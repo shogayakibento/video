@@ -2,7 +2,377 @@
    shorts.css — ショートビュープレイヤー専用スタイル
    ========================================================================== */
 
-/* ショートビューページはフッター非表示 */
+/* ===== ベーススタイル ===== */
+
+.shorts-wrapper {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    background: #000;
+}
+
+.shorts-scroll {
+    height: 100%;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.shorts-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.shorts-item {
+    position: relative;
+    height: 100%;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    overflow: hidden;
+    background: #000;
+}
+
+/* Edge vignette for cinematic feel */
+.shorts-item::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: radial-gradient(
+        ellipse at center,
+        transparent 45%,
+        rgba(0, 0, 0, 0.55) 100%
+    );
+    pointer-events: none;
+}
+
+/* Blurred background */
+.shorts-bg {
+    position: absolute;
+    inset: -40px;
+    background-size: cover;
+    background-position: center;
+    filter: blur(40px) brightness(0.5) saturate(1.5);
+    transform: scale(1.08);
+    pointer-events: none;
+}
+
+/* Player box — 16:9, centered */
+.shorts-player-wrap {
+    position: absolute;
+    top: 44%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    /* 0.82 係数: ノートPC(768px)でも上にはみ出さないサイズ */
+    width: min(100%, calc((100vh - 64px) * 16 / 9 * 0.82));
+    max-width: 1200px;
+}
+
+.shorts-player-box {
+    position: relative;
+    padding-bottom: 65%;
+    height: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #000;
+    box-shadow:
+        0 0 80px rgba(0, 0, 0, 0.9),
+        0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.shorts-iframe {
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 100%;
+    top: -15%;
+    height: 125%;
+    border: none;
+}
+
+/* Thumbnail placeholder — shimmer loading */
+@keyframes shorts-shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.shorts-thumb-placeholder {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, #111 25%, #1e1e1e 50%, #111 75%);
+    background-size: 200% 100%;
+    animation: shorts-shimmer 1.8s infinite linear;
+}
+
+.shorts-thumb-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.75;
+}
+
+.shorts-play-icon {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.shorts-play-icon svg {
+    width: 56px;
+    height: 56px;
+    color: rgba(255, 255, 255, 0.85);
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
+}
+
+/* Info overlay */
+.shorts-info-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    padding: 90px 160px 28px 24px; /* right padding avoids overlap with CTA button */
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.92) 0%,
+        rgba(0, 0, 0, 0.5) 55%,
+        transparent 100%
+    );
+    pointer-events: none;
+}
+
+.shorts-info-text {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Title */
+.shorts-title-text {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.45;
+    margin-bottom: 8px;
+    padding-left: 10px;
+    border-left: 3px solid var(--primary);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+}
+
+/* Actress row */
+.shorts-actress-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 5px;
+    pointer-events: auto;
+}
+
+/* 女優リンク: meta-tag.actress に準拠 */
+.shorts-actress-link {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--primary-light);
+    background: rgba(255, 45, 120, 0.15);
+    padding: 2px 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background 0.15s;
+    pointer-events: auto;
+}
+.shorts-actress-link:hover {
+    background: rgba(255, 45, 120, 0.3);
+    color: var(--primary-light);
+}
+
+/* 女優バッジ（リンクなし） */
+.shorts-actress-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--primary-light);
+    background: rgba(255, 45, 120, 0.1);
+    padding: 2px 10px;
+    border-radius: 4px;
+}
+
+/* メーカー・評価・ジャンル・価格行 */
+.shorts-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 5px;
+}
+
+/* メーカー: 目立たせない */
+.shorts-maker-badge {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+}
+
+/* 評価: 黄色 */
+.shorts-rating-badge {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #f59e0b;
+}
+
+/* Genres */
+.shorts-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 5px;
+}
+
+/* ジャンル: genre-tag に準拠 */
+.shorts-genre-tag {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    background: var(--bg-light);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+/* 価格: item-price / sample-modal-price に準拠 */
+.shorts-price-text {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary-light);
+    margin-bottom: 12px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* CTA button */
+.shorts-cta-btn {
+    position: absolute;
+    bottom: 28px;
+    right: 14px;
+    z-index: 15;
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 22px;
+    background: linear-gradient(135deg, var(--primary) 0%, #ff6b9d 100%);
+    color: #fff;
+    font-size: 0.88rem;
+    font-weight: 700;
+    border-radius: 9999px;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 4px 20px rgba(255, 45, 120, 0.55);
+    transition:
+        box-shadow 0.2s,
+        transform 0.15s;
+}
+
+.shorts-cta-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 6px 28px rgba(255, 45, 120, 0.75);
+}
+
+/* Counter bar */
+.shorts-counter-bar {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    z-index: 20;
+    background: rgba(0, 0, 0, 0.45);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    pointer-events: none;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.shorts-counter-sep {
+    margin: 0 2px;
+    opacity: 0.5;
+}
+
+/* Navigation buttons (right side) */
+.shorts-nav-btns {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.shorts-nav-up,
+.shorts-nav-down {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.4);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+        background 0.2s,
+        transform 0.15s,
+        box-shadow 0.2s;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.shorts-nav-up:hover,
+.shorts-nav-down:hover {
+    background: rgba(255, 45, 120, 0.55);
+    border-color: rgba(255, 45, 120, 0.5);
+    transform: scale(1.12);
+    box-shadow: 0 4px 16px rgba(255, 45, 120, 0.4);
+}
+
+.shorts-nav-up:disabled,
+.shorts-nav-down:disabled {
+    opacity: 0.2;
+    cursor: default;
+    transform: none;
+    box-shadow: none;
+}
+
+.shorts-nav-up svg,
+.shorts-nav-down svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Empty state */
+.shorts-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-muted);
+    gap: 16px;
+    font-size: 1rem;
+}
+
+/* ====== ショートビューページはフッター非表示 ====== */
 body.shorts-page footer,
 body.shorts-page .side-ad,
 body.shorts-page > ins,
@@ -89,154 +459,54 @@ body.shorts-page > script[src*="banner_placement"] {
     }
 }
 
-.shorts-info-text {
-    flex: 1;
-    min-width: 0;
-}
-
-/* Title */
-.shorts-title-text {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #fff;
-    line-height: 1.5;
-    margin: 0 0 6px;
-    padding-left: 10px;
-    border-left: 3px solid var(--primary);
-    text-shadow: 0 1px 8px rgba(0,0,0,0.9);
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-/* Actress row */
-.shorts-actress-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 5px;
-    pointer-events: auto;
-}
-
-/* 女優リンク: meta-tag.actress に準拠 */
-.shorts-actress-link {
-    display: inline-flex;
-    align-items: center;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--primary-light);
-    background: rgba(255, 45, 120, 0.15);
-    padding: 2px 10px;
-    border-radius: 4px;
-    text-decoration: none;
-    transition: background 0.15s;
-    pointer-events: auto;
-}
-.shorts-actress-link:hover {
-    background: rgba(255, 45, 120, 0.3);
-    color: var(--primary-light);
-}
-
-/* 女優バッジ（リンクなし） */
-.shorts-actress-badge {
-    display: inline-flex;
-    align-items: center;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--primary-light);
-    background: rgba(255, 45, 120, 0.1);
-    padding: 2px 10px;
-    border-radius: 4px;
-}
-
-/* メーカー・評価・ジャンル・価格行 */
-.shorts-meta-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 5px;
-}
-
-/* メーカー: 目立たせない */
-.shorts-maker-badge {
-    font-size: 0.72rem;
-    color: var(--text-muted);
-}
-
-/* 評価: 黄色 */
-.shorts-rating-badge {
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: #f59e0b;
-}
-
-/* Genres */
-.shorts-genres {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-bottom: 5px;
-}
-
-/* ジャンル: genre-tag に準拠 */
-.shorts-genre-tag {
-    font-size: 0.7rem;
-    color: var(--text-muted);
-    background: var(--bg-light);
-    padding: 2px 8px;
-    border-radius: 4px;
-}
-
-/* 価格: item-price / sample-modal-price に準拠 */
-.shorts-price-text {
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: #6ee7b7;
-    margin: 0;
-}
-
-/* CTA button */
-.shorts-cta-btn {
-    bottom: 32px;
-    right: 16px;
-    padding: 13px 20px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    border-radius: 14px;
-    box-shadow: 0 4px 24px rgba(255, 45, 120, 0.6);
-    letter-spacing: 0.02em;
-}
-
-.shorts-cta-btn:hover {
-    box-shadow: 0 6px 32px rgba(255, 45, 120, 0.8);
-    transform: translateY(-2px) scale(1.04);
-}
-
-/* ====== モバイル: 情報パネルを画面下部オーバーレイに ====== */
+/* ====== モバイル ====== */
 @media (max-width: 640px) {
+    .shorts-wrapper {
+        /* use dynamic viewport height to exclude browser chrome on iOS */
+        top: 56px;
+        bottom: 0;
+    }
+
+    /* アイテムはラッパーに合わせる（100dvhではラッパーからはみ出す） */
+    .shorts-item {
+        height: 100%;
+    }
+
+    .shorts-player-wrap {
+        width: 100%;
+        /* 動画の中心を下げて下部を大きく見せる */
+        top: 42%;
+    }
+
+    .shorts-player-box {
+        padding-bottom: 65%;
+    }
+
+    .shorts-nav-btns {
+        right: 8px;
+        top: 42%;
+    }
+
+    .shorts-counter-bar {
+        right: 8px;
+    }
+
+    /* 情報パネル: 画面下部オーバーレイ */
     .shorts-info-overlay {
-        /* 動画下固定ではなく画面下部へ */
-        top: auto !important;
-        bottom: env(safe-area-inset-bottom, 0) !important;
-        left: 0 !important;
-        right: 0 !important;
-        transform: none !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        border-radius: 0 !important;
-        padding: 60px 14px 14px !important;
+        position: absolute;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        padding: 70px 14px 14px;
         background: linear-gradient(
             to top,
-            rgba(0,0,0,0.93) 0%,
-            rgba(0,0,0,0.6) 65%,
+            rgba(0, 0, 0, 0.92) 0%,
+            rgba(0, 0, 0, 0.55) 65%,
             transparent 100%
-        ) !important;
-        backdrop-filter: none !important;
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 10px !important;
+        );
+        pointer-events: auto;
     }
 
     .shorts-info-text {
