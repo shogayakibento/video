@@ -347,25 +347,31 @@ body.shorts-page > script[src*="banner_placement"] {
         align-items: center !important;
     }
 
-    /* 16:9 を維持して縦中央配置 */
+    /* player-wrap: 左カラムを flex 縦中央コンテナとして使う */
     .shorts-player-wrap {
         position: relative !important;
         top: auto !important;
         left: auto !important;
         transform: none !important;
-        flex: 1 1 0% !important;
+        flex: 1 !important;
         width: auto !important;
         min-width: 0 !important;
         max-width: none !important;
-        aspect-ratio: 16 / 9 !important;
-        height: auto !important;
-        max-height: 100% !important;
+        height: 100% !important;
         padding: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: stretch !important;
     }
 
+    /* player-box: 16:9 で幅いっぱい、縦は auto */
     .shorts-player-box {
-        position: absolute !important;
-        inset: 0 !important;
+        position: relative !important;
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 16 / 9 !important;
+        max-height: 100% !important;
         padding-bottom: 0 !important;
         border-radius: 0 !important;
         min-height: 0 !important;
