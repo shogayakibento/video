@@ -74,18 +74,24 @@ body.shorts-page > script[src*="banner_placement"] {
         flex-shrink: 0 !important;
         max-width: none !important;
         border-radius: 0 !important;
-        padding: 24px 16px !important;
-        background: rgba(12, 12, 12, 0.95) !important;
+        padding: 20px 16px 20px !important;
+        background: rgba(12, 12, 12, 0.97) !important;
         backdrop-filter: blur(16px) !important;
         flex-direction: column !important;
         align-items: flex-start !important;
-        gap: 10px !important;
+        gap: 0 !important;
         justify-content: flex-start !important;
         overflow-y: auto !important;
+        border-left: 1px solid rgba(255,255,255,0.07) !important;
     }
 
     .shorts-info-text {
-        flex: 1;
+        flex: 1 !important;
+        width: 100% !important;
+    }
+
+    .shorts-info-divider {
+        display: block !important;
     }
 
     .shorts-cta-btn {
@@ -93,17 +99,20 @@ body.shorts-page > script[src*="banner_placement"] {
         width: 100% !important;
         text-align: center !important;
         justify-content: center !important;
-        padding: 10px 14px !important;
-        font-size: 0.82rem !important;
-        white-space: normal !important;
+        padding: 12px 14px !important;
+        font-size: 0.88rem !important;
+        white-space: nowrap !important;
         line-height: 1.4 !important;
-        box-shadow: 0 2px 12px rgba(255, 45, 120, 0.5) !important;
+        box-shadow: 0 2px 16px rgba(255, 45, 120, 0.55) !important;
+        margin-top: 0 !important;
+        flex-shrink: 0 !important;
     }
 }
 
 .shorts-info-text {
     flex: 1;
     min-width: 0;
+    width: 100%;
 }
 
 /* Title */
@@ -111,13 +120,13 @@ body.shorts-page > script[src*="banner_placement"] {
     font-size: 1rem;
     font-weight: 700;
     color: #fff;
-    line-height: 1.5;
-    margin: 0 0 6px;
+    line-height: 1.55;
+    margin: 0 0 10px;
     padding-left: 10px;
     border-left: 3px solid var(--primary);
     text-shadow: 0 1px 8px rgba(0,0,0,0.9);
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -126,8 +135,8 @@ body.shorts-page > script[src*="banner_placement"] {
 .shorts-actress-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 5px;
+    gap: 5px;
+    margin-bottom: 8px;
     pointer-events: auto;
 }
 
@@ -139,8 +148,8 @@ body.shorts-page > script[src*="banner_placement"] {
     font-weight: 600;
     color: var(--primary-light);
     background: rgba(255, 45, 120, 0.15);
-    padding: 2px 10px;
-    border-radius: 4px;
+    padding: 3px 10px;
+    border-radius: 20px;
     text-decoration: none;
     transition: background 0.15s;
     pointer-events: auto;
@@ -158,17 +167,17 @@ body.shorts-page > script[src*="banner_placement"] {
     font-weight: 600;
     color: var(--primary-light);
     background: rgba(255, 45, 120, 0.1);
-    padding: 2px 10px;
-    border-radius: 4px;
+    padding: 3px 10px;
+    border-radius: 20px;
 }
 
-/* メーカー・評価・ジャンル・価格行 */
+/* メーカー・評価行 */
 .shorts-meta-row {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 6px;
-    margin-bottom: 5px;
+    gap: 8px;
+    margin-bottom: 8px;
 }
 
 /* メーカー: 目立たせない */
@@ -182,14 +191,17 @@ body.shorts-page > script[src*="banner_placement"] {
     font-size: 0.82rem;
     font-weight: 700;
     color: #f59e0b;
+    background: rgba(245, 158, 11, 0.12);
+    padding: 2px 8px;
+    border-radius: 4px;
 }
 
 /* Genres */
 .shorts-genres {
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
-    margin-bottom: 5px;
+    gap: 4px;
+    margin-bottom: 8px;
 }
 
 /* ジャンル: genre-tag に準拠 */
@@ -203,10 +215,20 @@ body.shorts-page > script[src*="banner_placement"] {
 
 /* 価格: item-price / sample-modal-price に準拠 */
 .shorts-price-text {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 700;
     color: #6ee7b7;
     margin: 0;
+}
+
+/* セクション区切り */
+.shorts-info-divider {
+    display: none;
+    width: 100%;
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    margin: 12px 0;
+    flex-shrink: 0;
 }
 
 /* CTA button */
@@ -214,16 +236,17 @@ body.shorts-page > script[src*="banner_placement"] {
     bottom: 32px;
     right: 16px;
     padding: 13px 20px;
-    font-size: 0.85rem;
+    font-size: 0.88rem;
     font-weight: 700;
-    border-radius: 14px;
+    border-radius: 12px;
     box-shadow: 0 4px 24px rgba(255, 45, 120, 0.6);
-    letter-spacing: 0.02em;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
 }
 
 .shorts-cta-btn:hover {
     box-shadow: 0 6px 32px rgba(255, 45, 120, 0.8);
-    transform: translateY(-2px) scale(1.04);
+    transform: translateY(-2px) scale(1.03);
 }
 
 /* ====== モバイル: 情報パネルを画面下部オーバーレイに ====== */
@@ -238,43 +261,61 @@ body.shorts-page > script[src*="banner_placement"] {
         width: 100% !important;
         max-width: 100% !important;
         border-radius: 0 !important;
-        padding: 60px 14px 14px !important;
+        padding: 56px 14px 16px !important;
         background: linear-gradient(
             to top,
-            rgba(0,0,0,0.93) 0%,
-            rgba(0,0,0,0.6) 65%,
+            rgba(0,0,0,0.95) 0%,
+            rgba(0,0,0,0.75) 60%,
             transparent 100%
         ) !important;
         backdrop-filter: none !important;
         flex-direction: column !important;
         align-items: flex-start !important;
-        gap: 10px !important;
+        gap: 0 !important;
     }
 
     .shorts-info-text {
         width: 100%;
+        margin-bottom: 10px !important;
     }
 
     .shorts-title-text {
-        font-size: 0.88rem !important;
+        font-size: 0.9rem !important;
         -webkit-line-clamp: 2 !important;
         display: -webkit-box !important;
         -webkit-box-orient: vertical !important;
         overflow: hidden !important;
+        margin-bottom: 8px !important;
+    }
+
+    .shorts-actress-row {
+        margin-bottom: 6px !important;
+    }
+
+    .shorts-meta-row {
+        margin-bottom: 6px !important;
+    }
+
+    .shorts-genres {
+        margin-bottom: 6px !important;
     }
 
     .shorts-cta-btn {
         position: static !important;
         width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
         justify-content: center !important;
-        padding: 10px 16px !important;
-        font-size: 0.82rem !important;
+        padding: 12px 16px !important;
+        font-size: 0.9rem !important;
         border-radius: 10px !important;
+        box-shadow: 0 3px 16px rgba(255, 45, 120, 0.55) !important;
     }
 
     .shorts-actress-link,
     .shorts-actress-badge {
         font-size: 0.7rem !important;
+        padding: 2px 9px !important;
     }
 
     .shorts-genres,
@@ -284,6 +325,11 @@ body.shorts-page > script[src*="banner_placement"] {
 
     .shorts-genre-tag {
         font-size: 0.65rem !important;
+        padding: 1px 6px !important;
+    }
+
+    .shorts-rating-badge {
+        font-size: 0.75rem !important;
         padding: 1px 6px !important;
     }
 }
@@ -388,10 +434,12 @@ body.shorts-page > script[src*="banner_placement"] {
                     @endif
                 </div>
 
+                <hr class="shorts-info-divider">
+
                 <a href="{{ $url }}"
                    target="_blank"
                    rel="nofollow noopener"
-                   class="shorts-cta-btn">FANZAで<br>詳細を見る →</a>
+                   class="shorts-cta-btn">FANZAで詳細を見る →</a>
             </div>
 
         </div>
