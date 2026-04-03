@@ -566,7 +566,7 @@ body.shorts-page > script[src*="banner_placement"] {
 
         thumb.addEventListener('click', function () {
             if (iframe.dataset.src && iframe.src !== iframe.dataset.src) {
-                iframe.src = iframe.dataset.src;
+                iframe.src = iframe.dataset.src + '?autoplay=1';
             }
             thumb.style.display = 'none';
         });
