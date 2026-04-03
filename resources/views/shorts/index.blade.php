@@ -33,15 +33,14 @@ body.shorts-page > script[src*="banner_placement"] {
         width: auto !important;
         max-width: none !important;
 
-    /* 中の動画を拡大して枠いっぱいに合わせる（デスクトップ） */
+    /* サンプルモーダルと同じクロップ比率 */
     .shorts-iframe {
-        inset: 0 !important;
-        top: 0 !important;
         left: 0 !important;
+        right: 0 !important;
         width: 100% !important;
-        height: 100% !important;
-        transform: translateY(10%) scale(1.28) !important;
-        transform-origin: center center !important;
+        top: -15% !important;
+        height: 125% !important;
+        transform: none !important;
     }
 
         height: 100% !important;
