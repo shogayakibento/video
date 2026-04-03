@@ -344,28 +344,31 @@ body.shorts-page > script[src*="banner_placement"] {
     .shorts-item {
         display: flex !important;
         flex-direction: row !important;
-        align-items: stretch !important;
+        align-items: center !important;
     }
 
+    /* 16:9 を維持して縦中央配置 */
     .shorts-player-wrap {
         position: relative !important;
         top: auto !important;
         left: auto !important;
         transform: none !important;
         flex: 1 !important;
+        width: 0 !important;
         min-width: 0 !important;
-        width: auto !important;
         max-width: none !important;
-        height: 100% !important;
+        aspect-ratio: 16 / 9 !important;
+        height: auto !important;
+        max-height: 100% !important;
         padding: 0 !important;
     }
 
     .shorts-player-box {
-        position: relative !important;
-        width: 100% !important;
-        height: 100% !important;
-        min-height: calc(100vh - 64px) !important;
+        position: absolute !important;
+        inset: 0 !important;
         padding-bottom: 0 !important;
+        border-radius: 0 !important;
+        min-height: 0 !important;
     }
 
     .shorts-player-box .shorts-iframe {
@@ -374,7 +377,8 @@ body.shorts-page > script[src*="banner_placement"] {
         left: 0 !important;
         width: 100% !important;
         height: 100% !important;
-        transform: scale(1.28) translateY(-10%) !important;
+        /* DMMヘッダーを隠しコントロールを表示 */
+        transform: scale(1.2) translateY(-8%) !important;
         transform-origin: center center !important;
     }
 
@@ -396,6 +400,7 @@ body.shorts-page > script[src*="banner_placement"] {
         gap: 10px !important;
         justify-content: flex-start !important;
         overflow-y: auto !important;
+        align-self: stretch !important;
     }
 
     .shorts-info-text {
