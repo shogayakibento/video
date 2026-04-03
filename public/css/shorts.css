@@ -379,13 +379,11 @@ body.shorts-page > script[src*="banner_placement"] {
 
     .shorts-player-box .shorts-iframe {
         position: absolute !important;
-        top: 0 !important;
+        top: -15% !important;
         left: 0 !important;
         width: 100% !important;
-        height: 100% !important;
-        /* DMMヘッダーを隠しコントロールを表示 */
-        transform: scale(1.2) translateY(-8%) !important;
-        transform-origin: center center !important;
+        height: 115% !important;
+        transform: none !important;
     }
 
     .shorts-info-overlay {
