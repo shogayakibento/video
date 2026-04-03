@@ -7,6 +7,38 @@
 
 @push('styles')
 <style>
+/* サムネクリックで再生 */
+.shorts-thumb-placeholder {
+    cursor: pointer;
+}
+
+.shorts-play-icon svg {
+    transition: transform 0.18s ease, filter 0.18s ease, color 0.18s ease;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.7));
+}
+
+.shorts-thumb-placeholder:hover .shorts-play-icon svg {
+    color: #fff;
+    filter: drop-shadow(0 0 16px rgba(255,255,255,0.5));
+    transform: scale(1.15);
+}
+
+/* 「タップして再生」ラベル */
+.shorts-play-label {
+    position: absolute;
+    bottom: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.75);
+    background: rgba(0,0,0,0.45);
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+    pointer-events: none;
+    letter-spacing: 0.03em;
+}
+
 /* ショートビューページはフッター非表示 */
 body.shorts-page footer,
 body.shorts-page .side-ad,
@@ -391,6 +423,7 @@ body.shorts-page > script[src*="banner_placement"] {
                         <div class="shorts-play-icon">
                             <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
                         </div>
+                        <span class="shorts-play-label">タップして再生</span>
                     </div>
                 </div>
             </div>
@@ -525,6 +558,20 @@ body.shorts-page > script[src*="banner_placement"] {
     var counterEl   = document.getElementById('shortsCounterCurrent');
     var currentIdx  = 0;
 
+    /* ---------- サムネクリックで再生 ---------- */
+    items.forEach(function (item) {
+        var thumb  = item.querySelector('.shorts-thumb-placeholder');
+        var iframe = item.querySelector('.shorts-iframe');
+        if (!thumb || !iframe) return;
+
+        thumb.addEventListener('click', function () {
+            if (iframe.dataset.src && iframe.src !== iframe.dataset.src) {
+                iframe.src = iframe.dataset.src;
+            }
+            thumb.style.display = 'none';
+        });
+    });
+
     /* ---------- Lazy load iframes via IntersectionObserver ---------- */
     var observer = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
@@ -536,13 +583,9 @@ body.shorts-page > script[src*="banner_placement"] {
             if (entry.isIntersecting) {
                 currentIdx = idx;
                 if (counterEl) counterEl.textContent = idx + 1;
-
-                // Load iframe
-                if (iframe && iframe.dataset.src && iframe.src !== iframe.dataset.src) {
-                    iframe.src = iframe.dataset.src;
-                }
-                if (thumb) thumb.style.display = 'none';
                 updateNavButtons();
+                // サムネが表示中（未再生）なら自動ロードしない
+                // 画面外から戻ってきた場合はサムネを表示してリセット
             } else {
                 // Unload iframe to stop video & save resources
                 if (iframe && iframe.src) {
