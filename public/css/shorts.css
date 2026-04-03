@@ -406,6 +406,7 @@ body.shorts-page > script[src*="banner_placement"] {
         position: relative !important;
         width: 100% !important;
         height: 100% !important;
+        min-height: calc(100vh - 64px) !important;
         padding-bottom: 0 !important;
         aspect-ratio: auto !important;
     }
