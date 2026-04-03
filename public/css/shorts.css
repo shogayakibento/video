@@ -415,7 +415,9 @@ body.shorts-page > script[src*="banner_placement"] {
         inset: 0 !important;
         width: 100% !important;
         height: 100% !important;
-        transform: none !important;
+        /* スケールアップして左カラムを埋めつつ、上シフトでコントロールを表示 */
+        transform: scale(1.28) translateY(-11%) !important;
+        transform-origin: center center !important;
     }
 
     /* 右カラム: 情報パネル */
