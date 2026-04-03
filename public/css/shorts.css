@@ -2,8 +2,6 @@
    shorts.css — ショートビュープレイヤー専用スタイル
    ========================================================================== */
 
-/* ===== ベーススタイル ===== */
-
 .shorts-wrapper {
     position: fixed;
     top: 64px;
@@ -35,17 +33,13 @@
     background: #000;
 }
 
-/* Edge vignette for cinematic feel */
+/* Edge vignette */
 .shorts-item::before {
     content: "";
     position: absolute;
     inset: 0;
     z-index: 1;
-    background: radial-gradient(
-        ellipse at center,
-        transparent 45%,
-        rgba(0, 0, 0, 0.55) 100%
-    );
+    background: radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.55) 100%);
     pointer-events: none;
 }
 
@@ -60,14 +54,13 @@
     pointer-events: none;
 }
 
-/* Player box — 16:9, centered */
+/* Player */
 .shorts-player-wrap {
     position: absolute;
     top: 44%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 2;
-    /* 0.82 係数: ノートPC(768px)でも上にはみ出さないサイズ */
     width: min(100%, calc((100vh - 64px) * 16 / 9 * 0.82));
     max-width: 1200px;
 }
@@ -79,9 +72,7 @@
     border-radius: 14px;
     overflow: hidden;
     background: #000;
-    box-shadow:
-        0 0 80px rgba(0, 0, 0, 0.9),
-        0 0 0 1px rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 80px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 .shorts-iframe {
@@ -94,14 +85,10 @@
     border: none;
 }
 
-/* Thumbnail placeholder — shimmer loading */
+/* Thumbnail shimmer */
 @keyframes shorts-shimmer {
-    0% {
-        background-position: -200% 0;
-    }
-    100% {
-        background-position: 200% 0;
-    }
+    0%   { background-position: -200% 0; }
+    100% { background-position:  200% 0; }
 }
 
 .shorts-thumb-placeholder {
@@ -142,13 +129,8 @@
     left: 0;
     right: 0;
     z-index: 10;
-    padding: 90px 160px 28px 24px; /* right padding avoids overlap with CTA button */
-    background: linear-gradient(
-        to top,
-        rgba(0, 0, 0, 0.92) 0%,
-        rgba(0, 0, 0, 0.5) 55%,
-        transparent 100%
-    );
+    padding: 90px 160px 28px 24px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.5) 55%, transparent 100%);
     pointer-events: none;
 }
 
@@ -157,7 +139,6 @@
     min-width: 0;
 }
 
-/* Title */
 .shorts-title-text {
     font-size: 1rem;
     font-weight: 700;
@@ -169,7 +150,6 @@
     text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
 }
 
-/* Actress row */
 .shorts-actress-row {
     display: flex;
     flex-wrap: wrap;
@@ -178,7 +158,6 @@
     pointer-events: auto;
 }
 
-/* 女優リンク: meta-tag.actress に準拠 */
 .shorts-actress-link {
     display: inline-flex;
     align-items: center;
@@ -197,7 +176,6 @@
     color: var(--primary-light);
 }
 
-/* 女優バッジ（リンクなし） */
 .shorts-actress-badge {
     display: inline-flex;
     align-items: center;
@@ -209,7 +187,6 @@
     border-radius: 4px;
 }
 
-/* メーカー・評価・ジャンル・価格行 */
 .shorts-meta-row {
     display: flex;
     flex-wrap: wrap;
@@ -218,20 +195,17 @@
     margin-bottom: 5px;
 }
 
-/* メーカー: 目立たせない */
 .shorts-maker-badge {
     font-size: 0.72rem;
     color: var(--text-muted);
 }
 
-/* 評価: 黄色 */
 .shorts-rating-badge {
     font-size: 0.82rem;
     font-weight: 700;
     color: #f59e0b;
 }
 
-/* Genres */
 .shorts-genres {
     display: flex;
     flex-wrap: wrap;
@@ -239,7 +213,6 @@
     margin-bottom: 5px;
 }
 
-/* ジャンル: genre-tag に準拠 */
 .shorts-genre-tag {
     font-size: 0.7rem;
     color: var(--text-muted);
@@ -248,7 +221,6 @@
     border-radius: 4px;
 }
 
-/* 価格: item-price / sample-modal-price に準拠 */
 .shorts-price-text {
     font-size: 0.85rem;
     font-weight: 700;
@@ -257,12 +229,7 @@
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
 }
 
-/* CTA button */
 .shorts-cta-btn {
-    position: absolute;
-    bottom: 28px;
-    right: 14px;
-    z-index: 15;
     display: inline-flex;
     align-items: center;
     padding: 12px 22px;
@@ -274,9 +241,7 @@
     text-decoration: none;
     white-space: nowrap;
     box-shadow: 0 4px 20px rgba(255, 45, 120, 0.55);
-    transition:
-        box-shadow 0.2s,
-        transform 0.15s;
+    transition: box-shadow 0.2s, transform 0.15s;
 }
 
 .shorts-cta-btn:hover {
@@ -284,7 +249,6 @@
     box-shadow: 0 6px 28px rgba(255, 45, 120, 0.75);
 }
 
-/* Counter bar */
 .shorts-counter-bar {
     position: absolute;
     top: 12px;
@@ -306,7 +270,6 @@
     opacity: 0.5;
 }
 
-/* Navigation buttons (right side) */
 .shorts-nav-btns {
     position: absolute;
     right: 14px;
@@ -330,10 +293,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition:
-        background 0.2s,
-        transform 0.15s,
-        box-shadow 0.2s;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
     backdrop-filter: blur(10px);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
@@ -360,7 +320,6 @@
     height: 18px;
 }
 
-/* Empty state */
 .shorts-empty {
     display: flex;
     flex-direction: column;
@@ -372,7 +331,7 @@
     font-size: 1rem;
 }
 
-/* ====== ショートビューページはフッター非表示 ====== */
+/* フッター非表示 */
 body.shorts-page footer,
 body.shorts-page .side-ad,
 body.shorts-page > ins,
@@ -388,7 +347,6 @@ body.shorts-page > script[src*="banner_placement"] {
         align-items: stretch !important;
     }
 
-    /* 左カラム: 動画プレイヤー（残り幅いっぱい） */
     .shorts-player-wrap {
         position: relative !important;
         top: auto !important;
@@ -408,7 +366,6 @@ body.shorts-page > script[src*="banner_placement"] {
         height: 100% !important;
         min-height: calc(100vh - 64px) !important;
         padding-bottom: 0 !important;
-        aspect-ratio: auto !important;
     }
 
     .shorts-player-box .shorts-iframe {
@@ -417,12 +374,10 @@ body.shorts-page > script[src*="banner_placement"] {
         left: 0 !important;
         width: 100% !important;
         height: 100% !important;
-        /* 上シフトでヘッダーを隠し、コントロールを表示 */
         transform: scale(1.28) translateY(-10%) !important;
         transform-origin: center center !important;
     }
 
-    /* 右カラム: 情報パネル */
     .shorts-info-overlay {
         position: relative !important;
         top: auto !important;
@@ -463,24 +418,12 @@ body.shorts-page > script[src*="banner_placement"] {
 /* ====== モバイル ====== */
 @media (max-width: 640px) {
     .shorts-wrapper {
-        /* use dynamic viewport height to exclude browser chrome on iOS */
         top: 56px;
-        bottom: 0;
-    }
-
-    /* アイテムはラッパーに合わせる（100dvhではラッパーからはみ出す） */
-    .shorts-item {
-        height: 100%;
     }
 
     .shorts-player-wrap {
         width: 100%;
-        /* 動画の中心を下げて下部を大きく見せる */
         top: 42%;
-    }
-
-    .shorts-player-box {
-        padding-bottom: 65%;
     }
 
     .shorts-nav-btns {
@@ -492,7 +435,6 @@ body.shorts-page > script[src*="banner_placement"] {
         right: 8px;
     }
 
-    /* 情報パネル: 画面下部オーバーレイ */
     .shorts-info-overlay {
         position: absolute;
         top: auto;
@@ -501,12 +443,7 @@ body.shorts-page > script[src*="banner_placement"] {
         right: 0;
         z-index: 10;
         padding: 70px 14px 14px;
-        background: linear-gradient(
-            to top,
-            rgba(0, 0, 0, 0.92) 0%,
-            rgba(0, 0, 0, 0.55) 65%,
-            transparent 100%
-        );
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.55) 65%, transparent 100%);
         pointer-events: auto;
     }
 
@@ -515,11 +452,11 @@ body.shorts-page > script[src*="banner_placement"] {
     }
 
     .shorts-title-text {
-        font-size: 0.88rem !important;
-        -webkit-line-clamp: 2 !important;
-        display: -webkit-box !important;
-        -webkit-box-orient: vertical !important;
-        overflow: hidden !important;
+        font-size: 0.88rem;
+        -webkit-line-clamp: 2;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 
     .shorts-cta-btn {
@@ -533,16 +470,16 @@ body.shorts-page > script[src*="banner_placement"] {
 
     .shorts-actress-link,
     .shorts-actress-badge {
-        font-size: 0.7rem !important;
+        font-size: 0.7rem;
     }
 
     .shorts-genres,
     .shorts-meta-row {
-        gap: 4px !important;
+        gap: 4px;
     }
 
     .shorts-genre-tag {
-        font-size: 0.65rem !important;
-        padding: 1px 6px !important;
+        font-size: 0.65rem;
+        padding: 1px 6px;
     }
 }
