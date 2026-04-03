@@ -23,6 +23,7 @@ body.shorts-page > script[src*="banner_placement"] {
         align-items: stretch !important;
     }
 
+    /* 左カラム: 動画プレイヤー（残り幅いっぱい） */
     .shorts-player-wrap {
         position: relative !important;
         top: auto !important;
@@ -32,31 +33,30 @@ body.shorts-page > script[src*="banner_placement"] {
         min-width: 0 !important;
         width: auto !important;
         max-width: none !important;
-        display: flex !important;
-        align-items: center !important;
+        height: 100% !important;
         padding: 0 !important;
     }
 
     .shorts-player-box {
-        width: 100% !important;
-        height: auto !important;
-        padding-bottom: 0 !important;
-        aspect-ratio: 100/65 !important;
-        max-height: calc(100vh - 56px) !important;
         position: relative !important;
-    }
-
-    /* サンプルモーダルと同じクロップ */
-    .shorts-iframe {
-        position: absolute !important;
-        left: 0 !important;
-        right: 0 !important;
         width: 100% !important;
-        top: -15% !important;
-        height: 125% !important;
-        transform: none !important;
+        height: 100% !important;
+        padding-bottom: 0 !important;
+        aspect-ratio: auto !important;
     }
 
+    /* DMMプレイヤーのヘッダーとコントロールを隠す */
+    .shorts-player-box .shorts-iframe {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        transform: scale(1.28) translateY(10%) !important;
+        transform-origin: center center !important;
+    }
+
+    /* 右カラム: 情報パネル */
     .shorts-info-overlay {
         position: relative !important;
         top: auto !important;
