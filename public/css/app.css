@@ -2374,7 +2374,7 @@ img {
 
 .shorts-player-box {
     position: relative;
-    padding-bottom: 56.25%; /* 16:9 */
+    padding-bottom: 65%;
     height: 0;
     border-radius: 14px;
     overflow: hidden;
@@ -2386,10 +2386,11 @@ img {
 
 .shorts-iframe {
     position: absolute;
-    inset: 0;
+    left: 0;
+    right: 0;
     width: 100%;
-    height: calc(100% + 40px);
-    transform: translateY(-40px);
+    top: -15%;
+    height: 125%;
     border: none;
 }
 
@@ -2605,8 +2606,7 @@ img {
     }
 
     .shorts-player-box {
-        /* iframeの下端をもう少し見せるため縦比率を大きく */
-        padding-bottom: 63%;
+        padding-bottom: 65%;
     }
 
     .shorts-nav-btns {
