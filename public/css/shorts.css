@@ -400,16 +400,14 @@ body.shorts-page > script[src*="banner_placement"] {
         max-width: none !important;
         height: 100% !important;
         padding: 0 !important;
-        display: flex !important;
-        flex-direction: column !important;
     }
 
     .shorts-player-box {
-        flex: 1 !important;
-        position: relative !important;
-        width: 100% !important;
+        position: absolute !important;
+        inset: 0 !important;
         height: auto !important;
         padding-bottom: 0 !important;
+        border-radius: 0 !important;
     }
 
     .shorts-player-box .shorts-iframe {
