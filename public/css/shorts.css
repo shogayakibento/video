@@ -339,88 +339,34 @@ body.shorts-page > script[src*="banner_placement"] {
     display: none !important;
 }
 
-/* ====== デスクトップ: 左:動画 / 右:情報パネル の2カラムレイアウト ====== */
+/* ====== デスクトップ: 全画面表示 ====== */
 @media (min-width: 641px) {
-    .shorts-item {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-    }
-
-    /* player-wrap: 左カラムを flex 縦中央コンテナとして使う */
+    /* player-wrap: 画面全体を覆う */
     .shorts-player-wrap {
-        position: relative !important;
-        top: auto !important;
-        left: auto !important;
-        transform: none !important;
-        flex: 1 !important;
-        width: auto !important;
-        min-width: 0 !important;
-        max-width: none !important;
-        height: 100% !important;
-        padding: 0 !important;
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: center !important;
-        align-items: stretch !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transform: none;
+        max-width: none;
     }
 
-    /* player-box: 16:9 で幅いっぱい、縦は auto */
+    /* player-box: 全幅・全高 */
     .shorts-player-box {
-        position: relative !important;
-        width: 100% !important;
-        height: auto !important;
-        aspect-ratio: 16 / 9 !important;
-        max-height: 100% !important;
-        padding-bottom: 0 !important;
-        border-radius: 0 !important;
-        min-height: 0 !important;
-    }
-
-    .shorts-player-box .shorts-iframe {
-        position: absolute !important;
-        top: -15% !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 115% !important;
-        transform: none !important;
+        width: 100%;
+        height: 100%;
+        padding-bottom: 0;
+        border-radius: 0;
     }
 
     .shorts-info-overlay {
-        position: relative !important;
-        top: auto !important;
-        bottom: auto !important;
-        left: auto !important;
-        transform: none !important;
-        width: 300px !important;
-        flex-shrink: 0 !important;
-        max-width: none !important;
-        border-radius: 0 !important;
-        padding: 24px 16px !important;
-        background: rgba(12, 12, 12, 0.95) !important;
-        backdrop-filter: blur(16px) !important;
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 10px !important;
-        justify-content: flex-start !important;
-        overflow-y: auto !important;
-        align-self: stretch !important;
-    }
-
-    .shorts-info-text {
-        flex: 1;
+        padding: 120px 200px 36px 32px;
     }
 
     .shorts-cta-btn {
-        position: static !important;
-        width: 100% !important;
-        text-align: center !important;
-        justify-content: center !important;
-        padding: 10px 14px !important;
-        font-size: 0.82rem !important;
-        white-space: normal !important;
-        line-height: 1.4 !important;
-        box-shadow: 0 2px 12px rgba(255, 45, 120, 0.5) !important;
+        padding: 14px 28px;
+        font-size: 0.95rem;
     }
 }
 
