@@ -50,7 +50,7 @@ body.shorts-page > script[src*="banner_placement"] {
     .shorts-iframe {
         top: -6% !important;
         height: 108% !important;
-        transform: translateY(10%) scale(1.28) !important;
+        transform: translateY(18%) scale(1.28) !important;
         transform-origin: center center !important;
     }
 
