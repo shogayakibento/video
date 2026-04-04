@@ -558,14 +558,20 @@ body.shorts-page > script[src*="banner_placement"] {
     var counterEl   = document.getElementById('shortsCounterCurrent');
     var currentIdx  = 0;
 
-    /* ---------- サムネクリックで再生 ---------- */
+    /* ---------- iframe読み込み完了でサムネを自動非表示 ---------- */
     items.forEach(function (item) {
         var thumb  = item.querySelector('.shorts-thumb-placeholder');
         var iframe = item.querySelector('.shorts-iframe');
         if (!thumb || !iframe) return;
 
-        thumb.addEventListener('click', function () {
-            thumb.style.display = 'none';
+        // iframeのページ読み込みが終わったらサムネをフェードアウト
+        iframe.addEventListener('load', function () {
+            if (iframe.src && iframe.src !== 'about:blank') {
+                thumb.style.transition = 'opacity 0.25s';
+                thumb.style.opacity    = '0';
+                thumb.style.pointerEvents = 'none';
+                setTimeout(function () { thumb.style.display = 'none'; }, 260);
+            }
         });
     });
 
@@ -590,7 +596,12 @@ body.shorts-page > script[src*="banner_placement"] {
                 if (iframe && iframe.src) {
                     iframe.src = 'about:blank';
                 }
-                if (thumb) thumb.style.display = '';
+                if (thumb) {
+                    thumb.style.transition  = '';
+                    thumb.style.opacity     = '';
+                    thumb.style.pointerEvents = '';
+                    thumb.style.display     = '';
+                }
             }
         });
     }, { threshold: 0.6 });
