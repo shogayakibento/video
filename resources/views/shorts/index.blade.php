@@ -565,9 +565,6 @@ body.shorts-page > script[src*="banner_placement"] {
         if (!thumb || !iframe) return;
 
         thumb.addEventListener('click', function () {
-            if (iframe.dataset.src && iframe.src !== iframe.dataset.src) {
-                iframe.src = iframe.dataset.src + '?autoplay=1';
-            }
             thumb.style.display = 'none';
         });
     });
@@ -583,9 +580,11 @@ body.shorts-page > script[src*="banner_placement"] {
             if (entry.isIntersecting) {
                 currentIdx = idx;
                 if (counterEl) counterEl.textContent = idx + 1;
+                // iframeをバックグラウンドで先読み（サムネは非表示にしない）
+                if (iframe && iframe.dataset.src && iframe.src !== iframe.dataset.src) {
+                    iframe.src = iframe.dataset.src;
+                }
                 updateNavButtons();
-                // サムネが表示中（未再生）なら自動ロードしない
-                // 画面外から戻ってきた場合はサムネを表示してリセット
             } else {
                 // Unload iframe to stop video & save resources
                 if (iframe && iframe.src) {
