@@ -4,41 +4,11 @@
 @section('description', 'FANZAの人気AV・動画サンプルをショート動画感覚でサクサク視聴。スワイプ・矢印キーで次々に楽しめる無料サンプル動画まとめ。')
 @section('keywords', 'FANZA, サンプル動画, 無料サンプル, AV, ショート動画, 人気動画, 女優')
 @section('og_type', 'website')
+@php $firstOgImg = !empty($items) ? ($items[0]['imageURL']['large'] ?? $items[0]['imageURL']['small'] ?? '') : ''; @endphp
+@if($firstOgImg)@section('og_image', $firstOgImg)@endif
 
 @push('styles')
 <style>
-/* サムネクリックで再生 */
-.shorts-thumb-placeholder {
-    cursor: pointer;
-}
-
-.shorts-play-icon svg {
-    transition: transform 0.18s ease, filter 0.18s ease, color 0.18s ease;
-    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.7));
-}
-
-.shorts-thumb-placeholder:hover .shorts-play-icon svg {
-    color: #fff;
-    filter: drop-shadow(0 0 16px rgba(255,255,255,0.5));
-    transform: scale(1.15);
-}
-
-/* 「タップして再生」ラベル */
-.shorts-play-label {
-    position: absolute;
-    bottom: 30%;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.78rem;
-    color: rgba(255,255,255,0.75);
-    background: rgba(0,0,0,0.45);
-    padding: 4px 12px;
-    border-radius: 20px;
-    white-space: nowrap;
-    pointer-events: none;
-    letter-spacing: 0.03em;
-}
-
 /* ショートビューページはフッター非表示 */
 body.shorts-page footer,
 body.shorts-page .side-ad,
@@ -64,18 +34,6 @@ body.shorts-page > script[src*="banner_placement"] {
         min-width: 0 !important;
         width: auto !important;
         max-width: none !important;
-
-    /* 中の動画を拡大して枠いっぱいに合わせる（デスクトップ） */
-    .shorts-iframe {
-        inset: 0 !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        transform: translateY(10%) scale(1.28) !important;
-        transform-origin: center center !important;
-    }
-
         height: 100% !important;
         padding: 0 !important;
     }
@@ -385,7 +343,7 @@ body.shorts-page > script[src*="banner_placement"] {
     </div>
 
     {{-- Scroll container --}}
-    <div class="shorts-scroll" id="shortsScroll" data-affiliate-id="{{ config('fanza.affiliate_id') }}">
+    <div class="shorts-scroll" id="shortsScroll">
         @foreach($items as $index => $item)
         @php
             $title    = $item['title'] ?? '';
@@ -400,9 +358,7 @@ body.shorts-page > script[src*="banner_placement"] {
         @endphp
         <div class="shorts-item"
              data-index="{{ $index }}"
-             data-cid="{{ $cid }}"
-             data-url="{{ $url }}"
-             data-title="{{ $title }}">
+             data-cid="{{ $cid }}">
 
             {{-- Blurred background --}}
             @if($imgLg)
@@ -420,12 +376,11 @@ body.shorts-page > script[src*="banner_placement"] {
                             allowfullscreen
                             loading="lazy"
                             scrolling="no"></iframe>
-                    <div class="shorts-thumb-placeholder" data-bg="{{ $imgLg }}">
+                    <div class="shorts-thumb-placeholder">
                         <img src="{{ $imgLg }}" alt="{{ $title }}" loading="lazy">
                         <div class="shorts-play-icon">
                             <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
                         </div>
-                        <span class="shorts-play-label">タップして再生</span>
                     </div>
                 </div>
             </div>
@@ -548,7 +503,6 @@ body.shorts-page > script[src*="banner_placement"] {
 (function () {
     'use strict';
 
-    var wrapper     = document.getElementById('shortsWrapper');
     var scroll      = document.getElementById('shortsScroll');
     if (!scroll) return;
 
