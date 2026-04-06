@@ -48,9 +48,12 @@ class SitemapController extends Controller
             $urls = [
                 ['loc' => route('home'),                'priority' => '1.0', 'changefreq' => 'daily',  'lastmod' => $today],
                 ['loc' => route('tweet.ranking.index'), 'priority' => '0.9', 'changefreq' => 'daily',  'lastmod' => $today],
+                ['loc' => route('ranking'),             'priority' => '0.9', 'changefreq' => 'daily',  'lastmod' => $today],
                 ['loc' => route('shorts'),              'priority' => '0.8', 'changefreq' => 'daily',  'lastmod' => $today],
                 ['loc' => route('actress.index'),       'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => $staticLastmod],
                 ['loc' => route('genre.index'),         'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => $staticLastmod],
+                ['loc' => route('privacy'),             'priority' => '0.3', 'changefreq' => 'yearly', 'lastmod' => $staticLastmod],
+                ['loc' => route('contact'),             'priority' => '0.3', 'changefreq' => 'yearly', 'lastmod' => $staticLastmod],
             ];
 
             foreach ($categories as $slug => $cat) {
@@ -128,7 +131,7 @@ class SitemapController extends Controller
     {
         $content = Cache::remember('sitemap_videos_xml', 3600, function () {
             $urls = [];
-            Video::orderByDesc('total_likes')->limit(200)->get(['id', 'updated_at'])
+            Video::orderByDesc('total_likes')->limit(500)->get(['id', 'updated_at'])
                 ->each(function ($video) use (&$urls) {
                     $urls[] = [
                         'loc'        => route('tweet.video.show', $video->id),
