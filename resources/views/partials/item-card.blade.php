@@ -8,13 +8,26 @@
     $actressId = $item['iteminfo']['actress'][0]['id'] ?? null;
     $maker = $item['iteminfo']['maker'][0]['name'] ?? null;
     $price = $item['prices']['price'] ?? null;
-    $contentId = !empty($item['sampleMovieURL']) ? ($item['content_id'] ?? null) : null;
+    $hasSample = !empty($item['sampleMovieURL']);
+    $contentId = $hasSample ? ($item['content_id'] ?? null) : null;
     $eager = $eager ?? false;
+
+    // サンプルMP4 URL を組み立て
+    // パターン: cc3001.dmm.co.jp/litevideo/freepv/{c1}/{c3}/{cid}/{cid}_mhb_w.mp4
+    // ※ 英字始まりの標準形式 content_id のみ対応（h_xxx 等の特殊形式は除外）
+    $sampleMp4 = '';
+    if ($contentId && preg_match('/^[a-z]{2,}/i', $contentId)) {
+        $cid = strtolower($contentId);
+        $c1  = substr($cid, 0, 1);
+        $c3  = substr($cid, 0, 3);
+        $sampleMp4 = "https://cc3001.dmm.co.jp/litevideo/freepv/{$c1}/{$c3}/{$cid}/{$cid}_mhb_w.mp4";
+    }
 @endphp
 
 @if($contentId)
 <div class="item-card item-card-clickable"
      data-detail-url="{{ route('fanza.video.show', $contentId) }}"
+     data-sample-url="{{ $sampleMp4 }}"
      role="link" tabindex="0">
 @else
 <a href="{{ $url }}" class="item-card" target="_blank" rel="noopener noreferrer">
@@ -34,6 +47,9 @@
         @endif
         @if($review)
             <span class="rating-badge">★ {{ $review }}</span>
+        @endif
+        @if($sampleMp4)
+            <div class="hover-video-wrap" aria-hidden="true"></div>
         @endif
     </div>
     <div class="item-info">

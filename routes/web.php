@@ -34,6 +34,7 @@ Route::view('/contact', 'contact')->name('contact');
 
 // MGS動画
 Route::get('/mgs', [MgsController::class, 'index'])->name('mgs.index');
+Route::get('/mgs/{productCode}', [MgsController::class, 'show'])->name('mgs.show');
 
 // Xツイートランキング
 Route::get('/tweet-ranking', [RankingController::class, 'tweetIndex'])->name('tweet.ranking.index');

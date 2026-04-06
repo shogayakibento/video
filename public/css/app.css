@@ -2082,6 +2082,34 @@ img {
     transform: scale(1);
 }
 
+/* ===== Hover Video Preview ===== */
+.hover-video-wrap {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    background: #000;
+}
+.hover-video-wrap video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none; /* クリック・ホバーUI非表示 */
+}
+/* Chromeのビデオオーバーレイを非表示 */
+.hover-video-wrap video::-webkit-media-controls {
+    display: none !important;
+}
+.hover-video-wrap video::-webkit-media-controls-enclosure {
+    display: none !important;
+}
+.hover-video-wrap:has(video) {
+    opacity: 1;
+}
+
 .sample-modal-overlay {
     position: fixed;
     inset: 0;

@@ -9,6 +9,7 @@
         setupFAQ();
         setupScrollAnimations();
         setupSampleModal();
+        setupHoverPreview();
     });
 
     // ===== Mobile Menu =====
@@ -158,6 +159,65 @@
         // Close when clicking backdrop
         modalOverlay.addEventListener('click', function (e) {
             if (e.target === modalOverlay) closeModal();
+        });
+    }
+
+    // ===== Hover Video Preview =====
+    function setupHoverPreview() {
+        var hoverTimer = null;
+        var activeVideo = null;
+        var activeCard = null;
+
+        document.querySelectorAll('[data-sample-url]').forEach(function(card) {
+            var sampleUrl = card.dataset.sampleUrl;
+            if (!sampleUrl) return;
+
+            var wrap = card.querySelector('.hover-video-wrap');
+            if (!wrap) return;
+
+            card.addEventListener('mouseenter', function() {
+                hoverTimer = setTimeout(function() {
+                    // 前のカードの動画を止める
+                    if (activeVideo) {
+                        activeVideo.pause();
+                        activeVideo.remove();
+                        activeVideo = null;
+                    }
+
+                    var video = document.createElement('video');
+                    video.src = sampleUrl;
+                    video.muted = true;
+                    video.controls = false;
+                    video.loop = true;
+                    video.playsInline = true;
+                    video.preload = 'metadata'; // 最初はメタデータのみ取得（軽量）
+
+                    // メタデータ取得後に後半（50%地点）にシークして再生
+                    video.addEventListener('loadedmetadata', function() {
+                        // 60〜85%のランダムな地点（ホバーするたびに違うシーンが見える）
+                        var pct = 0.60 + Math.random() * 0.25;
+                        var seekTo = video.duration * pct;
+                        video.currentTime = seekTo;
+                    });
+                    video.addEventListener('seeked', function() {
+                        video.play().catch(function() {});
+                    });
+
+                    wrap.appendChild(video);
+                    activeVideo = video;
+                    activeCard = card;
+                }, 400);
+            });
+
+            card.addEventListener('mouseleave', function() {
+                clearTimeout(hoverTimer);
+                if (activeVideo && activeCard === card) {
+                    activeVideo.pause();
+                    activeVideo.remove();
+                    activeVideo = null;
+                    activeCard = null;
+                }
+            });
         });
     }
 })();

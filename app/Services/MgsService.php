@@ -4,18 +4,23 @@ namespace App\Services;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
+use GuzzleHttp\Cookie\SetCookie;
 
 class MgsService
 {
-    private Client $client;
     private string $affiliateId;
 
     public function __construct()
     {
         $this->affiliateId = config('mgs.affiliate_id', '');
-        $this->client = new Client([
+    }
+
+    private function makeClient(CookieJar $jar): Client
+    {
+        return new Client([
             'timeout'         => 15,
             'allow_redirects' => true,
+            'cookies'         => $jar,
             'headers'         => [
                 'User-Agent'      => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
                 'Accept-Language' => 'ja,en-US;q=0.9,en;q=0.8',
@@ -39,79 +44,60 @@ class MgsService
 
     /**
      * MGS商品ページから情報を取得する
+     * ※ URLは大文字品番を使用する必要がある（例: ABF-301）
      */
     public function fetchProductInfo(string $productCode): ?array
     {
-        $productCode = strtolower(trim($productCode));
-        $url = "https://www.mgstage.com/product/product_detail/{$productCode}/";
+        // MGSは大文字品番でアクセスする必要がある
+        $upperCode = strtoupper(trim($productCode));
+        $lowerCode = strtolower(trim($productCode));
+        $url = "https://www.mgstage.com/product/product_detail/{$upperCode}/";
 
-        // 年齢確認Cookie (adc=1)
-        $jar = CookieJar::fromArray(['adc' => '1'], 'www.mgstage.com');
+        // セッションを確立してからadc=1クッキーを付与する
+        $jar = new CookieJar();
+        $client = $this->makeClient($jar);
 
         try {
-            $response = $this->client->get($url, ['cookies' => $jar]);
+            // まずトップページでセッションを確立
+            $client->get('https://www.mgstage.com/');
+
+            // 年齢確認クッキーを設定
+            $jar->setCookie(new SetCookie([
+                'Name'   => 'adc',
+                'Value'  => '1',
+                'Domain' => '.mgstage.com',
+                'Path'   => '/',
+            ]));
+
+            // 商品ページを取得
+            $response = $client->get($url, [
+                'headers' => ['Referer' => 'https://www.mgstage.com/'],
+            ]);
             $html = (string) $response->getBody();
         } catch (\Exception $e) {
             return null;
         }
 
-        // --- pid（サンプル動画ID）を抽出 ---
-        $pid = null;
-        $pidPatterns = [
-            '/data-sample_id=["\']([0-9a-f\-]{36})["\']/',
-            '/data-pid=["\']([0-9a-f\-]{36})["\']/',
-            '/sampleplayer\.php\?pid=([0-9a-f\-]{36})/',
-            '/["\']pid["\']\s*:\s*["\']([0-9a-f\-]{36})["\']/',
-            '/var\s+pid\s*=\s*["\']([0-9a-f\-]{36})["\']/',
-        ];
-        foreach ($pidPatterns as $pattern) {
-            if (preg_match($pattern, $html, $m)) {
-                $pid = $m[1];
-                break;
-            }
+        // ページが正しく取得できたか確認（og:titleの有無）
+        if (!str_contains($html, 'og:title')) {
+            return null;
         }
 
         // --- タイトルを抽出 ---
         $title = '';
-        if (preg_match('/<meta property="og:title" content="([^"]+)"/', $html, $m)) {
+        if (preg_match('/property="og:title" content="([^"]+)"/', $html, $m)) {
             $title = html_entity_decode(trim($m[1]), ENT_QUOTES, 'UTF-8');
-            // "| MGS動画" などのサフィックスを除去
-            $title = preg_replace('/\s*[|｜]\s*MGS.*$/u', '', $title);
-        }
-        if (!$title && preg_match('/<h1[^>]*class="[^"]*tag_title[^"]*"[^>]*>(.*?)<\/h1>/s', $html, $m)) {
-            $title = html_entity_decode(strip_tags($m[1]), ENT_QUOTES, 'UTF-8');
-        }
-
-        // --- 女優名を抽出 ---
-        $actress = '';
-        if (preg_match_all('/<span class="tag_star">(.*?)<\/span>/s', $html, $m)) {
-            $names = array_map(fn($s) => html_entity_decode(strip_tags($s), ENT_QUOTES, 'UTF-8'), $m[1]);
-            $actress = implode(', ', array_filter($names));
-        }
-        // タグ形式 <a>女優名</a> のパターンも試す
-        if (!$actress && preg_match('/<dt>出演：<\/dt>.*?<dd>(.*?)<\/dd>/s', $html, $m)) {
-            preg_match_all('/>([^<]+)<\/a>/', $m[1], $am);
-            $actress = implode(', ', array_filter(array_map('trim', $am[1] ?? [])));
-        }
-
-        // --- メーカー名 ---
-        $maker = '';
-        if (preg_match('/<dt>メーカー：<\/dt>.*?<dd[^>]*>(.*?)<\/dd>/s', $html, $m)) {
-            $maker = html_entity_decode(strip_tags($m[1]), ENT_QUOTES, 'UTF-8');
-            $maker = trim($maker);
-        }
-
-        // --- ジャンル ---
-        $genre = '';
-        if (preg_match('/<dt>ジャンル：<\/dt>.*?<dd[^>]*>(.*?)<\/dd>/s', $html, $m)) {
-            preg_match_all('/>([^<\s][^<]*)<\/a>/', $m[1], $gm);
-            $genre = implode(', ', array_filter(array_map('trim', $gm[1] ?? [])));
+            // 「タイトル」：MGS動画... の形式から本文だけ抽出
+            $title = preg_replace('/^「(.+)」：.+$/u', '$1', $title);
+            // それ以外のサフィックスも除去
+            $title = preg_replace('/\s*[：:｜|]\s*MGS.*$/u', '', $title);
+            $title = trim($title);
         }
 
         // --- og:image からサムネURL・メーカーグループを取得 ---
         $thumbnailUrl = '';
         $makerGroup   = '';
-        if (preg_match('/<meta property="og:image" content="([^"]+)"/', $html, $m)) {
+        if (preg_match('/property="og:image" content="([^"]+)"/', $html, $m)) {
             $thumbnailUrl = $m[1];
             // https://image.mgstage.com/images/{makerGroup}/{makerCode}/{number}/...
             if (preg_match('#image\.mgstage\.com/images/([^/]+)/#', $thumbnailUrl, $mg)) {
@@ -119,9 +105,25 @@ class MgsService
             }
         }
 
-        // サムネが取れなかった場合は品番から生成を試みる
-        if (!$thumbnailUrl && $makerGroup) {
-            $thumbnailUrl = $this->buildThumbnailUrl($productCode, $makerGroup);
+        // --- 女優名を抽出（<th>出演 → <td>内のリンクテキスト）---
+        $actress = '';
+        if (preg_match('/<th>出演：<\/th>\s*<td>(.*?)<\/td>/s', $html, $am)) {
+            preg_match_all('/<a[^>]+>[\s\n]*([^\s<][^<]*)[\s\n]*<\/a>/u', $am[1], $names);
+            $actress = implode(', ', array_unique(array_filter(array_map('trim', $names[1] ?? []))));
+        }
+
+        // --- メーカー名（<th>メーカー → <td>内のリンクテキスト）---
+        $maker = '';
+        if (preg_match('/<th>メーカー：<\/th>\s*<td>(.*?)<\/td>/s', $html, $mm)) {
+            preg_match('/<a[^>]+>[\s\n]*([^\s<][^<]*)[\s\n]*<\/a>/u', $mm[1], $mk);
+            $maker = trim($mk[1] ?? '');
+        }
+
+        // --- ジャンル（<th>ジャンル → <td>内のリンクテキスト）---
+        $genre = '';
+        if (preg_match('/<th>ジャンル：<\/th>\s*<td>(.*?)<\/td>/s', $html, $gm)) {
+            preg_match_all('/<a[^>]+>[\s\n]*([^\s<][^<]*)[\s\n]*<\/a>/u', $gm[1], $genres);
+            $genre = implode(', ', array_filter(array_map('trim', $genres[1] ?? [])));
         }
 
         // --- 発売日 ---
@@ -131,51 +133,20 @@ class MgsService
         }
 
         return [
-            'product_code' => $productCode,
-            'pid'          => $pid,
-            'title'        => $title ?: $productCode,
-            'actress'      => $actress,
-            'maker'        => $maker,
-            'genre'        => $genre,
+            'product_code'  => $lowerCode,
+            'title'         => $title ?: $lowerCode,
+            'actress'       => $actress,
+            'maker'         => $maker,
+            'genre'         => $genre,
             'thumbnail_url' => $thumbnailUrl,
-            'maker_group'  => $makerGroup,
-            'release_date' => $releaseDate,
-            'affiliate_url' => $this->buildAffiliateUrl($productCode),
+            'maker_group'   => $makerGroup,
+            'release_date'  => $releaseDate,
+            'affiliate_url' => $this->buildAffiliateUrl($lowerCode),
         ];
     }
 
     /**
-     * pidからサンプル動画のMP4 URLを取得する
-     */
-    public function fetchSampleVideoUrl(string $pid): ?string
-    {
-        $jar = CookieJar::fromArray(['adc' => '1'], 'www.mgstage.com');
-
-        try {
-            $response = $this->client->get(
-                "https://www.mgstage.com/sampleRespons.php?pid={$pid}",
-                ['cookies' => $jar]
-            );
-            $data = json_decode((string) $response->getBody(), true);
-            $ismUrl = $data['url'] ?? null;
-
-            if (!$ismUrl) {
-                return null;
-            }
-
-            // .ism/request?... → .mp4 に変換
-            // 例: /abf-301_20251202T130002.ism/request?uid=...&pid=...
-            //   → /abf-301_20251202T130002.mp4
-            $mp4Url = preg_replace('/\.ism\/request.*$/', '.mp4', $ismUrl);
-
-            return $mp4Url ?: null;
-        } catch (\Exception $e) {
-            return null;
-        }
-    }
-
-    /**
-     * 品番とメーカーグループからサムネURLを生成する
+     * 品番とメーカーグループからサムネURLを生成する（フォールバック用）
      */
     public function buildThumbnailUrl(string $productCode, string $makerGroup): string
     {
@@ -185,7 +156,7 @@ class MgsService
             $makerGroup,
             $parsed['maker_code'],
             $parsed['number'],
-            $productCode
+            strtolower($productCode)
         );
     }
 
@@ -194,7 +165,8 @@ class MgsService
      */
     public function buildAffiliateUrl(string $productCode): string
     {
-        $base = "https://www.mgstage.com/product/product_detail/{$productCode}/";
+        $upper = strtoupper($productCode);
+        $base  = "https://www.mgstage.com/product/product_detail/{$upper}/";
         if ($this->affiliateId) {
             return $base . "?aff={$this->affiliateId}";
         }
@@ -203,18 +175,14 @@ class MgsService
 
     /**
      * 品番を登録して必要な情報を全取得する（admin用）
+     * ※ サンプル動画URLはJSが必要なためサーバーサイドでは取得不可
      */
     public function register(string $productCode): array
     {
         $info = $this->fetchProductInfo($productCode);
 
         if (!$info) {
-            return ['success' => false, 'error' => 'MGSページの取得に失敗しました。'];
-        }
-
-        $sampleVideoUrl = null;
-        if ($info['pid']) {
-            $sampleVideoUrl = $this->fetchSampleVideoUrl($info['pid']);
+            return ['success' => false, 'error' => 'MGSページの取得に失敗しました。品番が正しいか確認してください。'];
         }
 
         return [
@@ -225,7 +193,7 @@ class MgsService
             'maker'            => $info['maker'],
             'genre'            => $info['genre'],
             'thumbnail_url'    => $info['thumbnail_url'],
-            'sample_video_url' => $sampleVideoUrl,
+            'sample_video_url' => null, // サンプル動画はJSが必要なため取得不可
             'affiliate_url'    => $info['affiliate_url'],
             'release_date'     => $info['release_date'],
             'maker_group'      => $info['maker_group'],

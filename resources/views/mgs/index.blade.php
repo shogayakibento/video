@@ -60,46 +60,9 @@
 
 @push('styles')
 <style>
-.mgs-grid {
-    margin-top: 1.5rem;
-}
-.mgs-card {
-    cursor: default;
-    display: flex;
-    flex-direction: column;
-}
-.mgs-thumb {
-    position: relative;
-    overflow: hidden;
-    aspect-ratio: 16/9;
-    background: #111;
-    border-radius: 8px 8px 0 0;
-}
-.mgs-thumbnail {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: opacity 0.2s;
-}
-.mgs-thumbnail-clickable {
-    cursor: pointer;
-}
-.mgs-thumbnail-clickable:hover {
-    opacity: 0.85;
-}
-.mgs-play-overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.2s;
-}
-.mgs-thumb:hover .mgs-play-overlay {
-    opacity: 1;
-}
+.mgs-grid { margin-top: 1.5rem; }
+
+/* MGS固有: バッジ */
 .mgs-badge {
     position: absolute;
     top: 8px;
@@ -111,13 +74,11 @@
     padding: 2px 6px;
     border-radius: 4px;
     letter-spacing: 0.05em;
+    pointer-events: none;
+    z-index: 3;
 }
-.mgs-video-player {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
+
+/* MGS固有: アフィリエイトボタン */
 .mgs-btn {
     display: inline-block;
     background: #e91e8c;
@@ -130,38 +91,6 @@
     white-space: nowrap;
     transition: background 0.2s;
 }
-.mgs-btn:hover {
-    background: #c2185b;
-}
+.mgs-btn:hover { background: #c2185b; }
 </style>
-@endpush
-
-@push('scripts')
-<script>
-document.querySelectorAll('.mgs-card').forEach(function(card) {
-    var videoUrl = card.dataset.videoUrl;
-    if (!videoUrl) return;
-
-    var thumb = card.querySelector('.mgs-thumb');
-    var img   = card.querySelector('.mgs-thumbnail');
-
-    img.addEventListener('click', function() {
-        // 既に再生中なら何もしない
-        if (thumb.querySelector('video')) return;
-
-        var video = document.createElement('video');
-        video.src = videoUrl;
-        video.controls = true;
-        video.autoplay = true;
-        video.playsinline = true;
-        video.className = 'mgs-video-player';
-
-        // サムネ・オーバーレイを非表示にして動画を挿入
-        img.style.display = 'none';
-        var overlay = thumb.querySelector('.mgs-play-overlay');
-        if (overlay) overlay.style.display = 'none';
-        thumb.appendChild(video);
-    });
-});
-</script>
 @endpush
