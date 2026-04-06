@@ -6,6 +6,7 @@ use App\Models\ClickLog;
 use App\Models\Tweet;
 use App\Models\Video;
 use App\Services\DmmApiService;
+use App\Services\MgsService;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -133,6 +134,47 @@ class AdminController extends Controller
     public function quickAdd()
     {
         return view('admin.quick-add');
+    }
+
+    public function mgsAdd()
+    {
+        return view('admin.mgs-add');
+    }
+
+    public function mgsAddStore(Request $request, MgsService $mgs)
+    {
+        $request->validate([
+            'product_code' => 'required|string',
+        ]);
+
+        $productCode = strtolower(trim($request->input('product_code')));
+
+        // 既存チェック
+        $existing = Video::where('dmm_content_id', $productCode)->where('store', 'mgs')->first();
+        if ($existing) {
+            return back()->with('success', "「{$existing->title}」はすでに登録済みです。");
+        }
+
+        $result = $mgs->register($productCode);
+
+        if (!$result['success']) {
+            return back()->withInput()->withErrors(['product_code' => $result['error']]);
+        }
+
+        Video::create([
+            'dmm_content_id'   => $productCode,
+            'store'            => 'mgs',
+            'title'            => $result['title'],
+            'actress'          => $result['actress'],
+            'thumbnail_url'    => $result['thumbnail_url'],
+            'sample_video_url' => $result['sample_video_url'],
+            'affiliate_url'    => $result['affiliate_url'],
+            'genre'            => $result['genre'],
+            'maker'            => $result['maker'],
+            'release_date'     => $result['release_date'],
+        ]);
+
+        return back()->with('success', "「{$result['title']}」を登録しました！");
     }
 
     public function quickAddStore(Request $request, DmmApiService $dmmApi)

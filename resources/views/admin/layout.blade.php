@@ -29,6 +29,7 @@
                     <a href="{{ route('admin.dashboard') }}" class="hover:text-accent transition {{ request()->routeIs('admin.dashboard') ? 'text-accent' : '' }}">ダッシュボード</a>
                     <a href="{{ route('admin.videos') }}" class="hover:text-accent transition {{ request()->routeIs('admin.videos') ? 'text-accent' : '' }}">動画一覧</a>
                     <a href="{{ route('admin.quick-add') }}" class="hover:text-accent transition {{ request()->routeIs('admin.quick-add') ? 'text-accent' : '' }}">クイック登録</a>
+                    <a href="{{ route('admin.mgs-add') }}" class="hover:text-accent transition {{ request()->routeIs('admin.mgs-add') ? 'text-accent' : '' }}">MGS登録</a>
                 </div>
             </div>
             <div class="flex items-center gap-4 text-sm">

@@ -90,6 +90,7 @@
                     @endforeach
                     <li><a href="{{ route('genre.index') }}" class="nav-link {{ request()->routeIs('genre.*') ? 'active' : '' }}">ジャンル</a></li>
                     <li><a href="{{ route('actress.index') }}" class="nav-link {{ request()->routeIs('actress.*') ? 'active' : '' }}">女優</a></li>
+                    <li><a href="{{ route('mgs.index') }}" class="nav-link nav-link-mgs {{ request()->routeIs('mgs.*') ? 'active' : '' }}">MGS</a></li>
                     <li><a href="{{ route('tweet.ranking.index') }}" class="nav-link nav-link-buzz {{ request()->routeIs('tweet.ranking.*') || request()->routeIs('tweet.video.*') ? 'active' : '' }}">X バズりランキング</a></li>
                     <li><a href="{{ route('shorts') }}" class="nav-link nav-link-shorts {{ request()->routeIs('shorts') ? 'active' : '' }}">▶ ショートビュー</a></li>
                 </ul>
@@ -109,6 +110,7 @@
         @endforeach
         <a href="{{ route('genre.index') }}">ジャンル</a>
         <a href="{{ route('actress.index') }}">女優</a>
+        <a href="{{ route('mgs.index') }}" class="nav-link-mgs">MGS</a>
         <a href="{{ route('tweet.ranking.index') }}" class="nav-link-buzz">X バズりランキング</a>
         <a href="{{ route('shorts') }}" class="nav-link-shorts">▶ ショートビュー</a>
     </div>
