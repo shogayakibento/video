@@ -16,6 +16,7 @@
               || !empty($item['sampleMovieURL']['size_644_414'])
               || !empty($item['sampleMovieURL']['size_560_360']);
     $price = $item['prices']['price'] ?? null;
+    $eager = $eager ?? false;
     $sampleMp4 = '';
     $hasDvdSample = $isMono && !empty($item['sampleImageURL']['sample_s']['image']);
     if ($hasDvdSample) {
@@ -37,19 +38,24 @@
         $sampleMp4 = "https://cc3001.dmm.co.jp/litevideo/freepv/{$c1}/{$c3}/{$cid}/{$cid}_mhb_w.mp4";
     }
     $contentId = ($hasSample || !empty($sampleMp4)) ? ($item['content_id'] ?? null) : null;
+    $sampleImagesJson = '';
+    if ($isMono && !empty($item['sampleImageURL']['sample_s']['image'])) {
+        $sampleImagesJson = json_encode(array_values($item['sampleImageURL']['sample_s']['image']));
+    }
 @endphp
 
 @if($contentId)
 <div class="release-card item-card-clickable"
      data-detail-url="{{ route('fanza.video.show', $contentId) }}"
      data-sample-url="{{ $sampleMp4 }}"
+     @if($sampleImagesJson) data-sample-images='{!! $sampleImagesJson !!}'@endif
      role="link" tabindex="0">
 @else
 <a href="{{ $url }}" class="release-card" target="_blank" rel="noopener noreferrer">
 @endif
     <div class="release-thumb">
         @if($imageUrl)
-            <img src="{{ $imageUrl }}" alt="{{ $title }}" loading="lazy">
+            <img src="{{ $imageUrl }}" alt="{{ $title }}" loading="{{ $eager ? 'eager' : 'lazy' }}"@if($eager) fetchpriority="high"@endif>
         @else
             <div class="thumb-placeholder-card">
                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">

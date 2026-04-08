@@ -122,20 +122,20 @@
         <div class="side-ad-inner">
             <div class="side-ad-label">AD</div>
             <ins class="widget-banner"></ins>
-            <script class="widget-banner-script" src="https://widget-view.dmm.co.jp/js/banner_placement.js?affiliate_id=xlikeranking-001&banner_id=1846_300_250"></script>
+            <script async class="widget-banner-script" src="https://widget-view.dmm.co.jp/js/banner_placement.js?affiliate_id=xlikeranking-001&banner_id=1846_300_250"></script>
             <div class="side-ad-spacer"></div>
             <ins class="widget-banner"></ins>
-            <script class="widget-banner-script" src="https://widget-view.dmm.co.jp/js/banner_placement.js?affiliate_id=xlikeranking-001&banner_id=1701_300_250"></script>
+            <script async class="widget-banner-script" src="https://widget-view.dmm.co.jp/js/banner_placement.js?affiliate_id=xlikeranking-001&banner_id=1701_300_250"></script>
         </div>
     </div>
     <div class="side-ad side-ad-right" id="sideAdRight">
         <div class="side-ad-inner">
             <div class="side-ad-label">AD</div>
             <ins class="widget-banner"></ins>
-            <script class="widget-banner-script" src="https://widget-view.dmm.co.jp/js/banner_placement.js?affiliate_id=xlikeranking-001&banner_id=1829_300_250"></script>
+            <script async class="widget-banner-script" src="https://widget-view.dmm.co.jp/js/banner_placement.js?affiliate_id=xlikeranking-001&banner_id=1829_300_250"></script>
             <div class="side-ad-spacer"></div>
             <ins class="widget-banner"></ins>
-            <script class="widget-banner-script" src="https://widget-view.dmm.co.jp/js/banner_placement.js?affiliate_id=xlikeranking-001&banner_id=1523_300_250"></script>
+            <script async class="widget-banner-script" src="https://widget-view.dmm.co.jp/js/banner_placement.js?affiliate_id=xlikeranking-001&banner_id=1523_300_250"></script>
         </div>
     </div>
 

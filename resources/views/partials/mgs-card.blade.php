@@ -1,6 +1,7 @@
 @php
     $hasVideo  = !empty($video->sample_video_url);
     $detailUrl = route('mgs.show', $video->product_code);
+    $eager     = $eager ?? false;
 @endphp
 
 <div class="item-card item-card-clickable mgs-card"
@@ -11,7 +12,7 @@
     <div class="item-thumb">
         <img src="{{ $video->thumbnail_url }}"
              alt="{{ $video->title }}"
-             loading="lazy">
+             loading="{{ $eager ? 'eager' : 'lazy' }}"@if($eager) fetchpriority="high"@endif>
 
         <span class="mgs-badge">MGS</span>
 

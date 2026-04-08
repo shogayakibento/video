@@ -29,8 +29,8 @@
         {{-- Grid --}}
         @if($videos->count())
             <div class="items-grid content-grid mgs-grid">
-                @foreach($videos as $video)
-                    @include('partials.mgs-card', ['video' => $video])
+                @foreach($videos as $index => $video)
+                    @include('partials.mgs-card', ['video' => $video, 'eager' => $index < 3])
                 @endforeach
             </div>
         @else
