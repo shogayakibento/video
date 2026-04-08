@@ -164,10 +164,12 @@
 
     // ===== Hover Video Preview =====
     function setupHoverPreview() {
-        var hoverTimer = null;
         var activeEl = null;
         var activeCard = null;
         var activeSlideTimer = null;
+
+        // card要素 → { video, seeked(bool) }
+        var preloadCache = new WeakMap();
 
         function clearActive() {
             if (activeEl) {
@@ -181,6 +183,14 @@
                 clearInterval(activeSlideTimer);
                 activeSlideTimer = null;
             }
+            // キャッシュをリセットして次のホバーで新しい位置から再生
+            if (activeCard) {
+                preloadCache.delete(activeCard);
+                if (ioPreload) {
+                    ioPreload.unobserve(activeCard);
+                    ioPreload.observe(activeCard);
+                }
+            }
             activeCard = null;
         }
 
@@ -192,10 +202,64 @@
             wrap.appendChild(img);
             wrap.classList.add('visible');
             activeEl = img;
+            var preloadImg = new Image();
+            preloadImg.src = images[(idx + 1) % images.length];
             activeSlideTimer = setInterval(function() {
                 idx = (idx + 1) % images.length;
                 img.src = images[idx];
+                preloadImg.src = images[(idx + 1) % images.length];
             }, 800);
+        }
+
+        function buildPreloadVideo(card, sampleUrl) {
+            if (preloadCache.has(card)) return;
+            var entry = { video: null, seeked: false };
+            preloadCache.set(card, entry);
+
+            var video = document.createElement('video');
+            video.muted = true;
+            video.controls = false;
+            video.loop = true;
+            video.playsInline = true;
+            video.preload = 'metadata';
+            video.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;';
+
+            video.addEventListener('loadedmetadata', function() {
+                var pct = 0.60 + Math.random() * 0.25;
+                video.currentTime = video.duration * pct;
+            });
+            video.addEventListener('seeked', function() {
+                entry.seeked = true;
+                if (activeCard === card) {
+                    var wrap = card.querySelector('.hover-video-wrap');
+                    if (wrap && !wrap.contains(video)) {
+                        wrap.appendChild(video);
+                        activeEl = video;
+                    }
+                    wrap && wrap.classList.add('visible');
+                    video.play().catch(function() {});
+                }
+            });
+            video.addEventListener('error', function() {
+                preloadCache.delete(card);
+            });
+
+            entry.video = video;
+            video.src = sampleUrl;
+        }
+
+        // IntersectionObserver でビューポートに入ったらプリロード開始
+        var ioPreload = null;
+        if ('IntersectionObserver' in window) {
+            ioPreload = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        var card = entry.target;
+                        var url = card.dataset.sampleUrl;
+                        if (url) buildPreloadVideo(card, url);
+                    }
+                });
+            }, { rootMargin: '200px' });
         }
 
         document.querySelectorAll('.hover-video-wrap').forEach(function(wrap) {
@@ -205,19 +269,36 @@
             var sampleUrl = card.dataset.sampleUrl;
             var sampleImages = card.dataset.sampleImages ? JSON.parse(card.dataset.sampleImages) : null;
 
-            card.addEventListener('mouseenter', function() {
-                clearTimeout(hoverTimer);
-                hoverTimer = setTimeout(function() {
-                    clearActive();
-                    activeCard = card;
+            if (ioPreload && sampleUrl) {
+                ioPreload.observe(card);
+            }
 
-                    if (sampleUrl) {
+            card.addEventListener('mouseenter', function() {
+                clearActive();
+                activeCard = card;
+
+                if (sampleUrl) {
+                    var cached = preloadCache.get(card);
+                    if (cached && cached.video) {
+                        var video = cached.video;
+                        if (cached.seeked) {
+                            wrap.appendChild(video);
+                            activeEl = video;
+                            wrap.classList.add('visible');
+                            video.play().catch(function() {});
+                        } else {
+                            // シーク中 → seeked完了時に自動表示
+                            activeEl = video;
+                        }
+                    } else {
+                        // プリロードなし → 通常フロー
                         var video = document.createElement('video');
                         video.muted = true;
                         video.controls = false;
                         video.loop = true;
                         video.playsInline = true;
-                        video.preload = 'auto';
+                        video.preload = 'metadata';
+                        video.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;';
 
                         video.addEventListener('loadedmetadata', function() {
                             var pct = 0.60 + Math.random() * 0.25;
@@ -239,14 +320,13 @@
                         wrap.appendChild(video);
                         activeEl = video;
                         video.src = sampleUrl;
-                    } else if (sampleImages && sampleImages.length) {
-                        startSlideshow(wrap, sampleImages);
                     }
-                }, 400);
+                } else if (sampleImages && sampleImages.length) {
+                    startSlideshow(wrap, sampleImages);
+                }
             });
 
             card.addEventListener('mouseleave', function() {
-                clearTimeout(hoverTimer);
                 if (activeCard === card) clearActive();
             });
         });

@@ -7,29 +7,13 @@
     $contentId   = $item['content_id'] ?? '';
     $anyImgUrl   = $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? $item['imageURL']['list'] ?? '';
     $isMono      = str_contains($anyImgUrl, '/mono/');
-    $sampleEmbedUrl = null;
-    $sampleMp4   = '';
-    if ($isMono) {
-        $sampleImgUrl = $item['sampleImageURL']['sample_s']['image'][0] ?? '';
-        if ($sampleImgUrl && preg_match('/\/digital\/video\/([^\/]+)\//', $sampleImgUrl, $m)) {
-            $cid = $m[1];
-        } else {
-            $cid = preg_replace('/(dl|dp|ec|vec|[xda])$/i', '', $contentId);
-        }
-        if ($cid) {
-            $c1 = substr($cid, 0, 1);
-            $c3 = substr($cid, 0, 3);
-            $sampleMp4 = "https://cc3001.dmm.co.jp/litevideo/freepv/{$c1}/{$c3}/{$cid}/{$cid}_mhb_w.mp4";
-        }
-    } else {
-        $embedBase = $item['sampleMovieURL']['size_720_480']
-                  ?? $item['sampleMovieURL']['size_644_414']
-                  ?? $item['sampleMovieURL']['size_560_360']
-                  ?? null;
-        if ($embedBase) {
-            $sampleEmbedUrl = preg_replace('/size=\d+_\d+/', 'size=1280_720', $embedBase);
-        }
-    }
+    $embedBase = $item['sampleMovieURL']['size_720_480']
+              ?? $item['sampleMovieURL']['size_644_414']
+              ?? $item['sampleMovieURL']['size_560_360']
+              ?? null;
+    $sampleEmbedUrl = $embedBase
+        ? preg_replace('/size=\d+_\d+/', 'size=1280_720', $embedBase)
+        : $dvdEmbedUrl ?? null;
     $actresses   = $item['iteminfo']['actress'] ?? [];
     $genres      = $item['iteminfo']['genre'] ?? [];
     $maker       = $item['iteminfo']['maker'][0]['name'] ?? null;
@@ -81,10 +65,7 @@
         <div class="lg:col-span-2">
             {{-- サンプル動画 --}}
             <div class="bg-black rounded-lg overflow-hidden mb-4">
-                @if($sampleMp4)
-                    <video src="{{ $sampleMp4 }}" controls muted playsinline
-                           class="w-full" style="max-height: 480px; background:#000;"></video>
-                @elseif($sampleEmbedUrl)
+                @if($sampleEmbedUrl)
                     <div class="relative" style="padding-top: 65%;">
                         <iframe
                             src="{{ $sampleEmbedUrl }}"

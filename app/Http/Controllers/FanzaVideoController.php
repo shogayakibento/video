@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\FanzaViewLog;
 use App\Services\FanzaApiService;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 
 class FanzaVideoController extends Controller
 {
@@ -78,10 +80,31 @@ class FanzaVideoController extends Controller
             $actressItems = array_slice($actressItems, 0, 6);
         }
 
+        // DVDの場合: litevideo URLが有効かチェックし、無効ならFANZAへリダイレクト
+        $dvdEmbedUrl = null;
+        if ($itemService === 'mono') {
+            $affiliateId = config('fanza.affiliate_id');
+            $litevideoUrl = "https://www.dmm.co.jp/litevideo/-/part/=/affi_id={$affiliateId}/cid={$contentId}/size=1280_720/";
+            $cacheKey = "litevideo_check_{$contentId}";
+            $isValid = Cache::remember($cacheKey, 86400, function () use ($litevideoUrl) {
+                try {
+                    $res = Http::timeout(3)->get($litevideoUrl);
+                    return $res->status() !== 404;
+                } catch (\Exception $e) {
+                    return false;
+                }
+            });
+            if (!$isValid) {
+                $affiliateUrl = $item['affiliateURL'] ?? $item['URL'] ?? '#';
+                return redirect()->away($affiliateUrl);
+            }
+            $dvdEmbedUrl = $litevideoUrl;
+        }
+
         // この作品を見た人はこちらも視聴しています（協調フィルタリング）
         $alsoWatched = $this->getAlsoWatched($contentId, $itemService, $itemFloor, $item, $api);
 
-        return view('video.show', compact('item', 'actressItems', 'alsoWatched', 'sidebarByGenre'));
+        return view('video.show', compact('item', 'actressItems', 'alsoWatched', 'sidebarByGenre', 'dvdEmbedUrl'));
     }
 
     private function getAlsoWatched(string $contentId, string $service, string $floor, array $item, FanzaApiService $api): array
@@ -114,7 +137,7 @@ class FanzaVideoController extends Controller
         // 足りない場合はジャンルベースで補完
         if (count($alsoWatched) < 6) {
             $primaryGenreId  = $item['iteminfo']['genre'][0]['id'] ?? null;
-            $existingIds     = array_merge([$contentId], array_column(array_column($alsoWatched, null), 'content_id'));
+            $existingIds     = array_merge([$contentId], array_column($alsoWatched, 'content_id'));
 
             if ($primaryGenreId) {
                 $genreResult = $api->getItems([

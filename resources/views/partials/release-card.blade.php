@@ -1,23 +1,42 @@
 @php
     $title = $item['title'] ?? 'タイトル未設定';
     $url = $item['URL'] ?? '#';
-    $imageUrl = str_replace('http://', 'https://',
-        $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? $item['imageURL']['list'] ?? '');
+    $anyImageUrl = $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? $item['imageURL']['list'] ?? '';
+    $isMono = str_contains($anyImageUrl, '/mono/');
+    if ($isMono) {
+        $listUrl = str_replace('http://', 'https://', $item['imageURL']['list'] ?? $anyImageUrl);
+        $imageUrl = str_replace('pt.jpg', 'pl.jpg', $listUrl);
+    } else {
+        $imageUrl = str_replace('http://', 'https://', $anyImageUrl);
+    }
     $actress = $item['iteminfo']['actress'][0]['name'] ?? null;
     $actressId = $item['iteminfo']['actress'][0]['id'] ?? null;
     $date = isset($item['date']) ? \Carbon\Carbon::parse($item['date'])->format('m/d') : null;
     $hasSample = !empty($item['sampleMovieURL']['size_720_480'])
               || !empty($item['sampleMovieURL']['size_644_414'])
               || !empty($item['sampleMovieURL']['size_560_360']);
-    $contentId = $hasSample ? ($item['content_id'] ?? null) : null;
     $price = $item['prices']['price'] ?? null;
     $sampleMp4 = '';
-    if ($hasSample && $contentId) {
-        $cid = strtolower($contentId);
+    $hasDvdSample = $isMono && !empty($item['sampleImageURL']['sample_s']['image']);
+    if ($hasDvdSample) {
+        $sampleImgUrl = $item['sampleImageURL']['sample_s']['image'][0] ?? '';
+        if ($sampleImgUrl && preg_match('/\/digital\/video\/([^\/]+)\//', $sampleImgUrl, $m)) {
+            $cid = $m[1];
+        } else {
+            $cid = preg_replace('/(dl|dp|ec|vec|[xda])$/i', '', $item['content_id'] ?? '');
+        }
+        if ($cid) {
+            $c1 = substr($cid, 0, 1);
+            $c3 = substr($cid, 0, 3);
+            $sampleMp4 = "https://cc3001.dmm.co.jp/litevideo/freepv/{$c1}/{$c3}/{$cid}/{$cid}_mhb_w.mp4";
+        }
+    } elseif (!$isMono && $hasSample) {
+        $cid = strtolower($item['content_id'] ?? '');
         $c1  = substr($cid, 0, 1);
         $c3  = substr($cid, 0, 3);
         $sampleMp4 = "https://cc3001.dmm.co.jp/litevideo/freepv/{$c1}/{$c3}/{$cid}/{$cid}_mhb_w.mp4";
     }
+    $contentId = ($hasSample || !empty($sampleMp4)) ? ($item['content_id'] ?? null) : null;
 @endphp
 
 @if($contentId)

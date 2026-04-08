@@ -1,6 +1,6 @@
 @php
     $hasVideo  = !empty($video->sample_video_url);
-    $detailUrl = route('mgs.show', $video->dmm_content_id);
+    $detailUrl = route('mgs.show', $video->product_code);
 @endphp
 
 <div class="item-card item-card-clickable mgs-card"

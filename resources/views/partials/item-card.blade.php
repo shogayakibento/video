@@ -8,8 +8,7 @@
         $listUrl = str_replace('http://', 'https://', $item['imageURL']['list'] ?? $anyImageUrl);
         $imageUrl = str_replace('pt.jpg', 'pl.jpg', $listUrl);
     } else {
-        $imageUrl = str_replace('http://', 'https://',
-            $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? $item['imageURL']['list'] ?? '');
+        $imageUrl = str_replace('http://', 'https://', $anyImageUrl);
     }
     $review = $item['review']['average'] ?? null;
     $actress = $item['iteminfo']['actress'][0]['name'] ?? null;
@@ -23,7 +22,8 @@
 
     // サンプルMP4 URL（contentId設定より先に構築）
     $sampleMp4 = '';
-    if ($isMono) {
+    $hasDvdSample = $isMono && !empty($item['sampleImageURL']['sample_s']['image']);
+    if ($hasDvdSample) {
         $sampleImgUrl = $item['sampleImageURL']['sample_s']['image'][0] ?? '';
         if ($sampleImgUrl && preg_match('/\/digital\/video\/([^\/]+)\//', $sampleImgUrl, $m)) {
             $cid = $m[1];
@@ -35,9 +35,8 @@
             $c3  = substr($cid, 0, 3);
             $sampleMp4 = "https://cc3001.dmm.co.jp/litevideo/freepv/{$c1}/{$c3}/{$cid}/{$cid}_mhb_w.mp4";
         }
-    } elseif ($hasSample) {
-        $rawId = $item['content_id'] ?? '';
-        $cid = strtolower($rawId);
+    } elseif (!$isMono && $hasSample) {
+        $cid = strtolower($item['content_id'] ?? '');
         $c1  = substr($cid, 0, 1);
         $c3  = substr($cid, 0, 3);
         $sampleMp4 = "https://cc3001.dmm.co.jp/litevideo/freepv/{$c1}/{$c3}/{$cid}/{$cid}_mhb_w.mp4";
@@ -55,7 +54,7 @@
 <div class="item-card item-card-clickable"
      data-detail-url="{{ route('fanza.video.show', $contentId) }}"
      data-sample-url="{{ $sampleMp4 }}"
-     @if($sampleImagesJson) data-sample-images="{{ $sampleImagesJson }}"@endif
+     @if($sampleImagesJson) data-sample-images='{!! $sampleImagesJson !!}'@endif
      role="link" tabindex="0">
 @else
 <a href="{{ $url }}" class="item-card" target="_blank" rel="noopener noreferrer">
