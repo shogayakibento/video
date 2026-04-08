@@ -1,30 +1,61 @@
 @php
     $title = $item['title'] ?? 'タイトル未設定';
     $url = $item['URL'] ?? '#';
-    $imageUrl = str_replace('http://', 'https://',
-        $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? $item['imageURL']['list'] ?? '');
+    $anyImageUrl = $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? $item['imageURL']['list'] ?? '';
+    $isMono = str_contains($anyImageUrl, '/mono/');
+    if ($isMono) {
+        $listUrl = str_replace('http://', 'https://', $item['imageURL']['list'] ?? $anyImageUrl);
+        $imageUrl = str_replace('pt.jpg', 'pl.jpg', $listUrl);
+    } else {
+        $imageUrl = str_replace('http://', 'https://', $anyImageUrl);
+    }
     $actress = $item['iteminfo']['actress'][0]['name'] ?? null;
     $actressId = $item['iteminfo']['actress'][0]['id'] ?? null;
     $date = isset($item['date']) ? \Carbon\Carbon::parse($item['date'])->format('m/d') : null;
-    $contentId = !empty($item['sampleMovieURL']) ? ($item['content_id'] ?? null) : null;
+    $hasSample = !empty($item['sampleMovieURL']['size_720_480'])
+              || !empty($item['sampleMovieURL']['size_644_414'])
+              || !empty($item['sampleMovieURL']['size_560_360']);
     $price = $item['prices']['price'] ?? null;
+    $eager = $eager ?? false;
+    $sampleMp4 = '';
+    $hasDvdSample = $isMono && !empty($item['sampleImageURL']['sample_s']['image']);
+    if ($hasDvdSample) {
+        $sampleImgUrl = $item['sampleImageURL']['sample_s']['image'][0] ?? '';
+        if ($sampleImgUrl && preg_match('/\/digital\/video\/([^\/]+)\//', $sampleImgUrl, $m)) {
+            $cid = $m[1];
+        } else {
+            $cid = preg_replace('/(dl|dp|ec|vec|[xda])$/i', '', $item['content_id'] ?? '');
+        }
+        if ($cid) {
+            $c1 = substr($cid, 0, 1);
+            $c3 = substr($cid, 0, 3);
+            $sampleMp4 = "https://cc3001.dmm.co.jp/litevideo/freepv/{$c1}/{$c3}/{$cid}/{$cid}_mhb_w.mp4";
+        }
+    } elseif (!$isMono && $hasSample) {
+        $cid = strtolower($item['content_id'] ?? '');
+        $c1  = substr($cid, 0, 1);
+        $c3  = substr($cid, 0, 3);
+        $sampleMp4 = "https://cc3001.dmm.co.jp/litevideo/freepv/{$c1}/{$c3}/{$cid}/{$cid}_mhb_w.mp4";
+    }
+    $contentId = ($hasSample || !empty($sampleMp4)) ? ($item['content_id'] ?? null) : null;
+    $sampleImagesJson = '';
+    if ($isMono && !empty($item['sampleImageURL']['sample_s']['image'])) {
+        $sampleImagesJson = json_encode(array_values($item['sampleImageURL']['sample_s']['image']));
+    }
 @endphp
 
 @if($contentId)
 <div class="release-card item-card-clickable"
-     data-content-id="{{ $contentId }}"
-     data-title="{{ $title }}"
-     data-actress="{{ $actress }}"
-     data-actress-id="{{ $actressId }}"
-     data-url="{{ $url }}"
-     data-price="{{ $price }}"
-     role="button" tabindex="0">
+     data-detail-url="{{ route('fanza.video.show', $contentId) }}"
+     data-sample-url="{{ $sampleMp4 }}"
+     @if($sampleImagesJson) data-sample-images='{!! $sampleImagesJson !!}'@endif
+     role="link" tabindex="0">
 @else
 <a href="{{ $url }}" class="release-card" target="_blank" rel="noopener noreferrer">
 @endif
     <div class="release-thumb">
         @if($imageUrl)
-            <img src="{{ $imageUrl }}" alt="{{ $title }}" loading="lazy">
+            <img src="{{ $imageUrl }}" alt="{{ $title }}" loading="{{ $eager ? 'eager' : 'lazy' }}"@if($eager) fetchpriority="high"@endif>
         @else
             <div class="thumb-placeholder-card">
                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -33,10 +64,8 @@
             </div>
         @endif
         <span class="release-new-badge">NEW</span>
-        @if($contentId)
-            <div class="play-overlay" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            </div>
+        @if($sampleMp4)
+            <div class="hover-video-wrap" aria-hidden="true"></div>
         @endif
     </div>
     <div class="release-info">

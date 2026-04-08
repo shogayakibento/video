@@ -9,6 +9,7 @@
         setupFAQ();
         setupScrollAnimations();
         setupSampleModal();
+        setupHoverPreview();
     });
 
     // ===== Mobile Menu =====
@@ -158,6 +159,176 @@
         // Close when clicking backdrop
         modalOverlay.addEventListener('click', function (e) {
             if (e.target === modalOverlay) closeModal();
+        });
+    }
+
+    // ===== Hover Video Preview =====
+    function setupHoverPreview() {
+        var activeEl = null;
+        var activeCard = null;
+        var activeSlideTimer = null;
+
+        // card要素 → { video, seeked(bool) }
+        var preloadCache = new WeakMap();
+
+        function clearActive() {
+            if (activeEl) {
+                var w = activeEl.parentNode;
+                if (activeEl.pause) activeEl.pause();
+                activeEl.remove();
+                activeEl = null;
+                if (w) w.classList.remove('visible');
+            }
+            if (activeSlideTimer) {
+                clearInterval(activeSlideTimer);
+                activeSlideTimer = null;
+            }
+            // キャッシュをリセットして次のホバーで新しい位置から再生
+            if (activeCard) {
+                preloadCache.delete(activeCard);
+                if (ioPreload) {
+                    ioPreload.unobserve(activeCard);
+                    ioPreload.observe(activeCard);
+                }
+            }
+            activeCard = null;
+        }
+
+        function startSlideshow(wrap, images) {
+            var img = document.createElement('img');
+            img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;';
+            var idx = Math.floor(Math.random() * images.length);
+            img.src = images[idx];
+            wrap.appendChild(img);
+            wrap.classList.add('visible');
+            activeEl = img;
+            var preloadImg = new Image();
+            preloadImg.src = images[(idx + 1) % images.length];
+            activeSlideTimer = setInterval(function() {
+                idx = (idx + 1) % images.length;
+                img.src = images[idx];
+                preloadImg.src = images[(idx + 1) % images.length];
+            }, 800);
+        }
+
+        function buildPreloadVideo(card, sampleUrl) {
+            if (preloadCache.has(card)) return;
+            var entry = { video: null, seeked: false };
+            preloadCache.set(card, entry);
+
+            var video = document.createElement('video');
+            video.muted = true;
+            video.controls = false;
+            video.loop = true;
+            video.playsInline = true;
+            video.preload = 'metadata';
+            video.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;';
+
+            video.addEventListener('loadedmetadata', function() {
+                var pct = 0.60 + Math.random() * 0.25;
+                video.currentTime = video.duration * pct;
+            });
+            video.addEventListener('seeked', function() {
+                entry.seeked = true;
+                if (activeCard === card) {
+                    var wrap = card.querySelector('.hover-video-wrap');
+                    if (wrap && !wrap.contains(video)) {
+                        wrap.appendChild(video);
+                        activeEl = video;
+                    }
+                    wrap && wrap.classList.add('visible');
+                    video.play().catch(function() {});
+                }
+            });
+            video.addEventListener('error', function() {
+                preloadCache.delete(card);
+            });
+
+            entry.video = video;
+            video.src = sampleUrl;
+        }
+
+        // IntersectionObserver でビューポートに入ったらプリロード開始
+        var ioPreload = null;
+        if ('IntersectionObserver' in window) {
+            ioPreload = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        var card = entry.target;
+                        var url = card.dataset.sampleUrl;
+                        if (url) buildPreloadVideo(card, url);
+                    }
+                });
+            }, { rootMargin: '200px' });
+        }
+
+        document.querySelectorAll('.hover-video-wrap').forEach(function(wrap) {
+            var card = wrap.closest('[data-sample-url], [data-sample-images]');
+            if (!card) return;
+
+            var sampleUrl = card.dataset.sampleUrl;
+            var sampleImages = card.dataset.sampleImages ? JSON.parse(card.dataset.sampleImages) : null;
+
+            if (ioPreload && sampleUrl) {
+                ioPreload.observe(card);
+            }
+
+            card.addEventListener('mouseenter', function() {
+                clearActive();
+                activeCard = card;
+
+                if (sampleUrl) {
+                    var cached = preloadCache.get(card);
+                    if (cached && cached.video) {
+                        var video = cached.video;
+                        if (cached.seeked) {
+                            wrap.appendChild(video);
+                            activeEl = video;
+                            wrap.classList.add('visible');
+                            video.play().catch(function() {});
+                        } else {
+                            // シーク中 → seeked完了時に自動表示
+                            activeEl = video;
+                        }
+                    } else {
+                        // プリロードなし → 通常フロー
+                        var video = document.createElement('video');
+                        video.muted = true;
+                        video.controls = false;
+                        video.loop = true;
+                        video.playsInline = true;
+                        video.preload = 'metadata';
+                        video.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;';
+
+                        video.addEventListener('loadedmetadata', function() {
+                            var pct = 0.60 + Math.random() * 0.25;
+                            video.currentTime = video.duration * pct;
+                        });
+                        video.addEventListener('seeked', function() {
+                            if (activeCard !== card) return;
+                            wrap.classList.add('visible');
+                            video.play().catch(function() {});
+                        });
+                        video.addEventListener('error', function() {
+                            video.remove();
+                            activeEl = null;
+                            if (sampleImages && sampleImages.length && activeCard === card) {
+                                startSlideshow(wrap, sampleImages);
+                            }
+                        });
+
+                        wrap.appendChild(video);
+                        activeEl = video;
+                        video.src = sampleUrl;
+                    }
+                } else if (sampleImages && sampleImages.length) {
+                    startSlideshow(wrap, sampleImages);
+                }
+            });
+
+            card.addEventListener('mouseleave', function() {
+                if (activeCard === card) clearActive();
+            });
         });
     }
 })();

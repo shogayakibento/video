@@ -131,17 +131,21 @@ class SitemapController extends Controller
     {
         $content = Cache::remember('sitemap_videos_xml', 3600, function () {
             $urls = [];
-            Video::orderByDesc('total_likes')->limit(500)->get(['id', 'updated_at'])
+            Video::orderByDesc('total_likes')->limit(500)->get(['id', 'title', 'thumbnail_url', 'updated_at'])
                 ->each(function ($video) use (&$urls) {
                     $urls[] = [
                         'loc'        => route('tweet.video.show', $video->id),
                         'priority'   => '0.7',
                         'changefreq' => 'weekly',
                         'lastmod'    => $video->updated_at->toAtomString(),
+                        'video'      => [
+                            'thumbnail_loc' => $video->thumbnail_url,
+                            'title'         => $video->title,
+                        ],
                     ];
                 });
 
-            return $this->buildUrlset($urls);
+            return $this->buildVideoUrlset($urls);
         });
 
         return response($content, 200, ['Content-Type' => 'application/xml']);
@@ -161,6 +165,37 @@ class SitemapController extends Controller
             }
             $xml .= "    <changefreq>{$url['changefreq']}</changefreq>\n";
             $xml .= "    <priority>{$url['priority']}</priority>\n";
+            $xml .= "  </url>\n";
+        }
+
+        $xml .= '</urlset>';
+
+        return $xml;
+    }
+
+    private function buildVideoUrlset(array $urls): string
+    {
+        $xml  = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' . "\n";
+        $xml .= '        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">' . "\n";
+
+        foreach ($urls as $url) {
+            $loc = htmlspecialchars($url['loc'], ENT_XML1 | ENT_QUOTES, 'UTF-8');
+            $xml .= "  <url>\n";
+            $xml .= "    <loc>{$loc}</loc>\n";
+            if (!empty($url['lastmod'])) {
+                $xml .= "    <lastmod>{$url['lastmod']}</lastmod>\n";
+            }
+            $xml .= "    <changefreq>{$url['changefreq']}</changefreq>\n";
+            $xml .= "    <priority>{$url['priority']}</priority>\n";
+            if (!empty($url['video']['thumbnail_loc']) && !empty($url['video']['title'])) {
+                $thumbLoc = htmlspecialchars($url['video']['thumbnail_loc'], ENT_XML1 | ENT_QUOTES, 'UTF-8');
+                $title    = htmlspecialchars($url['video']['title'], ENT_XML1 | ENT_QUOTES, 'UTF-8');
+                $xml .= "    <video:video>\n";
+                $xml .= "      <video:thumbnail_loc>{$thumbLoc}</video:thumbnail_loc>\n";
+                $xml .= "      <video:title>{$title}</video:title>\n";
+                $xml .= "    </video:video>\n";
+            }
             $xml .= "  </url>\n";
         }
 

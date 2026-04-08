@@ -168,6 +168,9 @@
     if ($video->dmm_content_id) {
         $videoSchema['embedUrl'] = 'https://www.dmm.co.jp/litevideo/-/part/=/affi_id=' . config('dmm.affiliate_id') . '/cid=' . $video->dmm_content_id . '/size=1280_720/';
     }
+    if ($video->sample_video_url) {
+        $videoSchema['contentUrl'] = $video->sample_video_url;
+    }
     if ($actorSchema) {
         $videoSchema['actor'] = json_decode($actorSchema, true);
     }

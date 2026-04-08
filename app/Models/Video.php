@@ -9,9 +9,11 @@ class Video extends Model
 {
     protected $fillable = [
         'dmm_content_id',
+        'store',
         'title',
         'actress',
         'thumbnail_url',
+        'sample_video_url',
         'affiliate_url',
         'genre',
         'maker',

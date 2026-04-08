@@ -68,8 +68,10 @@
     <link rel="dns-prefetch" href="https://www.dmm.co.jp">
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet"></noscript>
+    <link rel="preconnect" href="https://cc3001.dmm.co.jp">
+    <link rel="dns-prefetch" href="https://cc3001.dmm.co.jp">
     <link rel="preload" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}" as="style">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
+<link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
     @stack('head_links')
     @stack('styles')
 </head>
@@ -90,6 +92,7 @@
                     @endforeach
                     <li><a href="{{ route('genre.index') }}" class="nav-link {{ request()->routeIs('genre.*') ? 'active' : '' }}">ジャンル</a></li>
                     <li><a href="{{ route('actress.index') }}" class="nav-link {{ request()->routeIs('actress.*') ? 'active' : '' }}">女優</a></li>
+                    <li><a href="{{ route('mgs.index') }}" class="nav-link nav-link-mgs {{ request()->routeIs('mgs.*') ? 'active' : '' }}">MGS</a></li>
                     <li><a href="{{ route('tweet.ranking.index') }}" class="nav-link nav-link-buzz {{ request()->routeIs('tweet.ranking.*') || request()->routeIs('tweet.video.*') ? 'active' : '' }}">X バズりランキング</a></li>
                     <li><a href="{{ route('shorts') }}" class="nav-link nav-link-shorts {{ request()->routeIs('shorts') ? 'active' : '' }}">▶ ショートビュー</a></li>
                 </ul>
@@ -109,6 +112,7 @@
         @endforeach
         <a href="{{ route('genre.index') }}">ジャンル</a>
         <a href="{{ route('actress.index') }}">女優</a>
+        <a href="{{ route('mgs.index') }}" class="nav-link-mgs">MGS</a>
         <a href="{{ route('tweet.ranking.index') }}" class="nav-link-buzz">X バズりランキング</a>
         <a href="{{ route('shorts') }}" class="nav-link-shorts">▶ ショートビュー</a>
     </div>
@@ -118,20 +122,20 @@
         <div class="side-ad-inner">
             <div class="side-ad-label">AD</div>
             <ins class="widget-banner"></ins>
-            <script class="widget-banner-script" src="https://widget-view.dmm.co.jp/js/banner_placement.js?affiliate_id=xlikeranking-001&banner_id=1846_300_250"></script>
+            <script async class="widget-banner-script" src="https://widget-view.dmm.co.jp/js/banner_placement.js?affiliate_id=xlikeranking-001&banner_id=1846_300_250"></script>
             <div class="side-ad-spacer"></div>
             <ins class="widget-banner"></ins>
-            <script class="widget-banner-script" src="https://widget-view.dmm.co.jp/js/banner_placement.js?affiliate_id=xlikeranking-001&banner_id=1701_300_250"></script>
+            <script async class="widget-banner-script" src="https://widget-view.dmm.co.jp/js/banner_placement.js?affiliate_id=xlikeranking-001&banner_id=1701_300_250"></script>
         </div>
     </div>
     <div class="side-ad side-ad-right" id="sideAdRight">
         <div class="side-ad-inner">
             <div class="side-ad-label">AD</div>
             <ins class="widget-banner"></ins>
-            <script class="widget-banner-script" src="https://widget-view.dmm.co.jp/js/banner_placement.js?affiliate_id=xlikeranking-001&banner_id=1829_300_250"></script>
+            <script async class="widget-banner-script" src="https://widget-view.dmm.co.jp/js/banner_placement.js?affiliate_id=xlikeranking-001&banner_id=1829_300_250"></script>
             <div class="side-ad-spacer"></div>
             <ins class="widget-banner"></ins>
-            <script class="widget-banner-script" src="https://widget-view.dmm.co.jp/js/banner_placement.js?affiliate_id=xlikeranking-001&banner_id=1523_300_250"></script>
+            <script async class="widget-banner-script" src="https://widget-view.dmm.co.jp/js/banner_placement.js?affiliate_id=xlikeranking-001&banner_id=1523_300_250"></script>
         </div>
     </div>
 
@@ -201,6 +205,21 @@
             },
             "query-input": "required name=search_term_string"
         }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "Organization",
+        "name": "FanzaGate",
+        "url": "{{ url('/') }}",
+        "logo": {
+            "@@type": "ImageObject",
+            "url": "{{ asset('images/og-default.webp') }}",
+            "width": 1200,
+            "height": 630
+        },
+        "sameAs": []
     }
     </script>
     @stack('scripts')

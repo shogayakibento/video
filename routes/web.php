@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MgsController;
 use App\Http\Controllers\RankingController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShortsController;
@@ -31,6 +32,10 @@ Route::get('/sitemap-videos.xml', [SitemapController::class, 'videos'])->name('s
 Route::view('/privacy', 'privacy')->name('privacy');
 Route::view('/contact', 'contact')->name('contact');
 
+// MGS動画
+Route::get('/mgs', [MgsController::class, 'index'])->name('mgs.index');
+Route::get('/mgs/{productCode}', [MgsController::class, 'show'])->name('mgs.show');
+
 // Xツイートランキング
 Route::get('/tweet-ranking', [RankingController::class, 'tweetIndex'])->name('tweet.ranking.index');
 Route::get('/tweet-video/{video}', [TweetVideoController::class, 'show'])->name('tweet.video.show');
@@ -50,4 +55,6 @@ Route::prefix('admin')->middleware('admin.auth')->group(function () {
     Route::delete('/tweet/{tweet}', [AdminController::class, 'deleteTweet'])->name('admin.tweet.delete');
     Route::get('/quick-add', [AdminController::class, 'quickAdd'])->name('admin.quick-add');
     Route::post('/quick-add', [AdminController::class, 'quickAddStore'])->name('admin.quick-add.store');
+    Route::get('/mgs-add', [AdminController::class, 'mgsAdd'])->name('admin.mgs-add');
+    Route::post('/mgs-add', [AdminController::class, 'mgsAddStore'])->name('admin.mgs-add.store');
 });

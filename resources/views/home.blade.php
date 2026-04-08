@@ -48,8 +48,8 @@
                 <a href="{{ route('category.show', 'douga') }}?sort=date" class="section-link">すべて見る →</a>
             </div>
             <div class="releases-slider">
-                @foreach(array_slice($newReleaseItems, 0, 8) as $item)
-                    @include('partials.release-card', ['item' => $item])
+                @foreach(array_slice($newReleaseItems, 0, 8) as $i => $item)
+                    @include('partials.release-card', ['item' => $item, 'eager' => $i < 3])
                 @endforeach
             </div>
         </div>
@@ -64,7 +64,7 @@
             </div>
             <div class="items-grid cols-3">
                 @foreach(array_slice($vrItems, 0, 6) as $index => $item)
-                    @include('partials.item-card', ['item' => $item, 'rank' => null])
+                    @include('partials.item-card', ['item' => $item, 'rank' => null, 'eager' => $index < 3])
                 @endforeach
             </div>
         </div>

@@ -5,6 +5,15 @@
     $affiliateUrl = $item['affiliateURL'] ?? $item['URL'] ?? '#';
     $imageUrl    = str_replace('http://', 'https://', $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? '');
     $contentId   = $item['content_id'] ?? '';
+    $anyImgUrl   = $item['imageURL']['large'] ?? $item['imageURL']['small'] ?? $item['imageURL']['list'] ?? '';
+    $isMono      = str_contains($anyImgUrl, '/mono/');
+    $embedBase = $item['sampleMovieURL']['size_720_480']
+              ?? $item['sampleMovieURL']['size_644_414']
+              ?? $item['sampleMovieURL']['size_560_360']
+              ?? null;
+    $sampleEmbedUrl = $embedBase
+        ? preg_replace('/size=\d+_\d+/', 'size=1280_720', $embedBase)
+        : $dvdEmbedUrl ?? null;
     $actresses   = $item['iteminfo']['actress'] ?? [];
     $genres      = $item['iteminfo']['genre'] ?? [];
     $maker       = $item['iteminfo']['maker'][0]['name'] ?? null;
@@ -56,10 +65,10 @@
         <div class="lg:col-span-2">
             {{-- サンプル動画 --}}
             <div class="bg-black rounded-lg overflow-hidden mb-4">
-                @if($contentId)
+                @if($sampleEmbedUrl)
                     <div class="relative" style="padding-top: 65%;">
                         <iframe
-                            src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id={{ config('fanza.affiliate_id') }}/cid={{ $contentId }}/size=1280_720/"
+                            src="{{ $sampleEmbedUrl }}"
                             class="absolute left-0 right-0 w-full"
                             style="top: -15%; height: 125%;"
                             frameborder="0"
@@ -117,7 +126,7 @@
         {{-- サイドバー: 同じ女優の作品 --}}
         <div class="lg:col-span-1">
             <h3 class="text-lg font-bold mb-3">
-                {{ $primaryActressName ? $primaryActressName . 'の他の作品' : '関連作品' }}
+                {{ $sidebarByGenre ? '関連作品' : ($primaryActressName ? $primaryActressName . 'の他の作品' : '関連作品') }}
             </h3>
             @if(empty($actressItems))
                 <p class="text-gray-500 text-sm">関連作品はありません</p>

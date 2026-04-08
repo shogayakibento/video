@@ -1,0 +1,548 @@
+[33m2aca4a7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mcodex/adjust-video-size-for-short-view[m[33m, [m[1;31morigin/codex/adjust-video-size-for-short-view[m[33m)[m HEAD@{0}: pull: Fast-forward
+[33m77c9e56[m HEAD@{1}: pull: Fast-forward
+[33m8bc39b2[m HEAD@{2}: pull: Fast-forward
+[33m7de88de[m HEAD@{3}: pull: Fast-forward
+[33ma655df4[m HEAD@{4}: pull: Fast-forward
+[33m297acfa[m HEAD@{5}: pull: Fast-forward
+[33m0a4ac62[m HEAD@{6}: pull: Fast-forward
+[33m5f596b8[m HEAD@{7}: pull: Fast-forward
+[33m370e0ca[m HEAD@{8}: pull: Fast-forward
+[33mfb8c6c0[m HEAD@{9}: pull: Fast-forward
+[33m0d6a471[m HEAD@{10}: pull: Fast-forward
+[33mafc9bf2[m HEAD@{11}: pull: Fast-forward
+[33m81f18df[m HEAD@{12}: pull: Fast-forward
+[33mfb7ebf2[m HEAD@{13}: pull: Fast-forward
+[33m2f2104b[m HEAD@{14}: pull: Fast-forward
+[33m713665b[m HEAD@{15}: checkout: moving from claude/fix-short-view-video-alignment-82mYr to codex/adjust-video-size-for-short-view
+[33m7d6334a[m[33m ([m[1;31morigin/claude/fix-short-view-video-alignment-82mYr[m[33m, [m[1;32mclaude/fix-short-view-video-alignment-82mYr[m[33m)[m HEAD@{16}: pull: Fast-forward
+[33m7180381[m HEAD@{17}: pull: Fast-forward
+[33mdcae115[m HEAD@{18}: pull: Fast-forward
+[33m844023a[m HEAD@{19}: checkout: moving from claude/review-sitemap-errors-GV7lB to claude/fix-short-view-video-alignment-82mYr
+[33m544c325[m[33m ([m[1;31morigin/claude/review-sitemap-errors-GV7lB[m[33m, [m[1;32mclaude/review-sitemap-errors-GV7lB[m[33m)[m HEAD@{20}: pull: Fast-forward
+[33m9ce6f46[m HEAD@{21}: pull: Fast-forward
+[33m214b487[m HEAD@{22}: pull: Fast-forward
+[33m750e85a[m HEAD@{23}: pull: Fast-forward
+[33m91e9a78[m HEAD@{24}: pull: Fast-forward
+[33m9f1f0a4[m HEAD@{25}: pull: Fast-forward
+[33mc17f343[m HEAD@{26}: pull: Fast-forward
+[33m6842b88[m HEAD@{27}: pull: Fast-forward
+[33mf796be1[m HEAD@{28}: pull: Fast-forward
+[33m3a0c0b0[m HEAD@{29}: pull: Fast-forward
+[33m2af7c76[m HEAD@{30}: pull: Fast-forward
+[33m11872af[m HEAD@{31}: pull: Fast-forward
+[33md5dd2f6[m HEAD@{32}: pull: Fast-forward
+[33m4cfec45[m HEAD@{33}: pull: Fast-forward
+[33m3f60339[m HEAD@{34}: pull: Fast-forward
+[33m9d61adc[m HEAD@{35}: pull: Fast-forward
+[33md69ccfe[m HEAD@{36}: checkout: moving from claude/fix-video-ranking-duplication-H3IuI to claude/review-sitemap-errors-GV7lB
+[33m6c9ac13[m[33m ([m[1;31morigin/claude/fix-video-ranking-duplication-H3IuI[m[33m, [m[1;32mclaude/fix-video-ranking-duplication-H3IuI[m[33m)[m HEAD@{37}: pull: Fast-forward
+[33mec7049b[m HEAD@{38}: pull: Fast-forward
+[33m8359616[m HEAD@{39}: pull: Fast-forward
+[33m076c3c1[m HEAD@{40}: pull: Fast-forward
+[33m591c4d9[m HEAD@{41}: pull: Fast-forward
+[33maafd923[m HEAD@{42}: pull: Fast-forward
+[33macbf44f[m HEAD@{43}: pull: Fast-forward
+[33maef59f7[m HEAD@{44}: pull: Fast-forward
+[33mff98f8c[m HEAD@{45}: pull: Fast-forward
+[33m021bfa8[m HEAD@{46}: pull: Fast-forward
+[33me69c684[m HEAD@{47}: pull: Fast-forward
+[33mfe3dfdb[m HEAD@{48}: checkout: moving from main to claude/fix-video-ranking-duplication-H3IuI
+[33m45766ea[m[33m ([m[1;32mmain[m[33m)[m HEAD@{49}: pull: Fast-forward
+[33mf2fc2f8[m HEAD@{50}: checkout: moving from claude/actress-similarity-logic-lcCph to main
+[33m1bcd4bf[m[33m ([m[1;31morigin/claude/actress-similarity-logic-lcCph[m[33m, [m[1;32mclaude/actress-similarity-logic-lcCph[m[33m)[m HEAD@{51}: pull: Fast-forward
+[33mfd7917e[m HEAD@{52}: pull: Fast-forward
+[33mbb72702[m HEAD@{53}: pull: Fast-forward
+[33maa9ba06[m HEAD@{54}: pull: Fast-forward
+[33m0a8f13a[m HEAD@{55}: pull: Fast-forward
+[33md1b631d[m HEAD@{56}: pull: Fast-forward
+[33m897acc4[m HEAD@{57}: pull: Fast-forward
+[33mba3c34e[m HEAD@{58}: pull: Fast-forward
+[33mfbf123b[m HEAD@{59}: pull: Fast-forward
+[33mffcd18f[m HEAD@{60}: pull: Fast-forward
+[33mcaa1839[m HEAD@{61}: pull: Fast-forward
+[33m6c89422[m HEAD@{62}: pull: Fast-forward
+[33m3a49a8c[m HEAD@{63}: pull: Fast-forward
+[33me566138[m HEAD@{64}: pull: Fast-forward
+[33mefcdbd4[m HEAD@{65}: pull: Fast-forward
+[33m3bfd703[m HEAD@{66}: pull: Fast-forward
+[33me9e7d30[m HEAD@{67}: pull: Fast-forward
+[33m06fd86b[m HEAD@{68}: pull: Fast-forward
+[33ma934c3f[m HEAD@{69}: pull: Fast-forward
+[33m0fa8108[m HEAD@{70}: pull: Fast-forward
+[33m1dcfaba[m HEAD@{71}: pull: Fast-forward
+[33m46ad3fc[m HEAD@{72}: pull: Fast-forward
+[33me3495ba[m HEAD@{73}: pull: Fast-forward
+[33m5cab800[m HEAD@{74}: checkout: moving from claude/decide-genre-RMhA1 to claude/actress-similarity-logic-lcCph
+[33m9ea8e5e[m[33m ([m[1;31morigin/claude/decide-genre-RMhA1[m[33m, [m[1;32mclaude/decide-genre-RMhA1[m[33m)[m HEAD@{75}: pull: Fast-forward
+[33m85c834e[m HEAD@{76}: pull: Fast-forward
+[33m75f4602[m HEAD@{77}: pull: Fast-forward
+[33madc3f5f[m HEAD@{78}: pull: Fast-forward
+[33mc510f79[m HEAD@{79}: pull: Fast-forward
+[33m4b9591f[m HEAD@{80}: pull: Fast-forward
+[33m3ab3017[m HEAD@{81}: pull: Fast-forward
+[33m5542780[m HEAD@{82}: pull: Fast-forward
+[33m1e20a7f[m HEAD@{83}: pull: Fast-forward
+[33m25a6abb[m HEAD@{84}: pull: Fast-forward
+[33meea54b7[m HEAD@{85}: pull: Fast-forward
+[33m91ae199[m HEAD@{86}: pull: Fast-forward
+[33m552f9a2[m HEAD@{87}: pull: Fast-forward
+[33mf66d615[m HEAD@{88}: pull: Fast-forward
+[33md46f157[m HEAD@{89}: pull: Fast-forward
+[33m2bed4f1[m HEAD@{90}: pull: Fast-forward
+[33m901164e[m HEAD@{91}: pull: Fast-forward
+[33m87f5d2b[m HEAD@{92}: checkout: moving from claude/add-recommendations-rankings-g3BvT to claude/decide-genre-RMhA1
+[33m43d71f1[m[33m ([m[1;31morigin/claude/add-recommendations-rankings-g3BvT[m[33m, [m[1;32mclaude/add-recommendations-rankings-g3BvT[m[33m)[m HEAD@{93}: checkout: moving from main to claude/add-recommendations-rankings-g3BvT
+[33mf2fc2f8[m HEAD@{94}: pull: Fast-forward
+[33m55b9a69[m HEAD@{95}: checkout: moving from claude/add-recommendations-rankings-g3BvT to main
+[33m43d71f1[m[33m ([m[1;31morigin/claude/add-recommendations-rankings-g3BvT[m[33m, [m[1;32mclaude/add-recommendations-rankings-g3BvT[m[33m)[m HEAD@{96}: pull: Fast-forward
+[33m0242c04[m HEAD@{97}: pull: Fast-forward
+[33m4af13fc[m HEAD@{98}: pull: Fast-forward
+[33m733fe2b[m HEAD@{99}: pull: Fast-forward
+[33me1ebe3a[m HEAD@{100}: pull: Fast-forward
+[33mef49621[m HEAD@{101}: pull: Fast-forward
+[33me27615c[m HEAD@{102}: pull: Fast-forward
+[33ma8c6bc1[m HEAD@{103}: pull: Fast-forward
+[33m6712eaf[m HEAD@{104}: pull: Fast-forward
+[33m8c01121[m HEAD@{105}: pull: Fast-forward
+[33m0b5b237[m HEAD@{106}: pull: Fast-forward
+[33me8796e4[m HEAD@{107}: pull: Fast-forward
+[33m892fd5f[m HEAD@{108}: pull: Fast-forward
+[33m113f36e[m HEAD@{109}: pull: Fast-forward
+[33m6418bdf[m HEAD@{110}: pull: Fast-forward
+[33med99b0c[m HEAD@{111}: pull: Fast-forward
+[33m5dfed3f[m HEAD@{112}: pull: Fast-forward
+[33m675a452[m HEAD@{113}: pull: Fast-forward
+[33m89ddc14[m HEAD@{114}: pull: Fast-forward
+[33mb9fe058[m HEAD@{115}: pull: Fast-forward
+[33mf679c64[m HEAD@{116}: pull: Fast-forward
+[33mab80d32[m HEAD@{117}: pull: Fast-forward
+[33m5970953[m HEAD@{118}: pull: Fast-forward
+[33mc2bc2b4[m HEAD@{119}: pull: Fast-forward
+[33m6e93d41[m HEAD@{120}: checkout: moving from claude/recommendation-actress-similarity-gZ6sI to claude/add-recommendations-rankings-g3BvT
+[33m4aa16d1[m[33m ([m[1;31morigin/claude/recommendation-actress-similarity-gZ6sI[m[33m, [m[1;32mclaude/recommendation-actress-similarity-gZ6sI[m[33m)[m HEAD@{121}: checkout: moving from main to claude/recommendation-actress-similarity-gZ6sI
+[33m55b9a69[m HEAD@{122}: checkout: moving from claude/add-recommendations-rankings-g3BvT to main
+[33m6e93d41[m HEAD@{123}: checkout: moving from main to claude/add-recommendations-rankings-g3BvT
+[33m55b9a69[m HEAD@{124}: checkout: moving from claude/persist-time-period-view-TUxHK to main
+[33mecd35d3[m[33m ([m[1;31morigin/claude/persist-time-period-view-TUxHK[m[33m, [m[1;32mclaude/persist-time-period-view-TUxHK[m[33m)[m HEAD@{125}: checkout: moving from main to claude/persist-time-period-view-TUxHK
+[33m55b9a69[m HEAD@{126}: checkout: moving from main to main
+[33m55b9a69[m HEAD@{127}: checkout: moving from claude/persist-time-period-view-TUxHK to main
+[33mecd35d3[m[33m ([m[1;31morigin/claude/persist-time-period-view-TUxHK[m[33m, [m[1;32mclaude/persist-time-period-view-TUxHK[m[33m)[m HEAD@{128}: checkout: moving from main to claude/persist-time-period-view-TUxHK
+[33m55b9a69[m HEAD@{129}: pull: Fast-forward
+[33m52263b7[m HEAD@{130}: checkout: moving from claude/persist-time-period-view-TUxHK to main
+[33mecd35d3[m[33m ([m[1;31morigin/claude/persist-time-period-view-TUxHK[m[33m, [m[1;32mclaude/persist-time-period-view-TUxHK[m[33m)[m HEAD@{131}: pull: Fast-forward
+[33m3312199[m HEAD@{132}: pull: Fast-forward
+[33mabb1279[m HEAD@{133}: checkout: moving from main to claude/persist-time-period-view-TUxHK
+[33m52263b7[m HEAD@{134}: pull: Fast-forward
+[33mdf65e0f[m HEAD@{135}: checkout: moving from claude/clarify-task-scope-sKteD to main
+[33m6e72fc0[m[33m ([m[1;31morigin/claude/clarify-task-scope-sKteD[m[33m, [m[1;32mclaude/clarify-task-scope-sKteD[m[33m)[m HEAD@{136}: pull: Fast-forward
+[33m1335cf7[m HEAD@{137}: pull: Fast-forward
+[33m26f53cb[m HEAD@{138}: pull: Fast-forward
+[33m903d168[m HEAD@{139}: pull: Fast-forward
+[33me0d35f1[m HEAD@{140}: pull: Fast-forward
+[33m8ce124c[m HEAD@{141}: pull: Fast-forward
+[33me88d93b[m HEAD@{142}: pull: Fast-forward
+[33mc787b55[m HEAD@{143}: pull: Fast-forward
+[33m3856530[m HEAD@{144}: pull: Fast-forward
+[33md5cd4fe[m HEAD@{145}: pull: Fast-forward
+[33md8dbfe4[m HEAD@{146}: pull: Fast-forward
+[33m43e6b53[m HEAD@{147}: pull: Fast-forward
+[33m42d3fb3[m HEAD@{148}: checkout: moving from main to claude/clarify-task-scope-sKteD
+[33mdf65e0f[m HEAD@{149}: pull: Fast-forward
+[33mdecef63[m HEAD@{150}: checkout: moving from claude/clarify-task-scope-sKteD to main
+[33m42d3fb3[m HEAD@{151}: checkout: moving from claude/seo-improvements-BO6kL to claude/clarify-task-scope-sKteD
+[33m149aa8b[m[33m ([m[1;31morigin/claude/seo-improvements-BO6kL[m[33m, [m[1;32mclaude/seo-improvements-BO6kL[m[33m)[m HEAD@{152}: pull: Fast-forward
+[33m72c6187[m HEAD@{153}: pull: Fast-forward
+[33m8ea5438[m HEAD@{154}: pull: Fast-forward
+[33m24e14a6[m HEAD@{155}: checkout: moving from main to claude/seo-improvements-BO6kL
+[33mdecef63[m HEAD@{156}: pull: Fast-forward
+[33m3f73c98[m HEAD@{157}: checkout: moving from claude/seo-improvements-56ecF to main
+[33mab1ff93[m[33m ([m[1;31morigin/claude/seo-improvements-56ecF[m[33m, [m[1;32mclaude/seo-improvements-56ecF[m[33m)[m HEAD@{158}: checkout: moving from main to claude/seo-improvements-56ecF
+[33m3f73c98[m HEAD@{159}: pull: Fast-forward
+[33m5e81093[m HEAD@{160}: checkout: moving from claude/add-seo-suggestions-wXYnY to main
+[33mb64a721[m[33m ([m[1;31morigin/claude/add-seo-suggestions-wXYnY[m[33m, [m[1;32mclaude/add-seo-suggestions-wXYnY[m[33m)[m HEAD@{161}: checkout: moving from main to claude/add-seo-suggestions-wXYnY
+[33m5e81093[m HEAD@{162}: checkout: moving from claude/add-seo-suggestions-wXYnY to main
+[33mb64a721[m[33m ([m[1;31morigin/claude/add-seo-suggestions-wXYnY[m[33m, [m[1;32mclaude/add-seo-suggestions-wXYnY[m[33m)[m HEAD@{163}: checkout: moving from main to claude/add-seo-suggestions-wXYnY
+[33m5e81093[m HEAD@{164}: checkout: moving from claude/add-seo-sitemap-F9Vou to main
+[33mbbeca76[m[33m ([m[1;31morigin/claude/add-seo-sitemap-F9Vou[m[33m, [m[1;32mclaude/add-seo-sitemap-F9Vou[m[33m)[m HEAD@{165}: checkout: moving from main to claude/add-seo-sitemap-F9Vou
+[33m5e81093[m HEAD@{166}: pull: Fast-forward
+[33m14ae281[m HEAD@{167}: checkout: moving from claude/add-seo-sitemap-F9Vou to main
+[33mbbeca76[m[33m ([m[1;31morigin/claude/add-seo-sitemap-F9Vou[m[33m, [m[1;32mclaude/add-seo-sitemap-F9Vou[m[33m)[m HEAD@{168}: checkout: moving from main to claude/add-seo-sitemap-F9Vou
+[33m14ae281[m HEAD@{169}: checkout: moving from claude/add-seo-sitemap-F9Vou to main
+[33mbbeca76[m[33m ([m[1;31morigin/claude/add-seo-sitemap-F9Vou[m[33m, [m[1;32mclaude/add-seo-sitemap-F9Vou[m[33m)[m HEAD@{170}: pull: Fast-forward
+[33md59d439[m HEAD@{171}: pull origin claude/add-seo-sitemap-F9Vou: Fast-forward
+[33m734fb8c[m HEAD@{172}: pull origin claude/add-seo-sitemap-F9Vou: Fast-forward
+[33mfc2857a[m HEAD@{173}: pull origin claude/add-seo-sitemap-F9Vou: Fast-forward
+[33mb10b84e[m HEAD@{174}: pull origin claude/add-seo-sitemap-F9Vou: Fast-forward
+[33m669b39a[m HEAD@{175}: pull origin claude/add-seo-sitemap-F9Vou: Fast-forward
+[33mb857a9f[m HEAD@{176}: pull origin claude/add-seo-sitemap-F9Vou: Fast-forward
+[33me140270[m HEAD@{177}: pull origin claude/add-seo-sitemap-F9Vou: Fast-forward
+[33m78eaf3c[m HEAD@{178}: pull origin claude/add-seo-sitemap-F9Vou: Fast-forward
+[33m7c0eba0[m HEAD@{179}: pull origin claude/add-seo-sitemap-F9Vou: Fast-forward
+[33m986e327[m HEAD@{180}: pull origin claude/add-seo-sitemap-F9Vou: Fast-forward
+[33m349a997[m HEAD@{181}: pull: Fast-forward
+[33mcdc2bb7[m HEAD@{182}: pull origin claude/add-seo-sitemap-F9Vou: Fast-forward
+[33m4961f19[m HEAD@{183}: pull: Fast-forward
+[33mf636c82[m HEAD@{184}: pull: Fast-forward
+[33mdf79b5c[m HEAD@{185}: pull: Fast-forward
+[33m97f97b0[m HEAD@{186}: pull: Fast-forward
+[33m0c8b56a[m HEAD@{187}: pull: Fast-forward
+[33mcefdf60[m HEAD@{188}: pull: Fast-forward
+[33m4cb7f82[m HEAD@{189}: pull: Fast-forward
+[33m8214b7d[m HEAD@{190}: pull: Fast-forward
+[33m5cfb6fb[m HEAD@{191}: checkout: moving from main to claude/add-seo-sitemap-F9Vou
+[33m14ae281[m HEAD@{192}: pull: Fast-forward
+[33mb48d63a[m HEAD@{193}: checkout: moving from claude/add-seo-sitemap-F9Vou to main
+[33m5cfb6fb[m HEAD@{194}: pull: Fast-forward
+[33m42c1e8f[m HEAD@{195}: commit: update
+[33m4759493[m HEAD@{196}: pull: Fast-forward
+[33mff04d4c[m HEAD@{197}: checkout: moving from claude/code-review-improvements-wMFXZ to claude/add-seo-sitemap-F9Vou
+[33maac7163[m[33m ([m[1;31morigin/claude/code-review-improvements-wMFXZ[m[33m, [m[1;32mclaude/code-review-improvements-wMFXZ[m[33m)[m HEAD@{198}: pull: Fast-forward
+[33m91bc174[m HEAD@{199}: pull: Fast-forward
+[33m82f0c0e[m HEAD@{200}: pull: Fast-forward
+[33m67db5fc[m HEAD@{201}: pull: Fast-forward
+[33mcda1cfb[m HEAD@{202}: pull: Fast-forward
+[33mf8048ba[m HEAD@{203}: pull: Fast-forward
+[33m7fdcfea[m HEAD@{204}: pull: Fast-forward
+[33mcf70abe[m HEAD@{205}: pull: Fast-forward
+[33md492d31[m HEAD@{206}: pull: Fast-forward
+[33m0e594da[m HEAD@{207}: reset: moving to origin/claude/code-review-improvements-wMFXZ
+[33m2829dbb[m HEAD@{208}: pull: Fast-forward
+[33m8f99399[m HEAD@{209}: pull: Fast-forward
+[33m1be1aae[m HEAD@{210}: pull: Fast-forward
+[33mb71c36c[m HEAD@{211}: pull: Fast-forward
+[33m0e594da[m HEAD@{212}: checkout: moving from main to claude/code-review-improvements-wMFXZ
+[33mb48d63a[m HEAD@{213}: pull: Fast-forward
+[33mc1a9010[m[33m ([m[1;31morigin/claude/cleanup-cache-sessions-1uCAl[m[33m, [m[1;32mclaude/cleanup-cache-sessions-1uCAl[m[33m)[m HEAD@{214}: checkout: moving from claude/review-seo-code-oU0CV to main
+[33m52d3d52[m[33m ([m[1;31morigin/claude/review-seo-code-oU0CV[m[33m, [m[1;32mclaude/review-seo-code-oU0CV[m[33m)[m HEAD@{215}: pull: Fast-forward
+[33m718f3ae[m HEAD@{216}: pull: Fast-forward
+[33m41b7649[m HEAD@{217}: pull: Fast-forward
+[33m4d27c9c[m HEAD@{218}: reset: moving to origin/claude/review-seo-code-oU0CV
+[33m4d27c9c[m HEAD@{219}: checkout: moving from codex/review-code-for-seo-optimization-7hxeat to claude/review-seo-code-oU0CV
+[33mdbce2cd[m[33m ([m[1;31morigin/codex/review-code-for-seo-optimization-7hxeat[m[33m, [m[1;32mcodex/review-code-for-seo-optimization-7hxeat[m[33m)[m HEAD@{220}: checkout: moving from main to codex/review-code-for-seo-optimization-7hxeat
+[33mc1a9010[m[33m ([m[1;31morigin/claude/cleanup-cache-sessions-1uCAl[m[33m, [m[1;32mclaude/cleanup-cache-sessions-1uCAl[m[33m)[m HEAD@{221}: reset: moving to claude/cleanup-cache-sessions-1uCAl
+[33m80d1556[m HEAD@{222}: checkout: moving from main to main
+[33m80d1556[m HEAD@{223}: checkout: moving from claude/cleanup-cache-sessions-1uCAl to main
+[33mc1a9010[m[33m ([m[1;31morigin/claude/cleanup-cache-sessions-1uCAl[m[33m, [m[1;32mclaude/cleanup-cache-sessions-1uCAl[m[33m)[m HEAD@{224}: checkout: moving from main to claude/cleanup-cache-sessions-1uCAl
+[33m80d1556[m HEAD@{225}: pull: Fast-forward
+[33md2dcbfe[m HEAD@{226}: pull: Fast-forward
+[33m919f52f[m HEAD@{227}: pull: Fast-forward
+[33mdc6e665[m HEAD@{228}: checkout: moving from codex/review-code-for-seo-optimization-7hxeat to main
+[33mdbce2cd[m[33m ([m[1;31morigin/codex/review-code-for-seo-optimization-7hxeat[m[33m, [m[1;32mcodex/review-code-for-seo-optimization-7hxeat[m[33m)[m HEAD@{229}: checkout: moving from main to codex/review-code-for-seo-optimization-7hxeat
+[33mdc6e665[m HEAD@{230}: pull: Fast-forward
+[33m1b35627[m HEAD@{231}: pull: Fast-forward
+[33m2c51d73[m HEAD@{232}: pull: Fast-forward
+[33me32666f[m HEAD@{233}: checkout: moving from claude/cleanup-cache-sessions-1uCAl to main
+[33mc1a9010[m[33m ([m[1;31morigin/claude/cleanup-cache-sessions-1uCAl[m[33m, [m[1;32mclaude/cleanup-cache-sessions-1uCAl[m[33m)[m HEAD@{234}: checkout: moving from claude/cleanup-cache-sessions-1uCAl to claude/cleanup-cache-sessions-1uCAl
+[33mc1a9010[m[33m ([m[1;31morigin/claude/cleanup-cache-sessions-1uCAl[m[33m, [m[1;32mclaude/cleanup-cache-sessions-1uCAl[m[33m)[m HEAD@{235}: checkout: moving from main to claude/cleanup-cache-sessions-1uCAl
+[33me32666f[m HEAD@{236}: checkout: moving from claude/cleanup-cache-sessions-1uCAl to main
+[33mc1a9010[m[33m ([m[1;31morigin/claude/cleanup-cache-sessions-1uCAl[m[33m, [m[1;32mclaude/cleanup-cache-sessions-1uCAl[m[33m)[m HEAD@{237}: pull: Fast-forward
+[33mb000223[m HEAD@{238}: checkout: moving from main to claude/cleanup-cache-sessions-1uCAl
+[33me32666f[m HEAD@{239}: pull: Fast-forward
+[33mb0e8d8d[m HEAD@{240}: checkout: moving from claude/style-videos-link-actresses-cZLaK to main
+[33mc3ac8e0[m[33m ([m[1;31morigin/claude/style-videos-link-actresses-cZLaK[m[33m, [m[1;32mclaude/style-videos-link-actresses-cZLaK[m[33m)[m HEAD@{241}: pull: Fast-forward
+[33mc860317[m HEAD@{242}: pull: Fast-forward
+[33m0b04b68[m HEAD@{243}: pull: Fast-forward
+[33md0d8d58[m HEAD@{244}: pull: Fast-forward
+[33m27178b7[m HEAD@{245}: pull: Fast-forward
+[33m5266cdd[m HEAD@{246}: pull: Fast-forward
+[33m38976ce[m HEAD@{247}: pull: Fast-forward
+[33m650e710[m HEAD@{248}: pull: Fast-forward
+[33m24159e1[m HEAD@{249}: pull: Fast-forward
+[33m04c9920[m HEAD@{250}: pull: Fast-forward
+[33mc8e344a[m HEAD@{251}: pull: Fast-forward
+[33ma7734e4[m HEAD@{252}: pull: Fast-forward
+[33m377b815[m HEAD@{253}: pull: Fast-forward
+[33m2d82e6f[m HEAD@{254}: pull: Fast-forward
+[33me1d9afe[m HEAD@{255}: pull: Fast-forward
+[33mc6d1c13[m HEAD@{256}: pull: Fast-forward
+[33mb0e8d8d[m HEAD@{257}: checkout: moving from main to claude/style-videos-link-actresses-cZLaK
+[33mb0e8d8d[m HEAD@{258}: reset: moving to origin/claude/style-videos-link-actresses-cZLaK
+[33mb0e8d8d[m HEAD@{259}: reset: moving to origin/claude/style-videos-link-actresses-cZLaK
+[33mf081d08[m[33m ([m[1;31morigin/claude/improve-shorts-layout-nA8gc[m[33m, [m[1;31morigin/claude/align-frame-ratios-BcBNW[m[33m, [m[1;32mclaude/improve-shorts-layout-nA8gc[m[33m, [m[1;32mclaude/align-frame-ratios-BcBNW[m[33m)[m HEAD@{260}: reset: moving to origin/claude/align-frame-ratios-BcBNW
+[33mc1738bd[m HEAD@{261}: checkout: moving from claude/style-videos-link-actresses-cZLaK to main
+[33mb0e8d8d[m HEAD@{262}: pull: Fast-forward
+[33m18f3839[m HEAD@{263}: pull: Fast-forward
+[33m62406f0[m HEAD@{264}: reset: moving to origin/claude/style-videos-link-actresses-cZLaK
+[33m62406f0[m HEAD@{265}: pull: Fast-forward
+[33mb0c3c51[m HEAD@{266}: pull: Fast-forward
+[33mcb333f1[m HEAD@{267}: pull: Fast-forward
+[33m5c3e424[m HEAD@{268}: pull: Fast-forward
+[33m1e6d363[m HEAD@{269}: checkout: moving from main to claude/style-videos-link-actresses-cZLaK
+[33mc1738bd[m HEAD@{270}: checkout: moving from main to main
+[33mc1738bd[m HEAD@{271}: checkout: moving from claude/align-frame-ratios-BcBNW to main
+[33mf081d08[m[33m ([m[1;31morigin/claude/improve-shorts-layout-nA8gc[m[33m, [m[1;31morigin/claude/align-frame-ratios-BcBNW[m[33m, [m[1;32mclaude/improve-shorts-layout-nA8gc[m[33m, [m[1;32mclaude/align-frame-ratios-BcBNW[m[33m)[m HEAD@{272}: reset: moving to ORIG_HEAD
+[33m5690389[m HEAD@{273}: pull: Fast-forward
+[33mf081d08[m[33m ([m[1;31morigin/claude/improve-shorts-layout-nA8gc[m[33m, [m[1;31morigin/claude/align-frame-ratios-BcBNW[m[33m, [m[1;32mclaude/improve-shorts-layout-nA8gc[m[33m, [m[1;32mclaude/align-frame-ratios-BcBNW[m[33m)[m HEAD@{274}: reset: moving to ORIG_HEAD
+[33m5690389[m HEAD@{275}: pull: Fast-forward
+[33mf081d08[m[33m ([m[1;31morigin/claude/improve-shorts-layout-nA8gc[m[33m, [m[1;31morigin/claude/align-frame-ratios-BcBNW[m[33m, [m[1;32mclaude/improve-shorts-layout-nA8gc[m[33m, [m[1;32mclaude/align-frame-ratios-BcBNW[m[33m)[m HEAD@{276}: reset: moving to ORIG_HEAD
+[33m5690389[m HEAD@{277}: pull: Fast-forward
+[33mf081d08[m[33m ([m[1;31morigin/claude/improve-shorts-layout-nA8gc[m[33m, [m[1;31morigin/claude/align-frame-ratios-BcBNW[m[33m, [m[1;32mclaude/improve-shorts-layout-nA8gc[m[33m, [m[1;32mclaude/align-frame-ratios-BcBNW[m[33m)[m HEAD@{278}: reset: moving to origin/claude/improve-shorts-layout-nA8gc
+[33m4d4f543[m HEAD@{279}: pull: Fast-forward
+[33m9e74ace[m HEAD@{280}: pull: Fast-forward
+[33m8afa363[m HEAD@{281}: pull: Fast-forward
+[33m347dbda[m HEAD@{282}: pull: Fast-forward
+[33mff94540[m HEAD@{283}: checkout: moving from main to claude/align-frame-ratios-BcBNW
+[33mc1738bd[m HEAD@{284}: pull: Fast-forward
+[33mdae0dd6[m HEAD@{285}: checkout: moving from claude/improve-shorts-layout-nA8gc to main
+[33mf081d08[m[33m ([m[1;31morigin/claude/improve-shorts-layout-nA8gc[m[33m, [m[1;31morigin/claude/align-frame-ratios-BcBNW[m[33m, [m[1;32mclaude/improve-shorts-layout-nA8gc[m[33m, [m[1;32mclaude/align-frame-ratios-BcBNW[m[33m)[m HEAD@{286}: checkout: moving from main to claude/improve-shorts-layout-nA8gc
+[33mdae0dd6[m HEAD@{287}: checkout: moving from claude/improve-shorts-layout-nA8gc to main
+[33mf081d08[m[33m ([m[1;31morigin/claude/improve-shorts-layout-nA8gc[m[33m, [m[1;31morigin/claude/align-frame-ratios-BcBNW[m[33m, [m[1;32mclaude/improve-shorts-layout-nA8gc[m[33m, [m[1;32mclaude/align-frame-ratios-BcBNW[m[33m)[m HEAD@{288}: commit: fix
+[33m7526587[m HEAD@{289}: checkout: moving from claude/add-short-video-samples-jPXso to claude/improve-shorts-layout-nA8gc
+[33m26e453c[m[33m ([m[1;31morigin/claude/add-short-video-samples-jPXso[m[33m, [m[1;32mclaude/add-short-video-samples-jPXso[m[33m)[m HEAD@{290}: reset: moving to origin/claude/add-short-video-samples-jPXso
+[33mb32ded1[m HEAD@{291}: pull: Fast-forward
+[33m91b08d0[m HEAD@{292}: pull: Fast-forward
+[33m41b54b0[m HEAD@{293}: pull: Fast-forward
+[33mb770e69[m HEAD@{294}: pull: Fast-forward
+[33m380eb8d[m HEAD@{295}: pull: Fast-forward
+[33ma3f22ea[m HEAD@{296}: pull: Fast-forward
+[33mdfae222[m HEAD@{297}: pull: Fast-forward
+[33m237e661[m HEAD@{298}: pull: Fast-forward
+[33me651561[m HEAD@{299}: pull: Fast-forward
+[33mee3638a[m HEAD@{300}: pull: Fast-forward
+[33md5dff24[m HEAD@{301}: pull: Fast-forward
+[33m9409274[m HEAD@{302}: pull: Fast-forward
+[33m55cfc71[m HEAD@{303}: pull: Fast-forward
+[33mb3138a6[m HEAD@{304}: pull: Fast-forward
+[33m85aed74[m HEAD@{305}: pull: Fast-forward
+[33m6a4eaf4[m HEAD@{306}: checkout: moving from main to claude/add-short-video-samples-jPXso
+[33mdae0dd6[m HEAD@{307}: pull: Fast-forward
+[33m71b47fd[m HEAD@{308}: checkout: moving from claude/clarify-task-requirements-Qlf1a to main
+[33mb12e26f[m[33m ([m[1;31morigin/claude/clarify-task-requirements-Qlf1a[m[33m, [m[1;32mclaude/clarify-task-requirements-Qlf1a[m[33m)[m HEAD@{309}: checkout: moving from main to claude/clarify-task-requirements-Qlf1a
+[33m71b47fd[m HEAD@{310}: pull: Fast-forward
+[33m08d7df4[m HEAD@{311}: checkout: moving from claude/fix-actress-template-syntax-NMBAR to main
+[33mbf9f335[m[33m ([m[1;31morigin/claude/fix-actress-template-syntax-NMBAR[m[33m, [m[1;32mclaude/fix-actress-template-syntax-NMBAR[m[33m)[m HEAD@{312}: checkout: moving from main to claude/fix-actress-template-syntax-NMBAR
+[33m08d7df4[m HEAD@{313}: checkout: moving from claude/fix-actress-template-syntax-NMBAR to main
+[33mbf9f335[m[33m ([m[1;31morigin/claude/fix-actress-template-syntax-NMBAR[m[33m, [m[1;32mclaude/fix-actress-template-syntax-NMBAR[m[33m)[m HEAD@{314}: pull: Fast-forward
+[33md97ff74[m HEAD@{315}: checkout: moving from main to claude/fix-actress-template-syntax-NMBAR
+[33m08d7df4[m HEAD@{316}: pull: Fast-forward
+[33m5ca61f4[m HEAD@{317}: checkout: moving from claude/fix-actress-template-syntax-NMBAR to main
+[33md97ff74[m HEAD@{318}: pull: Fast-forward
+[33ma21acc6[m HEAD@{319}: pull: Fast-forward
+[33ma9370a6[m HEAD@{320}: pull: Fast-forward
+[33m4141323[m HEAD@{321}: pull: Fast-forward
+[33mea9b25c[m HEAD@{322}: pull: Fast-forward
+[33m1fd4e85[m HEAD@{323}: pull: Fast-forward
+[33m2bafe2a[m HEAD@{324}: pull: Fast-forward
+[33m9dcba84[m HEAD@{325}: pull: Fast-forward
+[33md833b50[m HEAD@{326}: pull: Fast-forward
+[33m54a7dd9[m HEAD@{327}: pull: Fast-forward
+[33m8d431f3[m HEAD@{328}: pull: Fast-forward
+[33m4323162[m HEAD@{329}: pull: Fast-forward
+[33m0756443[m HEAD@{330}: pull: Fast-forward
+[33mf2d8b66[m HEAD@{331}: pull: Fast-forward
+[33mab03848[m HEAD@{332}: pull: Fast-forward
+[33m8f3a213[m HEAD@{333}: pull: Fast-forward
+[33m17c9671[m HEAD@{334}: checkout: moving from claude/improve-seo-G7jWV to claude/fix-actress-template-syntax-NMBAR
+[33m90f7d2b[m[33m ([m[1;31morigin/claude/improve-seo-G7jWV[m[33m, [m[1;32mclaude/improve-seo-G7jWV[m[33m)[m HEAD@{335}: commit: add favicon
+[33m8fbcb89[m HEAD@{336}: pull: Fast-forward
+[33mcfe9f71[m HEAD@{337}: pull: Fast-forward
+[33md0e753b[m HEAD@{338}: checkout: moving from claude/improve-seo-bwsOF to claude/improve-seo-G7jWV
+[33ma2661a2[m[33m ([m[1;31morigin/claude/improve-seo-bwsOF[m[33m, [m[1;32mclaude/improve-seo-bwsOF[m[33m)[m HEAD@{339}: pull: Fast-forward
+[33ma4e8c96[m HEAD@{340}: checkout: moving from main to claude/improve-seo-bwsOF
+[33m5ca61f4[m HEAD@{341}: pull: Fast-forward
+[33m4978f0d[m HEAD@{342}: checkout: moving from claude/audit-seo-structure-fRhAv to main
+[33m1b0d594[m[33m ([m[1;31morigin/claude/copy-audit-branch-XELIl[m[33m)[m HEAD@{343}: checkout: moving from claude/push-local-changes-j1AeW to claude/audit-seo-structure-fRhAv
+[33mbbbb1b4[m HEAD@{344}: commit: ローカルの変更を追加
+[33m1b0d594[m[33m ([m[1;31morigin/claude/copy-audit-branch-XELIl[m[33m)[m HEAD@{345}: checkout: moving from claude/audit-seo-structure-fRhAv to claude/push-local-changes-j1AeW
+[33m1b0d594[m[33m ([m[1;31morigin/claude/copy-audit-branch-XELIl[m[33m)[m HEAD@{346}: checkout: moving from main to claude/audit-seo-structure-fRhAv
+[33m4978f0d[m HEAD@{347}: checkout: moving from claude/audit-seo-structure-fRhAv to main
+[33m1b0d594[m[33m ([m[1;31morigin/claude/copy-audit-branch-XELIl[m[33m)[m HEAD@{348}: checkout: moving from main to claude/audit-seo-structure-fRhAv
+[33m4978f0d[m HEAD@{349}: checkout: moving from claude/audit-seo-structure-fRhAv to main
+[33m1b0d594[m[33m ([m[1;31morigin/claude/copy-audit-branch-XELIl[m[33m)[m HEAD@{350}: pull: Fast-forward
+[33m33dea10[m HEAD@{351}: pull: Fast-forward
+[33m453ab9b[m HEAD@{352}: pull: Fast-forward
+[33m1389bb0[m HEAD@{353}: checkout: moving from claude/reduce-search-spacing-Jpqln to claude/audit-seo-structure-fRhAv
+[33m99506f5[m HEAD@{354}: pull: Fast-forward
+[33m8fdf726[m HEAD@{355}: pull: Fast-forward
+[33m8368314[m HEAD@{356}: commit: OG画像を更新
+[33m3f3add7[m HEAD@{357}: pull: Fast-forward
+[33m2d228fc[m HEAD@{358}: commit: スクショを更新
+[33m05609f6[m HEAD@{359}: commit: CSSを修正
+[33me0f5831[m HEAD@{360}: pull: Fast-forward
+[33m857b7f7[m HEAD@{361}: pull: Fast-forward
+[33md00c032[m HEAD@{362}: pull: Fast-forward
+[33m6e9c347[m HEAD@{363}: pull: Fast-forward
+[33m728c05d[m HEAD@{364}: pull: Fast-forward
+[33md1b76bb[m HEAD@{365}: pull: Fast-forward
+[33m1a44f53[m HEAD@{366}: pull: Fast-forward
+[33m1ef566f[m HEAD@{367}: pull: Fast-forward
+[33m97dd062[m HEAD@{368}: pull: Fast-forward
+[33mc825190[m HEAD@{369}: pull: Fast-forward
+[33mefb175d[m HEAD@{370}: pull: Fast-forward
+[33mcd0c366[m HEAD@{371}: pull: Fast-forward
+[33m04317e3[m HEAD@{372}: commit: OG画像追加
+[33md8cde4e[m HEAD@{373}: checkout: moving from claude/seo-video-location-review-ntBta to claude/reduce-search-spacing-Jpqln
+[33m20f0acf[m HEAD@{374}: checkout: moving from claude/reduce-search-spacing-Jpqln to claude/seo-video-location-review-ntBta
+[33md8cde4e[m HEAD@{375}: checkout: moving from claude/seo-video-location-review-ntBta to claude/reduce-search-spacing-Jpqln
+[33m20f0acf[m HEAD@{376}: checkout: moving from claude/reduce-search-spacing-Jpqln to claude/seo-video-location-review-ntBta
+[33md8cde4e[m HEAD@{377}: checkout: moving from claude/seo-video-location-review-ntBta to claude/reduce-search-spacing-Jpqln
+[33m20f0acf[m HEAD@{378}: checkout: moving from claude/reduce-search-spacing-Jpqln to claude/seo-video-location-review-ntBta
+[33md8cde4e[m HEAD@{379}: pull: Fast-forward
+[33mf52245a[m HEAD@{380}: pull: Fast-forward
+[33mf151636[m HEAD@{381}: checkout: moving from claude/seo-video-location-review-ntBta to claude/reduce-search-spacing-Jpqln
+[33m20f0acf[m HEAD@{382}: pull: Fast-forward
+[33m19bc461[m HEAD@{383}: pull: Fast-forward
+[33m470c3d4[m HEAD@{384}: pull: Fast-forward
+[33m3fa8e9a[m HEAD@{385}: pull: Fast-forward
+[33m4329889[m HEAD@{386}: pull: Fast-forward
+[33m7638e36[m HEAD@{387}: pull: Fast-forward
+[33mc4fa027[m HEAD@{388}: pull: Fast-forward
+[33m56c424e[m HEAD@{389}: pull: Fast-forward
+[33md13b55f[m HEAD@{390}: pull: Fast-forward
+[33m8ac45f3[m HEAD@{391}: pull: Fast-forward
+[33mf2597ef[m HEAD@{392}: pull: Fast-forward
+[33mcbe6a51[m HEAD@{393}: pull: Fast-forward
+[33me3b2e34[m HEAD@{394}: pull: Fast-forward
+[33m28b4cde[m HEAD@{395}: pull: Fast-forward
+[33m5b7005e[m HEAD@{396}: pull: Fast-forward
+[33m1593232[m HEAD@{397}: checkout: moving from claude/fix-thumbnail-sizing-PeTmq to claude/seo-video-location-review-ntBta
+[33md6ea2c8[m HEAD@{398}: checkout: moving from claude/seo-video-location-review-ntBta to claude/fix-thumbnail-sizing-PeTmq
+[33m1593232[m HEAD@{399}: checkout: moving from claude/fix-thumbnail-sizing-PeTmq to claude/seo-video-location-review-ntBta
+[33md6ea2c8[m HEAD@{400}: pull: Fast-forward
+[33meb21e91[m HEAD@{401}: pull: Fast-forward
+[33m2fff9de[m HEAD@{402}: pull: Fast-forward
+[33m8d4a709[m HEAD@{403}: pull: Fast-forward
+[33m53e264a[m HEAD@{404}: pull: Fast-forward
+[33m5586230[m HEAD@{405}: pull: Fast-forward
+[33mbd91192[m HEAD@{406}: pull: Fast-forward
+[33m2266234[m HEAD@{407}: pull: Fast-forward
+[33mfbbd8ba[m HEAD@{408}: pull: Fast-forward
+[33me6f3ac2[m HEAD@{409}: pull: Fast-forward
+[33m20c007d[m HEAD@{410}: checkout: moving from claude/av-ranking-titles-jW8K6 to claude/fix-thumbnail-sizing-PeTmq
+[33m48e95b9[m HEAD@{411}: checkout: moving from claude/fix-thumbnail-sizing-PeTmq to claude/av-ranking-titles-jW8K6
+[33m20c007d[m HEAD@{412}: checkout: moving from claude/av-ranking-titles-jW8K6 to claude/fix-thumbnail-sizing-PeTmq
+[33m48e95b9[m HEAD@{413}: pull: Fast-forward
+[33ma300ba3[m HEAD@{414}: pull: Fast-forward
+[33m8b88a43[m HEAD@{415}: pull: Fast-forward
+[33med85545[m HEAD@{416}: pull: Fast-forward
+[33m6c0367d[m HEAD@{417}: pull: Fast-forward
+[33m4373147[m HEAD@{418}: pull: Fast-forward
+[33m001709c[m HEAD@{419}: pull: Fast-forward
+[33md8be5cd[m HEAD@{420}: pull: Fast-forward
+[33md4ab2ad[m HEAD@{421}: pull: Fast-forward
+[33m6edc536[m HEAD@{422}: pull: Fast-forward
+[33mad8aa48[m HEAD@{423}: pull: Fast-forward
+[33mcaf8572[m HEAD@{424}: pull: Fast-forward
+[33me9be9af[m HEAD@{425}: checkout: moving from claude/review-tweet-affiliate-ElRXe to claude/av-ranking-titles-jW8K6
+[33mb755aae[m HEAD@{426}: checkout: moving from claude/suggest-av-ranking-title-6jD9A to claude/review-tweet-affiliate-ElRXe
+[33me3ada5c[m HEAD@{427}: checkout: moving from main to claude/suggest-av-ranking-title-6jD9A
+[33m4978f0d[m HEAD@{428}: checkout: moving from claude/review-tweet-affiliate-ElRXe to main
+[33mb755aae[m HEAD@{429}: checkout: moving from claude/suggest-av-ranking-title-6jD9A to claude/review-tweet-affiliate-ElRXe
+[33me3ada5c[m HEAD@{430}: pull: Fast-forward
+[33mff9d74e[m HEAD@{431}: checkout: moving from claude/review-tweet-affiliate-ElRXe to claude/suggest-av-ranking-title-6jD9A
+[33mb755aae[m HEAD@{432}: pull: Fast-forward
+[33m0151a82[m HEAD@{433}: pull: Fast-forward
+[33ma5c869d[m HEAD@{434}: pull: Fast-forward
+[33m295c284[m HEAD@{435}: pull: Fast-forward
+[33md17dc58[m HEAD@{436}: pull: Fast-forward
+[33m9e3ecf2[m HEAD@{437}: pull: Fast-forward
+[33m4f09015[m HEAD@{438}: pull: Fast-forward
+[33m67dff83[m HEAD@{439}: pull: Fast-forward
+[33md645609[m HEAD@{440}: pull: Fast-forward
+[33mbb4af06[m HEAD@{441}: pull: Fast-forward
+[33m35df411[m HEAD@{442}: checkout: moving from claude/add-actress-photos-ranking-4H1XI to claude/review-tweet-affiliate-ElRXe
+[33m7453cea[m HEAD@{443}: commit (merge): Merge remote-tracking branch 'origin/claude/sync-files-to-git-hoDqQ' into claude/add-actress-photos-ranking-4H1XI
+[33m2a65ca2[m HEAD@{444}: commit (merge): merge: breadcrumbパンくずリスト修正をマージ
+[33m732a2b2[m HEAD@{445}: merge origin/claude/sync-files-to-git-hoDqQ: Merge made by the 'ort' strategy.
+[33m7a0ba37[m HEAD@{446}: reset: moving to ORIG_HEAD
+[33m7a0ba37[m HEAD@{447}: reset: moving to ORIG_HEAD
+[33m7a0ba37[m HEAD@{448}: reset: moving to ORIG_HEAD
+[33m7a0ba37[m HEAD@{449}: checkout: moving from claude/sync-files-to-git-hoDqQ to claude/add-actress-photos-ranking-4H1XI
+[33m181979d[m HEAD@{450}: checkout: moving from claude/add-actress-photos-ranking-4H1XI to claude/sync-files-to-git-hoDqQ
+[33m7a0ba37[m HEAD@{451}: commit: サーバーの内容を反映
+[33m389ad66[m HEAD@{452}: pull origin claude/add-actress-photos-ranking-4H1XI: Fast-forward
+[33ma438953[m HEAD@{453}: reset: moving to HEAD
+[33ma438953[m HEAD@{454}: pull: Fast-forward
+[33m698df56[m HEAD@{455}: pull: Fast-forward
+[33m9877e1a[m HEAD@{456}: pull: Fast-forward
+[33m161baba[m HEAD@{457}: pull: Fast-forward
+[33m894b367[m HEAD@{458}: pull: Fast-forward
+[33m7c57b2d[m HEAD@{459}: pull: Fast-forward
+[33m3a696f0[m HEAD@{460}: pull: Fast-forward
+[33me30e39c[m HEAD@{461}: pull: Fast-forward
+[33made4c51[m HEAD@{462}: pull: Fast-forward
+[33m0d4653d[m HEAD@{463}: pull: Fast-forward
+[33m3c49ab3[m HEAD@{464}: pull: Fast-forward
+[33m4fb8ff0[m HEAD@{465}: pull: Fast-forward
+[33m0077fc1[m HEAD@{466}: pull: Fast-forward
+[33m537ce77[m HEAD@{467}: pull: Fast-forward
+[33me0ff800[m HEAD@{468}: pull: Fast-forward
+[33m3e1526c[m HEAD@{469}: pull: Fast-forward
+[33m2c2c1cf[m HEAD@{470}: pull: Fast-forward
+[33mc846416[m HEAD@{471}: pull: Fast-forward
+[33mb368e4c[m HEAD@{472}: pull: Fast-forward
+[33m87401ed[m HEAD@{473}: pull: Fast-forward
+[33m3b664a6[m HEAD@{474}: pull: Fast-forward
+[33m6363f80[m HEAD@{475}: pull: Fast-forward
+[33m741407d[m HEAD@{476}: pull: Fast-forward
+[33m0617a77[m HEAD@{477}: pull: Fast-forward
+[33m205dba1[m HEAD@{478}: checkout: moving from claude/check-site-accessibility-xxD5u to claude/add-actress-photos-ranking-4H1XI
+[33mc41bcdd[m HEAD@{479}: pull: Fast-forward
+[33m2e3b642[m HEAD@{480}: pull: Fast-forward
+[33md576753[m HEAD@{481}: pull: Fast-forward
+[33m66d62e1[m HEAD@{482}: pull: Fast-forward
+[33m0705c92[m HEAD@{483}: pull: Fast-forward
+[33md96fb40[m HEAD@{484}: pull: Fast-forward
+[33mc2c24ef[m HEAD@{485}: pull: Fast-forward
+[33m09014f1[m HEAD@{486}: pull: Fast-forward
+[33m5e70ed8[m HEAD@{487}: pull: Fast-forward
+[33m77dc3b4[m HEAD@{488}: pull: Fast-forward
+[33m901ada3[m HEAD@{489}: pull: Fast-forward
+[33m5504c36[m HEAD@{490}: pull: Fast-forward
+[33m724739d[m HEAD@{491}: pull: Fast-forward
+[33m548d146[m HEAD@{492}: pull: Fast-forward
+[33m6407542[m HEAD@{493}: pull: Fast-forward
+[33ma0507b8[m HEAD@{494}: pull: Fast-forward
+[33mb6767c7[m HEAD@{495}: pull: Fast-forward
+[33mcd9eb01[m HEAD@{496}: pull: Fast-forward
+[33m85735b8[m HEAD@{497}: checkout: moving from claude/fanza-affiliate-site-dHgVN to claude/check-site-accessibility-xxD5u
+[33m780d71a[m HEAD@{498}: pull origin claude/check-site-accessibility-xxD5u: Fast-forward
+[33ma1a0028[m HEAD@{499}: pull origin claude/check-site-accessibility-xxD5u: Fast-forward
+[33m23f83d0[m HEAD@{500}: pull origin claude/check-site-accessibility-xxD5u: Fast-forward
+[33m39e7a26[m HEAD@{501}: pull origin claude/check-site-accessibility-xxD5u: Fast-forward
+[33me1af235[m HEAD@{502}: pull origin claude/check-site-accessibility-xxD5u: Fast-forward
+[33m908cc4b[m HEAD@{503}: reset: moving to origin/claude/check-site-accessibility-xxD5u
+[33mff3df6f[m HEAD@{504}: commit (merge): Resolve merge conflicts - accept remote version
+[33ma6084d0[m HEAD@{505}: commit (merge): Merge conflict resolved - remove actress feature
+[33m495babe[m HEAD@{506}: reset: moving to ORIG_HEAD
+[33m495babe[m HEAD@{507}: reset: moving to ORIG_HEAD
+[33m495babe[m HEAD@{508}: pull: Fast-forward
+[33mdc88538[m HEAD@{509}: pull: Fast-forward
+[33m352ad5e[m HEAD@{510}: pull: Fast-forward
+[33mf73bd1e[m HEAD@{511}: pull: Fast-forward
+[33mfc8b280[m HEAD@{512}: pull: Fast-forward
+[33md6c8790[m HEAD@{513}: pull: Fast-forward
+[33mfac0c46[m HEAD@{514}: pull: Fast-forward
+[33m479b0d4[m HEAD@{515}: pull: Fast-forward
+[33m563a6d4[m HEAD@{516}: pull: Fast-forward
+[33m401c96e[m HEAD@{517}: pull: Fast-forward
+[33m86d444e[m HEAD@{518}: pull: Fast-forward
+[33mac2a641[m HEAD@{519}: pull: Fast-forward
+[33m98c70b8[m HEAD@{520}: pull: Fast-forward
+[33m9dd5375[m HEAD@{521}: pull: Fast-forward
+[33mc13ef33[m HEAD@{522}: pull: Fast-forward
+[33m69ea184[m HEAD@{523}: pull: Fast-forward
+[33m2722e0c[m HEAD@{524}: pull: Fast-forward
+[33mdcdca9c[m HEAD@{525}: pull: Fast-forward
+[33mc8b9160[m HEAD@{526}: pull: Fast-forward
+[33m1f95562[m HEAD@{527}: pull: Fast-forward
+[33m63403cc[m HEAD@{528}: pull: Fast-forward
+[33m533b30e[m HEAD@{529}: pull: Fast-forward
+[33m250b3e1[m HEAD@{530}: pull: Fast-forward
+[33m46e0daa[m HEAD@{531}: pull: Fast-forward
+[33mec3ca11[m HEAD@{532}: pull: Fast-forward
+[33m84455ce[m HEAD@{533}: pull: Fast-forward
+[33md812313[m HEAD@{534}: pull: Fast-forward
+[33m13aed6e[m HEAD@{535}: pull: Fast-forward
+[33me400e6e[m HEAD@{536}: pull: Fast-forward
+[33meaa9f52[m HEAD@{537}: pull: Fast-forward
+[33m39bcc07[m HEAD@{538}: pull: Fast-forward
+[33mffb7458[m HEAD@{539}: pull: Fast-forward
+[33m22120ca[m HEAD@{540}: pull: Fast-forward
+[33m5da13ed[m HEAD@{541}: pull: Fast-forward
+[33m8b3b8ac[m HEAD@{542}: pull: Fast-forward
+[33m605c4ff[m HEAD@{543}: pull: Fast-forward
+[33md31c13c[m HEAD@{544}: pull: Fast-forward
+[33m99b1bc2[m HEAD@{545}: pull: Fast-forward
+[33mbc98f59[m HEAD@{546}: checkout: moving from main to claude/fanza-affiliate-site-dHgVN
+[33m4978f0d[m HEAD@{547}: clone: from https://github.com/shogayakibento/video.git
