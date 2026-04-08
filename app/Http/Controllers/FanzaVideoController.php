@@ -42,13 +42,15 @@ class FanzaVideoController extends Controller
             'session_id' => session()->getId(),
         ]);
 
-        // サイドバー: 同じ女優の他作品
+        // サイドバー: 同じ女優の他作品（女優なしの場合はジャンルで代替）
         $primaryActressId = $item['iteminfo']['actress'][0]['id'] ?? null;
         $actressItems     = [];
+        $sidebarByGenre   = false;
+
         if ($primaryActressId) {
             $actressResult = $api->getItems([
-                'service'    => $itemService,
-                'floor'      => $itemFloor,
+                'service'    => 'digital',
+                'floor'      => 'videoa',
                 'article'    => 'actress',
                 'article_id' => $primaryActressId,
                 'hits'       => 7,
@@ -61,10 +63,25 @@ class FanzaVideoController extends Controller
             $actressItems = array_slice($actressItems, 0, 6);
         }
 
+        if (empty($actressItems)) {
+            $sidebarByGenre = true;
+            $popularResult = $api->getItems([
+                'service' => $itemService,
+                'floor'   => $itemFloor,
+                'hits'    => 7,
+                'sort'    => 'rank',
+            ]);
+            $actressItems = array_values(array_filter(
+                $popularResult['result']['items'] ?? [],
+                fn($i) => ($i['content_id'] ?? '') !== $contentId
+            ));
+            $actressItems = array_slice($actressItems, 0, 6);
+        }
+
         // この作品を見た人はこちらも視聴しています（協調フィルタリング）
         $alsoWatched = $this->getAlsoWatched($contentId, $itemService, $itemFloor, $item, $api);
 
-        return view('video.show', compact('item', 'actressItems', 'alsoWatched'));
+        return view('video.show', compact('item', 'actressItems', 'alsoWatched', 'sidebarByGenre'));
     }
 
     private function getAlsoWatched(string $contentId, string $service, string $floor, array $item, FanzaApiService $api): array

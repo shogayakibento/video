@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MgsVideo;
+use App\Models\Video;
 use App\Services\FanzaApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -213,6 +215,7 @@ public function index(Request $request, FanzaApiService $api)
         $sort = $request->input('sort', 'rank');
         $cast = $request->input('cast', 'all'); // all / solo / multi
         $hits = 20;
+        $actressName = $actress['name'] ?? '';
 
         $baseParams = [
             'service'    => 'digital',
@@ -222,30 +225,63 @@ public function index(Request $request, FanzaApiService $api)
             'article_id' => $id,
         ];
 
+        // === MGS ===
+        $mgsTotal  = 0;
+        $mgsVideos = collect();
+        if ($actressName) {
+            $mgsQuery = MgsVideo::where('actress', 'like', "%{$actressName}%");
+
+            // sort
+            $mgsQuery = match ($sort) {
+                'date'   => $mgsQuery->orderByDesc('release_date'),
+                'review' => $mgsQuery->orderByDesc('review_score'),
+                default  => $mgsQuery->orderBy('mgs_rank'),
+            };
+
+            // cast filter（actress文字列をスペース/カンマで分割して人数判定）
+            if ($cast === 'solo') {
+                $mgsQuery = $mgsQuery->where(function ($q) {
+                    $q->whereRaw("actress NOT REGEXP '[, ]'")
+                      ->orWhereNull('actress');
+                });
+            } elseif ($cast === 'multi') {
+                $mgsQuery = $mgsQuery->whereRaw("actress REGEXP '[, ]'");
+            }
+
+            $mgsTotal   = $mgsQuery->count();
+            $startIndex = ($page - 1) * $hits;
+            if ($startIndex < $mgsTotal) {
+                $mgsVideos = $mgsQuery->offset($startIndex)->limit(min($hits, $mgsTotal - $startIndex))->get();
+            }
+        }
+
+        // === FANZA ===
+        $fanzaStart  = max(0, ($page - 1) * $hits - $mgsTotal); // FANZA内0始まりオフセット
+        $fanzaNeeded = $hits - $mgsVideos->count();              // このページで必要なFANZA件数
+        $items       = [];
+        $fanzaTotal  = 0;
+
         if ($cast === 'all') {
-            $offset     = (($page - 1) * $hits) + 1;
             $itemResult = $api->getItems(array_merge($baseParams, [
-                'hits'   => $hits,
-                'offset' => $offset,
+                'hits'   => max(1, $fanzaNeeded),
+                'offset' => $fanzaStart + 1,
             ]));
-            $items      = $itemResult['result']['items'] ?? [];
-            $totalCount = (int) ($itemResult['result']['total_count'] ?? 0);
-            $totalPages = min((int) ceil($totalCount / $hits), 50);
+            $fanzaTotal = (int) ($itemResult['result']['total_count'] ?? 0);
+            $items      = $fanzaNeeded > 0 ? ($itemResult['result']['items'] ?? []) : [];
         } else {
-            // 最大100件取得してPHP側で絞り込み・ページネーション
-            $itemResult = $api->getItems(array_merge($baseParams, [
-                'hits'   => 100,
-                'offset' => 1,
-            ]));
-            $allItems = $itemResult['result']['items'] ?? [];
-            $filtered = array_values(array_filter($allItems, function ($item) use ($cast) {
+            $itemResult = $api->getItems(array_merge($baseParams, ['hits' => 100, 'offset' => 1]));
+            $allItems   = $itemResult['result']['items'] ?? [];
+            $filtered   = array_values(array_filter($allItems, function ($item) use ($cast) {
                 $count = count($item['iteminfo']['actress'] ?? []);
                 return $cast === 'solo' ? $count <= 1 : $count > 1;
             }));
-            $totalCount = count($filtered);
-            $items      = array_slice($filtered, ($page - 1) * $hits, $hits);
-            $totalPages = max(1, (int) ceil($totalCount / $hits));
+            $fanzaTotal = count($filtered);
+            $items      = $fanzaNeeded > 0 ? array_slice($filtered, $fanzaStart, $fanzaNeeded) : [];
         }
+
+        $combinedTotal = $mgsTotal + $fanzaTotal;
+        $totalCount    = $combinedTotal;
+        $totalPages    = min((int) ceil($combinedTotal / $hits), 50 + (int) ceil($mgsTotal / $hits));
 
         // --- Similar Actresses (co-star based) ---
         $cacheKey = 'similar_actresses_v14_' . $id;
@@ -260,6 +296,7 @@ public function index(Request $request, FanzaApiService $api)
         return view('actress.show', [
             'actress'          => $actress,
             'items'            => $items,
+            'mgsVideos'        => $mgsVideos,
             'currentPage'      => $page,
             'totalPages'       => $totalPages,
             'totalCount'       => $totalCount,

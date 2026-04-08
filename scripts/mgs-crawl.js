@@ -107,7 +107,7 @@ async function getExclusiveActressNames(page) {
 async function getProductUrlsByActress(page, actressName) {
     log(`  「${actressName}」の作品を取得中...`);
 
-    const productUrls = new Set();
+    const productUrls = new Map();
     let pageNum = 1;
 
     while (true) {
@@ -118,12 +118,38 @@ async function getProductUrlsByActress(page, actressName) {
         await sleep(800);
 
         const found = await page.evaluate(() => {
-            const links = document.querySelectorAll('a[href*="/product/product_detail/"]');
-            return [...new Set(Array.from(links).map(a => a.href.split('?')[0]))];
+            const items = [];
+            // 各商品カードを取得
+            const cards = document.querySelectorAll('.rank_list li, .list_items li, li.s_list');
+            cards.forEach(card => {
+                const a = card.querySelector('a[href*="/product/product_detail/"]');
+                if (!a) return;
+                const url = a.href.split('?')[0];
+
+                // レビュースコア（例: 4.6\n(15件)）
+                const rateEl = card.querySelector('p.review');
+                let reviewScore = null, reviewCount = 0;
+                if (rateEl) {
+                    const text = rateEl.textContent;
+                    const scoreMatch = text.match(/(\d+\.\d+)/);
+                    const countMatch = text.match(/\((\d+)\s*件\)/);
+                    if (scoreMatch) reviewScore = parseFloat(scoreMatch[1]);
+                    if (countMatch) reviewCount = parseInt(countMatch[1]);
+                }
+
+                items.push({ url, reviewScore, reviewCount, releaseDate: null });
+            });
+
+            // カード構造が見つからない場合はURLのみ
+            if (items.length === 0) {
+                const links = document.querySelectorAll('a[href*="/product/product_detail/"]');
+                return [...new Set(Array.from(links).map(a => a.href.split('?')[0]))].map(url => ({ url, reviewScore: null, reviewCount: 0, releaseDate: null }));
+            }
+            return items;
         });
 
         if (found.length === 0) break;
-        found.forEach(u => productUrls.add(u));
+        found.forEach(item => productUrls.set(item.url, item));
 
         log(`    ページ${pageNum}: ${found.length}件（累計: ${productUrls.size}件）`);
 
@@ -138,11 +164,11 @@ async function getProductUrlsByActress(page, actressName) {
         if (LIMIT > 0 && productUrls.size >= LIMIT) break;
     }
 
-    return [...productUrls];
+    return [...productUrls.values()];
 }
 
 // -------- 作品ページから情報取得 --------
-async function scrapeProduct(browser, productUrl) {
+async function scrapeProduct(browser, productUrl, listingData = {}) {
     const page = await setupPage(browser);
     let sampleUrl = null;
 
@@ -181,13 +207,22 @@ async function scrapeProduct(browser, productUrl) {
                          .replace(/\s*[：:]\s*MGS.*$/, '')
                          .trim();
 
+            // レビュー取得（評価：のth/tdから）
+            const ratingText = getThTd('評価：');
+            const scoreMatch = ratingText.match(/(\d+\.\d+)/);
+            const countMatch = ratingText.match(/\((\d+)\s*件\)/);
+            const reviewScore = scoreMatch ? parseFloat(scoreMatch[1]) : null;
+            const reviewCount = countMatch ? parseInt(countMatch[1]) : 0;
+
             return {
                 title,
                 thumbnail_url: getMeta('og:image'),
-                actress:  getThTd('出演：'),
-                maker:    getThTd('メーカー：'),
-                genre:    getThTd('ジャンル：'),
-                release_date: getThTd('配信日：').replace(/\//g, '-'),
+                actress:      getThTd('出演：'),
+                maker:        getThTd('メーカー：'),
+                genre:        getThTd('ジャンル：'),
+                release_date: getThTd('配信開始日：').replace(/\//g, '-'),
+                review_score: reviewScore,
+                review_count: reviewCount,
             };
         });
 
@@ -213,7 +248,10 @@ async function scrapeProduct(browser, productUrl) {
             thumbnail_url:    info.thumbnail_url,
             sample_video_url: sampleUrl,
             affiliate_url:    buildAffUrl(productCode),
-            release_date:     info.release_date || null,
+            release_date:     info.release_date || listingData.releaseDate || null,
+            review_score:     listingData.reviewScore ?? info.review_score,
+            review_count:     listingData.reviewCount || info.review_count,
+            mgs_rank:         listingData.mgsRank ?? null,
         };
 
     } catch (err) {
@@ -247,23 +285,24 @@ async function main() {
 
         log(`[2/3] ${actressNames.length}人の作品URLを収集中...`);
 
-        const productUrls = new Set();
+        const productMap = new Map(); // url → {reviewScore, reviewCount, releaseDate}
         for (const name of actressNames) {
-            const urls = await getProductUrlsByActress(page, name);
-            urls.forEach(u => productUrls.add(u));
-            log(`  作品累計: ${productUrls.size}件`);
+            const items = await getProductUrlsByActress(page, name);
+            items.forEach(item => productMap.set(item.url, item));
+            log(`  作品累計: ${productMap.size}件`);
             await sleep(1000);
-            if (LIMIT > 0 && productUrls.size >= LIMIT) break;
+            if (LIMIT > 0 && productMap.size >= LIMIT) break;
         }
 
         await page.close();
 
-        const urlList = [...productUrls].slice(0, LIMIT || Infinity);
-        log(`[3/3] ${urlList.length}件の作品を詳細取得中...`);
+        const itemList = [...productMap.values()].slice(0, LIMIT || Infinity);
+        log(`[3/3] ${itemList.length}件の作品を詳細取得中...`);
 
-        for (let i = 0; i < urlList.length; i++) {
-            log(`  [${i + 1}/${urlList.length}] ${urlList[i]}`);
-            const data = await scrapeProduct(browser, urlList[i]);
+        for (let i = 0; i < itemList.length; i++) {
+            const { url, reviewScore, reviewCount, releaseDate } = itemList[i];
+            log(`  [${i + 1}/${itemList.length}] ${url}`);
+            const data = await scrapeProduct(browser, url, { reviewScore, reviewCount, releaseDate, mgsRank: i + 1 });
             if (data) results.push(data);
             await sleep(1500);
         }

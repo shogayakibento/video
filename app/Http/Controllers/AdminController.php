@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ClickLog;
+use App\Models\MgsVideo;
 use App\Models\Tweet;
 use App\Models\Video;
 use App\Services\DmmApiService;
@@ -150,7 +151,7 @@ class AdminController extends Controller
         $productCode = strtolower(trim($request->input('product_code')));
 
         // 既存チェック
-        $existing = Video::where('dmm_content_id', $productCode)->where('store', 'mgs')->first();
+        $existing = MgsVideo::where('product_code', $productCode)->first();
         if ($existing) {
             return back()->with('success', "「{$existing->title}」はすでに登録済みです。");
         }
@@ -161,9 +162,8 @@ class AdminController extends Controller
             return back()->withInput()->withErrors(['product_code' => $result['error']]);
         }
 
-        Video::create([
-            'dmm_content_id'   => $productCode,
-            'store'            => 'mgs',
+        MgsVideo::create([
+            'product_code'     => $productCode,
             'title'            => $result['title'],
             'actress'          => $result['actress'],
             'thumbnail_url'    => $result['thumbnail_url'],

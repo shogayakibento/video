@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Video;
+use App\Models\MgsVideo;
 use Illuminate\Console\Command;
 
 class MgsCrawl extends Command
@@ -85,11 +85,10 @@ class MgsCrawl extends Command
 
         $saved = $updated = 0;
 
-        foreach ($videos as $v) {
+        foreach ($videos as $i => $v) {
             if (empty($v['product_code']) || empty($v['title'])) continue;
 
             $data = [
-                'store'         => 'mgs',
                 'title'         => $v['title'],
                 'actress'       => $v['actress']       ?? '',
                 'thumbnail_url' => $v['thumbnail_url'] ?? '',
@@ -97,21 +96,22 @@ class MgsCrawl extends Command
                 'genre'         => $v['genre']         ?? '',
                 'maker'         => $v['maker']         ?? '',
                 'release_date'  => $v['release_date']  ?: null,
+                'review_score'  => $v['review_score']  ?? null,
+                'review_count'  => $v['review_count']  ?? 0,
+                'mgs_rank'      => $i + 1,
             ];
 
             if (!empty($v['sample_video_url'])) {
                 $data['sample_video_url'] = $v['sample_video_url'];
             }
 
-            $existing = Video::where('dmm_content_id', $v['product_code'])
-                ->where('store', 'mgs')
-                ->first();
+            $existing = MgsVideo::where('product_code', $v['product_code'])->first();
 
             if ($existing) {
                 $existing->update($data);
                 $updated++;
             } else {
-                Video::create(array_merge($data, ['dmm_content_id' => $v['product_code']]));
+                MgsVideo::create(array_merge($data, ['product_code' => $v['product_code']]));
                 $saved++;
             }
 

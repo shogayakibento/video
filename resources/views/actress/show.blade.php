@@ -98,7 +98,7 @@
             @endif
         </div>
 
-        {{-- Sort & Cast Filter --}}
+        {{-- Sort & Cast Filter（FANZAのみ対象） --}}
         <div class="filter-bar" style="flex-wrap: wrap; gap: 6px;">
             <a href="{{ route('actress.show', $actressId) }}?sort=rank&cast={{ $cast }}" class="tab-btn {{ $sort === 'rank' ? 'active' : '' }}">人気順</a>
             <a href="{{ route('actress.show', $actressId) }}?sort=date&cast={{ $cast }}" class="tab-btn {{ $sort === 'date' ? 'active' : '' }}">新着順</a>
@@ -107,20 +107,21 @@
             <a href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast=all"   class="tab-btn {{ $cast === 'all'   ? 'active' : '' }}">全て</a>
             <a href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast=solo"  class="tab-btn {{ $cast === 'solo'  ? 'active' : '' }}">単体</a>
             <a href="{{ route('actress.show', $actressId) }}?sort={{ $sort }}&cast=multi" class="tab-btn {{ $cast === 'multi' ? 'active' : '' }}">複数出演</a>
-            @if($cast !== 'all')
-                <span class="filter-count">{{ number_format($totalCount) }}件</span>
-            @endif
         </div>
 
-        {{-- Items Grid --}}
+        {{-- MGS + FANZA 統合グリッド --}}
         <div class="items-grid content-grid">
-            @forelse($items as $index => $item)
-                @include('partials.item-card', ['item' => $item, 'rank' => $sort === 'rank' ? (($currentPage - 1) * 20) + $index + 1 : null, 'eager' => $index === 0 && $currentPage === 1])
-            @empty
+            @foreach($mgsVideos as $video)
+                @include('partials.mgs-card', ['video' => $video])
+            @endforeach
+            @foreach($items as $index => $item)
+                @include('partials.item-card', ['item' => $item, 'rank' => null, 'eager' => $index === 0 && $currentPage === 1 && $mgsVideos->isEmpty()])
+            @endforeach
+            @if($mgsVideos->isEmpty() && empty($items))
                 <div class="empty-state">
                     <p>作品が見つかりませんでした。</p>
                 </div>
-            @endforelse
+            @endif
         </div>
 
         @include('partials.ad-inline', ['bannerId' => '1829_300_250'])

@@ -9,7 +9,7 @@
     $thumbnail   = $video->thumbnail_url;
     $sampleVideo = $video->sample_video_url;
     $affUrl      = $video->affiliate_url;
-    $productCode = $video->dmm_content_id;
+    $productCode = $video->product_code;
 
     $firstActress = $actress ? trim(explode(',', $actress)[0]) : null;
 
@@ -138,12 +138,12 @@
                 <div class="space-y-4">
                     @foreach($related as $rel)
                         <div class="flex gap-3 group">
-                            <a href="{{ route('mgs.show', $rel->dmm_content_id) }}" class="flex-shrink-0 w-32">
+                            <a href="{{ route('mgs.show', $rel->product_code) }}" class="flex-shrink-0 w-32">
                                 <img src="{{ $rel->thumbnail_url }}" alt="{{ $rel->title }}"
                                      class="w-full aspect-[3/2] object-cover rounded group-hover:opacity-80 transition" loading="lazy">
                             </a>
                             <div class="flex-1 min-w-0">
-                                <a href="{{ route('mgs.show', $rel->dmm_content_id) }}"
+                                <a href="{{ route('mgs.show', $rel->product_code) }}"
                                    class="text-sm line-clamp-2 hover:text-accent transition">{{ $rel->title }}</a>
                                 @if($rel->actress)
                                     <p class="text-xs text-gray-400 mt-1">{{ trim(explode(',', $rel->actress)[0]) }}</p>
