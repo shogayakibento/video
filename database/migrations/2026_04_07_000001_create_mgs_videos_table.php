@@ -21,11 +21,11 @@ return new class extends Migration
             $table->date('release_date')->nullable();
             $table->decimal('review_score', 3, 1)->nullable();
             $table->unsignedInteger('review_count')->default(0);
-            $table->unsignedInteger('click_count')->default(0);
+            $table->unsignedInteger('mgs_rank')->nullable();
             $table->timestamps();
 
             $table->index('release_date');
-            $table->index('click_count');
+            $table->index('mgs_rank');
             $table->index('review_score');
         });
     }
