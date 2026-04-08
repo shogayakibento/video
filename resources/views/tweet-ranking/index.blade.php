@@ -83,6 +83,15 @@
 </div>
 @endsection
 
+@push('head_links')
+@if($videos->currentPage() > 1)
+<link rel="prev" href="{{ $videos->previousPageUrl() }}">
+@endif
+@if($videos->hasMorePages())
+<link rel="next" href="{{ $videos->nextPageUrl() }}">
+@endif
+@endpush
+
 @push('scripts')
 @if($videos->isNotEmpty())
 <script type="application/ld+json">

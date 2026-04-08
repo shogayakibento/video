@@ -207,6 +207,21 @@
         }
     }
     </script>
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "Organization",
+        "name": "FanzaGate",
+        "url": "{{ url('/') }}",
+        "logo": {
+            "@@type": "ImageObject",
+            "url": "{{ asset('images/og-default.webp') }}",
+            "width": 1200,
+            "height": 630
+        },
+        "sameAs": []
+    }
+    </script>
     @stack('scripts')
 </body>
 </html>
