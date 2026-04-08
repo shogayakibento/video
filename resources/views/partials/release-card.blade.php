@@ -6,19 +6,25 @@
     $actress = $item['iteminfo']['actress'][0]['name'] ?? null;
     $actressId = $item['iteminfo']['actress'][0]['id'] ?? null;
     $date = isset($item['date']) ? \Carbon\Carbon::parse($item['date'])->format('m/d') : null;
-    $contentId = !empty($item['sampleMovieURL']) ? ($item['content_id'] ?? null) : null;
+    $hasSample = !empty($item['sampleMovieURL']['size_720_480'])
+              || !empty($item['sampleMovieURL']['size_644_414'])
+              || !empty($item['sampleMovieURL']['size_560_360']);
+    $contentId = $hasSample ? ($item['content_id'] ?? null) : null;
     $price = $item['prices']['price'] ?? null;
+    $sampleMp4 = '';
+    if ($hasSample && $contentId) {
+        $cid = strtolower($contentId);
+        $c1  = substr($cid, 0, 1);
+        $c3  = substr($cid, 0, 3);
+        $sampleMp4 = "https://cc3001.dmm.co.jp/litevideo/freepv/{$c1}/{$c3}/{$cid}/{$cid}_mhb_w.mp4";
+    }
 @endphp
 
 @if($contentId)
 <div class="release-card item-card-clickable"
-     data-content-id="{{ $contentId }}"
-     data-title="{{ $title }}"
-     data-actress="{{ $actress }}"
-     data-actress-id="{{ $actressId }}"
-     data-url="{{ $url }}"
-     data-price="{{ $price }}"
-     role="button" tabindex="0">
+     data-detail-url="{{ route('fanza.video.show', $contentId) }}"
+     data-sample-url="{{ $sampleMp4 }}"
+     role="link" tabindex="0">
 @else
 <a href="{{ $url }}" class="release-card" target="_blank" rel="noopener noreferrer">
 @endif
@@ -33,10 +39,8 @@
             </div>
         @endif
         <span class="release-new-badge">NEW</span>
-        @if($contentId)
-            <div class="play-overlay" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            </div>
+        @if($sampleMp4)
+            <div class="hover-video-wrap" aria-hidden="true"></div>
         @endif
     </div>
     <div class="release-info">

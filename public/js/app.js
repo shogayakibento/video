@@ -165,58 +165,89 @@
     // ===== Hover Video Preview =====
     function setupHoverPreview() {
         var hoverTimer = null;
-        var activeVideo = null;
+        var activeEl = null;
         var activeCard = null;
+        var activeSlideTimer = null;
 
-        document.querySelectorAll('[data-sample-url]').forEach(function(card) {
+        function clearActive() {
+            if (activeEl) {
+                var w = activeEl.parentNode;
+                if (activeEl.pause) activeEl.pause();
+                activeEl.remove();
+                activeEl = null;
+                if (w) w.classList.remove('visible');
+            }
+            if (activeSlideTimer) {
+                clearInterval(activeSlideTimer);
+                activeSlideTimer = null;
+            }
+            activeCard = null;
+        }
+
+        function startSlideshow(wrap, images) {
+            var img = document.createElement('img');
+            img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;';
+            var idx = Math.floor(Math.random() * images.length);
+            img.src = images[idx];
+            wrap.appendChild(img);
+            wrap.classList.add('visible');
+            activeEl = img;
+            activeSlideTimer = setInterval(function() {
+                idx = (idx + 1) % images.length;
+                img.src = images[idx];
+            }, 800);
+        }
+
+        document.querySelectorAll('.hover-video-wrap').forEach(function(wrap) {
+            var card = wrap.closest('[data-sample-url], [data-sample-images]');
+            if (!card) return;
+
             var sampleUrl = card.dataset.sampleUrl;
-            if (!sampleUrl) return;
-
-            var wrap = card.querySelector('.hover-video-wrap');
-            if (!wrap) return;
+            var sampleImages = card.dataset.sampleImages ? JSON.parse(card.dataset.sampleImages) : null;
 
             card.addEventListener('mouseenter', function() {
+                clearTimeout(hoverTimer);
                 hoverTimer = setTimeout(function() {
-                    // 前のカードの動画を止める
-                    if (activeVideo) {
-                        activeVideo.pause();
-                        activeVideo.remove();
-                        activeVideo = null;
-                    }
-
-                    var video = document.createElement('video');
-                    video.src = sampleUrl;
-                    video.muted = true;
-                    video.controls = false;
-                    video.loop = true;
-                    video.playsInline = true;
-                    video.preload = 'metadata'; // 最初はメタデータのみ取得（軽量）
-
-                    // メタデータ取得後に後半（50%地点）にシークして再生
-                    video.addEventListener('loadedmetadata', function() {
-                        // 60〜85%のランダムな地点（ホバーするたびに違うシーンが見える）
-                        var pct = 0.60 + Math.random() * 0.25;
-                        var seekTo = video.duration * pct;
-                        video.currentTime = seekTo;
-                    });
-                    video.addEventListener('seeked', function() {
-                        video.play().catch(function() {});
-                    });
-
-                    wrap.appendChild(video);
-                    activeVideo = video;
+                    clearActive();
                     activeCard = card;
+
+                    if (sampleUrl) {
+                        var video = document.createElement('video');
+                        video.muted = true;
+                        video.controls = false;
+                        video.loop = true;
+                        video.playsInline = true;
+                        video.preload = 'auto';
+
+                        video.addEventListener('loadedmetadata', function() {
+                            var pct = 0.60 + Math.random() * 0.25;
+                            video.currentTime = video.duration * pct;
+                        });
+                        video.addEventListener('seeked', function() {
+                            if (activeCard !== card) return;
+                            wrap.classList.add('visible');
+                            video.play().catch(function() {});
+                        });
+                        video.addEventListener('error', function() {
+                            video.remove();
+                            activeEl = null;
+                            if (sampleImages && sampleImages.length && activeCard === card) {
+                                startSlideshow(wrap, sampleImages);
+                            }
+                        });
+
+                        wrap.appendChild(video);
+                        activeEl = video;
+                        video.src = sampleUrl;
+                    } else if (sampleImages && sampleImages.length) {
+                        startSlideshow(wrap, sampleImages);
+                    }
                 }, 400);
             });
 
             card.addEventListener('mouseleave', function() {
                 clearTimeout(hoverTimer);
-                if (activeVideo && activeCard === card) {
-                    activeVideo.pause();
-                    activeVideo.remove();
-                    activeVideo = null;
-                    activeCard = null;
-                }
+                if (activeCard === card) clearActive();
             });
         });
     }

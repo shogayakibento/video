@@ -2106,7 +2106,7 @@ img {
 .hover-video-wrap video::-webkit-media-controls-enclosure {
     display: none !important;
 }
-.hover-video-wrap:has(video) {
+.hover-video-wrap.visible {
     opacity: 1;
 }
 
